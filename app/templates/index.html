@@ -9,21 +9,20 @@
     <h1>Todo App</h1>
 
     <form>
-        <label for="title">Todo Title</label>
-        <input type="text" id="title" name="title" placeholder="Enter Title...">
-        <br>
+        <label for="title">Todo Title:</label>
+        <input type="text" id="title" name="title" placeholder="Enter title...">
         <button type="submit">Add</button>
     </form>
 
     {% for todo in todos %}
         <div>
-            <p>{{ todo.id }} | {{ todo.title }}</p>
-
-            {% if todo.completed %}
-                <span>Completed</span>
-            {% else %}
-                <span>Not Completed</span>
-            {% endif %}
+            <p>{{ todo.id }} |
+                {%if todo.completed %}
+                    <del>{{ todo.title }}</del>
+                {% else %}
+                    {{ todo.title }}
+                {% endif %}
+            </p>
         </div>
     {% endfor %}
 </body>

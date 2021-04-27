@@ -21,19 +21,38 @@
             <button type="submit">Add</button>
         </form>
 
-        {% for todo in todos %}
-            <div>
-                <p>{{ todo.id }} |
-                    {%if todo.completed %}
-                        <del>{{ todo.title }}</del>
-                    {% else %}
-                        {{ todo.title }}
-                    {% endif %}
-                </p>
-                <a href="/complete/{{ todo.id }}">Complete</a>
-                <a class="btn btn-secondary" href="/delete/{{ todo.id }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
-            </div>
-        {% endfor %}
+        <div style="margin-top: 20px;" class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Complete</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}
+                        <tr>
+                            <td>{{ todo.id }}</td>
+                            <td>
+                                {%if todo.completed %}
+                                    <del>{{ todo.title }}</del>
+                                {% else %}
+                                    {{ todo.title }}
+                                {% endif %}
+                            </td>
+                            <td><a href="/complete/{{ todo.id }}">Complete</a></td>
+                            <td>
+                                <a class="btn btn-secondary" href="/delete/{{ todo.id }}">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"

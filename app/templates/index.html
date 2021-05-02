@@ -15,7 +15,7 @@
     <div style="margin-top: 50px;" class="container">
         <h1>Todo App</h1>
 
-        <form action="/add" method="POST">
+        <form action="/add" method="post">
             <label for="title">Todo Title:</label>
             <input type="text" id="title" name="title" placeholder="Enter title...">
             <button type="submit">Add</button>
@@ -26,8 +26,8 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Completed</th>
                         <th>Title</th>
-                        <th>Complete</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -36,13 +36,18 @@
                         <tr>
                             <td>{{ todo.id }}</td>
                             <td>
-                                {%if todo.completed %}
+                                <a href="/update/{{ todo.id }}">
+                                    <input type="checkbox" name="completed"
+                                       {% if todo.completed %} checked {% endif %}>
+                                </a>
+                            </td>
+                            <td>
+                                {% if todo.completed %}
                                     <del>{{ todo.title }}</del>
                                 {% else %}
                                     {{ todo.title }}
                                 {% endif %}
                             </td>
-                            <td><a href="/complete/{{ todo.id }}">Complete</a></td>
                             <td>
                                 <a class="btn btn-secondary" href="/delete/{{ todo.id }}">
                                     <i class="fa fa-trash" aria-hidden="true"></i>

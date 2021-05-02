@@ -29,10 +29,10 @@ def add():
     return redirect(url_for("index"))
 
 
-@app.route("/complete/<int:todo_id>", methods=["GET"])
+@app.route("/update/<int:todo_id>", methods=["GET"])
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
-    todo.completed = True
+    todo.completed = not todo.completed
     db.session.commit()
     return redirect(url_for("index"))
 

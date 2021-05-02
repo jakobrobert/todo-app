@@ -37,7 +37,7 @@
                             <td>{{ todo.id }}</td>
                             <td>
                                 <a href="/update/{{ todo.id }}">
-                                    <input type="checkbox" name="completed"
+                                    <input class="form-check-input" type="checkbox" name="completed"
                                        {% if todo.completed %} checked {% endif %}>
                                 </a>
                             </td>

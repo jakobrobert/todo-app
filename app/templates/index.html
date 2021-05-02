@@ -16,9 +16,11 @@
         <h1>Todo App</h1>
 
         <form action="/add" method="post">
-            <label for="title">Todo Title:</label>
-            <input type="text" id="title" name="title" placeholder="Enter title...">
-            <button type="submit">Add</button>
+            <div class="form-group">
+                <label class="form-label" for="title">Todo title</label>
+                <input class="form-control" type="text" id="title" name="title" placeholder="Enter title...">
+            </div>
+            <button class="btn btn-primary" type="submit">Add</button>
         </form>
 
         <div style="margin-top: 20px;" class="container">

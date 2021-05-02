@@ -47,4 +47,5 @@ def delete(todo_id):
 
 if __name__ == "__main__":
     db.create_all()
-    app.run(debug=True)
+    # use 0.0.0.0 as host so the app is publicly available
+    app.run(host="0.0.0.0", port=1024, debug=True)

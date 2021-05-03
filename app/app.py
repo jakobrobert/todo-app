@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
+URL_PREFIX = "/dev/todo-app"
+
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -14,13 +17,13 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean)
 
 
-@app.route("/", methods=["GET"])
+@app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
     todos = Todo.query.all()
     return render_template("index.html", todos=todos)
 
 
-@app.route("/add", methods=["POST"])
+@app.route(URL_PREFIX + "/add", methods=["POST"])
 def add():
     title = request.form.get("title")
     new_todo = Todo(title=title, completed=False)
@@ -29,7 +32,7 @@ def add():
     return redirect(url_for("index"))
 
 
-@app.route("/update/<int:todo_id>", methods=["GET"])
+@app.route(URL_PREFIX + "/update/<int:todo_id>", methods=["GET"])
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
@@ -37,7 +40,7 @@ def update(todo_id):
     return redirect(url_for("index"))
 
 
-@app.route("/delete/<int:todo_id>", methods=["GET"])
+@app.route(URL_PREFIX + "/delete/<int:todo_id>", methods=["GET"])
 def delete(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     db.session.delete(todo)

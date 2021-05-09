@@ -22,6 +22,7 @@ class Todo(db.Model):
     # TODO set defaults
     completed = db.Column(db.Boolean)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True))
+    timestamp_completed =db.Column(db.TIMESTAMP(timezone=True))
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
@@ -43,6 +44,9 @@ def add():
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
+    if todo.completed:
+        todo.timestamp_completed = func.now()
+    # TODO handle not completed
     db.session.commit()
     return redirect(url_for("index"))
 

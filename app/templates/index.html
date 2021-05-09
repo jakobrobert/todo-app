@@ -22,6 +22,7 @@
                         <th>Completed</th>
                         <th>Title</th>
                         <th>Created at</th>
+                        <th>Completed at</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ todo.timestamp_created }}</td>
+                            <td>{{ todo.timestamp_completed }}</td>
                             <td>
                                 <a class="btn btn-secondary" href="{{ url_for('delete', todo_id=todo.id) }}">
                                     <i class="fa fa-trash" aria-hidden="true"></i>

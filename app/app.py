@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 
 import configparser
+
 
 config = configparser.ConfigParser()
 config.read("server.ini")
@@ -18,6 +20,9 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean)
+    timestamp_created = db.Column(db.TIMESTAMP(timezone=True))
+
+    # TODO add constructor and set defaults
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
@@ -29,7 +34,7 @@ def index():
 @app.route(URL_PREFIX + "/add", methods=["POST"])
 def add():
     title = request.form.get("title")
-    new_todo = Todo(title=title, completed=False)
+    new_todo = Todo(title=title, completed=False, timestamp_created=func.now())
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("index"))

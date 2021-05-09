@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 
 import configparser
+
 
 config = configparser.ConfigParser()
 config.read("server.ini")
@@ -17,7 +19,9 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
-    completed = db.Column(db.Boolean)
+    completed = db.Column(db.Boolean, default=False)
+    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
+    timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
@@ -29,7 +33,7 @@ def index():
 @app.route(URL_PREFIX + "/add", methods=["POST"])
 def add():
     title = request.form.get("title")
-    new_todo = Todo(title=title, completed=False)
+    new_todo = Todo(title=title)
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("index"))
@@ -39,6 +43,10 @@ def add():
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
+    if todo.completed:
+        todo.timestamp_completed = func.now()
+    else:
+        todo.timestamp_completed = None
     db.session.commit()
     return redirect(url_for("index"))
 

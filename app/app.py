@@ -21,7 +21,7 @@ class Todo(db.Model):
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
-    timestamp_completed =db.Column(db.TIMESTAMP(timezone=True))
+    timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])

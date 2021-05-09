@@ -46,7 +46,8 @@ def update(todo_id):
     todo.completed = not todo.completed
     if todo.completed:
         todo.timestamp_completed = func.now()
-    # TODO handle not completed
+    else:
+        todo.timestamp_completed = None
     db.session.commit()
     return redirect(url_for("index"))
 

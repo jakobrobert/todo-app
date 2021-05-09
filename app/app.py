@@ -19,9 +19,8 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
-    # TODO set defaults
-    completed = db.Column(db.Boolean)
-    timestamp_created = db.Column(db.TIMESTAMP(timezone=True))
+    completed = db.Column(db.Boolean, default=False)
+    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed =db.Column(db.TIMESTAMP(timezone=True))
 
 
@@ -34,7 +33,7 @@ def index():
 @app.route(URL_PREFIX + "/add", methods=["POST"])
 def add():
     title = request.form.get("title")
-    new_todo = Todo(title=title, completed=False, timestamp_created=func.now())
+    new_todo = Todo(title=title)
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("index"))

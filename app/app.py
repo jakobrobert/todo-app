@@ -19,10 +19,9 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
+    # TODO set defaults
     completed = db.Column(db.Boolean)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True))
-
-    # TODO add constructor and set defaults
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])

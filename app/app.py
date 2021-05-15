@@ -32,7 +32,7 @@ class TodoList(db.Model):
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
-    return redirect(url_for("get_todo_lists"))
+    return redirect(url_for("get_todo_list"))
 
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
@@ -50,9 +50,9 @@ def add_todo_list():
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/delete_todo_list/<int:todo_list_id>", methods=["GET"])
-def delete_todo_list(todo_list_id):
-    todo = TodoList.query.filter_by(id=todo_list_id).first()
+@app.route(URL_PREFIX + "/delete_todo_list/<int:id>", methods=["GET"])
+def delete_todo_list(id):
+    todo = TodoList.query.filter_by(id=id).first()
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
@@ -76,9 +76,9 @@ def add_todo():
     return redirect(url_for("get_todo_list"))
 
 
-@app.route(URL_PREFIX + "/update_todo/<int:todo_id>", methods=["GET"])
-def update_todo(todo_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
+@app.route(URL_PREFIX + "/update_todo/<int:id>", methods=["GET"])
+def update_todo(id):
+    todo = Todo.query.filter_by(id=id).first()
     todo.completed = not todo.completed
     if todo.completed:
         todo.timestamp_completed = func.now()
@@ -88,9 +88,9 @@ def update_todo(todo_id):
     return redirect(url_for("get_todo_list"))
 
 
-@app.route(URL_PREFIX + "/delete_todo/<int:todo_id>", methods=["GET"])
-def delete_todo(todo_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
+@app.route(URL_PREFIX + "/delete_todo/<int:id>", methods=["GET"])
+def delete_todo(id):
+    todo = Todo.query.filter_by(id=id).first()
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list"))

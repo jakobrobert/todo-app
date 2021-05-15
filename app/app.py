@@ -26,8 +26,14 @@ class Todo(db.Model):
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
+    return redirect(url_for("todo_list"))
+
+
+# TODO add id
+@app.route(URL_PREFIX + "/todo_list", methods=["GET"])
+def todo_list():
     todos = Todo.query.all()
-    return render_template("index.html", todos=todos)
+    return render_template("todo_list.html", todos=todos)
 
 
 @app.route(URL_PREFIX + "/add", methods=["POST"])

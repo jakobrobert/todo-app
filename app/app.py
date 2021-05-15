@@ -32,7 +32,7 @@ class TodoList(db.Model):
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
-    return redirect(url_for("get_todo_list"))
+    return redirect(url_for("get_todo_lists"))
 
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])

@@ -52,7 +52,7 @@ def add_todo_list():
 
 @app.route(URL_PREFIX + "/delete_todo_list/<int:todo_list_id>", methods=["GET"])
 def delete_todo_list(todo_list_id):
-    todo = Todo.query.filter_by(id=todo_list_id).first()
+    todo = TodoList.query.filter_by(id=todo_list_id).first()
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_lists"))

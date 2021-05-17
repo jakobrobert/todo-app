@@ -43,14 +43,14 @@ def get_todo_lists():
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
 
-@app.route(URL_PREFIX + "/todo_list/<int:id>", methods=["GET"])
+@app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
     todo_list = TodoList.query.filter_by(id=id).first()
     todos = todo_list.todos
     return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
 
 
-@app.route(URL_PREFIX + "/add_todo_list", methods=["POST"])
+@app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
 def add_todo_list():
     title = request.form.get("title")
     new_todo = TodoList(title=title)
@@ -59,7 +59,7 @@ def add_todo_list():
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/delete_todo_list/<int:id>", methods=["GET"])
+@app.route(URL_PREFIX + "/todo_lists/<int:id>/delete", methods=["GET"])
 def delete_todo_list(id):
     todo = TodoList.query.filter_by(id=id).first()
     db.session.delete(todo)
@@ -67,7 +67,7 @@ def delete_todo_list(id):
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/add_todo/<int:todo_list_id>", methods=["POST"])
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
 def add_todo(todo_list_id):
     title = request.form.get("title")
     new_todo = Todo(title=title, todo_list_id=todo_list_id)
@@ -76,9 +76,8 @@ def add_todo(todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-# TODO fix url: /todo_list/<id>/todo/<id>/update
-@app.route(URL_PREFIX + "/update_todo/<int:todo_id>/<int:todo_list_id>", methods=["GET"])
-def update_todo(todo_id, todo_list_id):
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/update", methods=["GET"])
+def update_todo(todo_list_id, todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
     if todo.completed:
@@ -89,9 +88,8 @@ def update_todo(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-# TODO fix url: /todo_list/<id>/todo/<id>/delete
-@app.route(URL_PREFIX + "/delete_todo/<int:todo_id>/<int:todo_list_id>", methods=["GET"])
-def delete_todo(todo_id, todo_list_id):
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
+def delete_todo(todo_list_id, todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     db.session.delete(todo)
     db.session.commit()

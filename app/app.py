@@ -22,13 +22,14 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
+    todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
 
 
-# TODO one-to-many:  one TodoList is linked to many Todos
 class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
+    todos = db.relationship("Todo", backref="todo_list")
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
@@ -40,6 +41,14 @@ def index():
 def get_todo_lists():
     todo_lists = TodoList.query.all()
     return render_template("todo_lists.html", todo_lists=todo_lists)
+
+
+@app.route(URL_PREFIX + "/todo_list/<int:id>", methods=["GET"])
+def get_todo_list(id):
+    todo_list = TodoList.query.filter_by(id=id).first()
+    # TODO read not all todos, but todos from this todo list
+    todos = Todo.query.all()
+    return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
 
 
 @app.route(URL_PREFIX + "/add_todo_list", methods=["POST"])
@@ -59,22 +68,13 @@ def delete_todo_list(id):
     return redirect(url_for("get_todo_lists"))
 
 
-# TODO add id
-@app.route(URL_PREFIX + "/todo_list/<int:id>", methods=["GET"])
-def get_todo_list(id):
-    todo_list = TodoList.query.filter_by(id=id).first()
-    # TODO read not all todos, but todos from this todo list
-    todos = Todo.query.all()
-    return render_template("todo_list.html", title=todo_list.title, todos=todos)
-
-
-@app.route(URL_PREFIX + "/add_todo", methods=["POST"])
-def add_todo():
+@app.route(URL_PREFIX + "/add_todo/<int:todo_list_id>", methods=["POST"])
+def add_todo(todo_list_id):
     title = request.form.get("title")
-    new_todo = Todo(title=title)
+    new_todo = Todo(title=title, todo_list_id=todo_list_id)
     db.session.add(new_todo)
     db.session.commit()
-    return redirect(url_for("get_todo_list"))
+    return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/update_todo/<int:id>", methods=["GET"])
@@ -92,6 +92,7 @@ def update_todo(id):
 @app.route(URL_PREFIX + "/delete_todo/<int:id>", methods=["GET"])
 def delete_todo(id):
     todo = Todo.query.filter_by(id=id).first()
+    # TODO delete todo from the todo list
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list"))

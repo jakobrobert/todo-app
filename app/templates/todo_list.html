@@ -61,7 +61,7 @@
                 </tbody>
             </table>
         </div>
-        <form action="{{ url_for('add_todo') }}" method="post">
+        <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
             <div class="form-group row">
                 <div class="col">
                     <input class="form-control" type="text" id="title" name="title" placeholder="Enter todo title...">

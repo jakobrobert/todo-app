@@ -13,46 +13,29 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>Todo App</h1>
+        <h1>Todo Lists</h1>
         <div style="margin-top: 20px;" class="container">
             <table class="table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Completed</th>
                         <th>Title</th>
                         <th>Created at</th>
-                        <th>Completed at</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for todo in todos %}
+                    {% for todo_list in todo_lists %}
                         <tr>
-                            <td>{{ todo.id }}</td>
+                            <td>{{ todo_list.id }}</td>
                             <td>
-                                <a href="{{ url_for('update', todo_id=todo.id) }}">
-                                    <input class="form-check-input" type="checkbox" name="completed"
-                                       {% if todo.completed %} checked {% endif %}>
+                                <a href="{{ url_for('get_todo_list', id=todo_list.id) }}">
+                                    {{ todo_list.title }}
                                 </a>
                             </td>
+                            <td>{{ todo_list.timestamp_created }}</td>
                             <td>
-                                {% if todo.completed %}
-                                    <del>{{ todo.title }}</del>
-                                {% else %}
-                                    {{ todo.title }}
-                                {% endif %}
-                            </td>
-                            <td>{{ todo.timestamp_created }}</td>
-                            <td>
-                                {% if todo.completed %}
-                                    {{ todo.timestamp_completed }}
-                                {% else %}
-                                    n / a
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a class="btn btn-secondary" href="{{ url_for('delete', todo_id=todo.id) }}">
+                                <a class="btn btn-secondary" href="{{ url_for('delete_todo_list', id=todo_list.id) }}">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -61,10 +44,10 @@
                 </tbody>
             </table>
         </div>
-        <form action="{{ url_for('add') }}" method="post">
+        <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="form-group row">
                 <div class="col">
-                    <input class="form-control" type="text" id="title" name="title" placeholder="Enter todo title...">
+                    <input class="form-control" type="text" id="title" name="title" placeholder="Enter todo list title...">
                 </div>
                 <div class="col">
                     <button class="btn btn-primary" type="submit">Add</button>

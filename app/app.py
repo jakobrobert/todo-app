@@ -22,25 +22,64 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
+    todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
+
+
+class TodoList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
+    todos = db.relationship("Todo", backref="todo_list")
 
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
-    todos = Todo.query.all()
-    return render_template("index.html", todos=todos)
+    return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/add", methods=["POST"])
-def add():
+@app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
+def get_todo_lists():
+    todo_lists = TodoList.query.all()
+    return render_template("todo_lists.html", todo_lists=todo_lists)
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
+def get_todo_list(id):
+    todo_list = TodoList.query.filter_by(id=id).first()
+    todos = todo_list.todos
+    return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
+
+
+@app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
+def add_todo_list():
     title = request.form.get("title")
-    new_todo = Todo(title=title)
+    new_todo = TodoList(title=title)
     db.session.add(new_todo)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/update/<int:todo_id>", methods=["GET"])
-def update(todo_id):
+@app.route(URL_PREFIX + "/todo_lists/<int:id>/delete", methods=["GET"])
+def delete_todo_list(id):
+    todo_list = TodoList.query.filter_by(id=id).first()
+    for todo in todo_list.todos:
+        db.session.delete(todo)
+    db.session.delete(todo_list)
+    db.session.commit()
+    return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
+def add_todo(todo_list_id):
+    title = request.form.get("title")
+    todo = Todo(title=title, todo_list_id=todo_list_id)
+    db.session.add(todo)
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/update", methods=["GET"])
+def update_todo(todo_list_id, todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
     if todo.completed:
@@ -48,15 +87,15 @@ def update(todo_id):
     else:
         todo.timestamp_completed = None
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/delete/<int:todo_id>", methods=["GET"])
-def delete(todo_id):
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
+def delete_todo(todo_list_id, todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     db.session.delete(todo)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 if __name__ == "__main__":

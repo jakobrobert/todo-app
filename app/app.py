@@ -61,8 +61,10 @@ def add_todo_list():
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>/delete", methods=["GET"])
 def delete_todo_list(id):
-    todo = TodoList.query.filter_by(id=id).first()
-    db.session.delete(todo)
+    todo_list = TodoList.query.filter_by(id=id).first()
+    for todo in todo_list.todos:
+        db.session.delete(todo)
+    db.session.delete(todo_list)
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
 
@@ -70,8 +72,8 @@ def delete_todo_list(id):
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
 def add_todo(todo_list_id):
     title = request.form.get("title")
-    new_todo = Todo(title=title, todo_list_id=todo_list_id)
-    db.session.add(new_todo)
+    todo = Todo(title=title, todo_list_id=todo_list_id)
+    db.session.add(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 

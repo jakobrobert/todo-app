@@ -46,8 +46,7 @@ def get_todo_lists():
 @app.route(URL_PREFIX + "/todo_list/<int:id>", methods=["GET"])
 def get_todo_list(id):
     todo_list = TodoList.query.filter_by(id=id).first()
-    # TODO read not all todos, but todos from this todo list
-    todos = Todo.query.all()
+    todos = todo_list.todos
     return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
 
 

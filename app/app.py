@@ -24,6 +24,7 @@ class Todo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
 
 
+# TODO one-to-many:  one TodoList is linked to many Todos
 class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
@@ -59,12 +60,12 @@ def delete_todo_list(id):
 
 
 # TODO add id
-@app.route(URL_PREFIX + "/todo_list", methods=["GET"])
-def get_todo_list():
-    # TODO read title and pass to template
+@app.route(URL_PREFIX + "/todo_list/<int:id>", methods=["GET"])
+def get_todo_list(id):
+    todo_list = TodoList.query.filter_by(id=id).first()
     # TODO read not all todos, but todos from this todo list
     todos = Todo.query.all()
-    return render_template("todo_list.html", todos=todos)
+    return render_template("todo_list.html", title=todo_list.title, todos=todos)
 
 
 @app.route(URL_PREFIX + "/add_todo", methods=["POST"])

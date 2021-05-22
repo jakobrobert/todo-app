@@ -100,8 +100,3 @@ def delete_todo(todo_list_id, todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
-
-
-if __name__ == "__main__":
-    # use 0.0.0.0 as host so the app is publicly available
-    app.run(host="0.0.0.0", port=1024, debug=True)

@@ -32,6 +32,10 @@ class TodoList(db.Model):
     todos = db.relationship("Todo", backref="todo_list")
 
 
+db.create_all()
+db.session.commit()
+
+
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
     return redirect(url_for("get_todo_lists"))
@@ -96,9 +100,3 @@ def delete_todo(todo_list_id, todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
-
-
-if __name__ == "__main__":
-    db.create_all()
-    # use 0.0.0.0 as host so the app is publicly available
-    app.run(host="0.0.0.0", port=1024, debug=True)

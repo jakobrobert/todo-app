@@ -1,2 +1,3 @@
 source ENV/bin/activate
-python app.py
+export FLASK_APP=app
+flask run

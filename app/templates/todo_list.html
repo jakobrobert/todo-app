@@ -31,10 +31,9 @@
                         <tr>
                             <td>{{ todo.id }}</td>
                             <td>
-                                <a href="{{ url_for('update_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
-                                    <input class="form-check-input" type="checkbox" name="completed"
+                                <input class="form-check-input" type="checkbox" name="completed"
+                                       onclick="window.location.href='{{ url_for('update_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
                                        {% if todo.completed %} checked {% endif %}>
-                                </a>
                             </td>
                             <td>
                                 {% if todo.completed %}

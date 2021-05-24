@@ -46,12 +46,12 @@
                             </td>
                             <td>{{ todo.timestamp_created }}</td>
                             <td>{{ todo.timestamp_started or 'n/a' }}</td>
-                            <td>
-                                {% if todo.completed %}
+                            <td>{{ todo.timestamp_completed or 'n/a' }}</td>
+                                <!--{% if todo.completed %}
                                     {{ todo.timestamp_completed }}
                                 {% else %}
                                     n / a
-                                {% endif %}
+                                {% endif %}-->
                             </td>
                             <td>
                                 <a class="btn btn-primary"

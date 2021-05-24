@@ -47,12 +47,6 @@
                             <td>{{ todo.timestamp_created }}</td>
                             <td>{{ todo.timestamp_started or 'n/a' }}</td>
                             <td>{{ todo.timestamp_completed or 'n/a' }}</td>
-                                <!--{% if todo.completed %}
-                                    {{ todo.timestamp_completed }}
-                                {% else %}
-                                    n / a
-                                {% endif %}-->
-                            </td>
                             <td>
                                 <a class="btn btn-primary"
                                    href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">

@@ -21,8 +21,15 @@ class Todo(db.Model):
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
+    timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
+
+    @property
+    def duration(self):
+        if self.timestamp_started is None or self.timestamp_completed is None:
+            return None
+        return self.timestamp_completed - self.timestamp_started
 
 
 class TodoList(db.Model):
@@ -83,13 +90,21 @@ def add_todo(todo_list_id):
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/update", methods=["GET"])
-def update_todo(todo_list_id, todo_id):
+def update_todo(todo_id, todo_list_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.completed = not todo.completed
     if todo.completed:
         todo.timestamp_completed = func.now()
     else:
         todo.timestamp_completed = None
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
+def start_todo(todo_id, todo_list_id):
+    todo = Todo.query.filter_by(id=todo_id).first()
+    todo.timestamp_started = func.now()
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 

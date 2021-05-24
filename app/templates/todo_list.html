@@ -45,13 +45,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ todo.timestamp_created }}</td>
-                            <td>
-                                {% if todo.timestamp_started is not none %}
-                                    {{ todo.timestamp_started }}
-                                {% else %}
-                                    n / a
-                                {% endif %}
-                            </td>
+                            <td>{{ todo.timestamp_started or 'n/a' }}</td>
                             <td>
                                 {% if todo.completed %}
                                     {{ todo.timestamp_completed }}

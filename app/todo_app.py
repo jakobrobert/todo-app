@@ -25,6 +25,12 @@ class Todo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
 
+    @property
+    def duration(self):
+        if self.timestamp_started is None or self.timestamp_completed is None:
+            return None
+        return self.timestamp_completed - self.timestamp_started
+
 
 class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,9 +105,7 @@ def update_todo(todo_id, todo_list_id):
 def start_todo(todo_id, todo_list_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.timestamp_started = func.now()
-    print(todo.timestamp_started)
     db.session.commit()
-    print(todo.timestamp_started)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

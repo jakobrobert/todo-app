@@ -24,6 +24,7 @@
                         <th>Created at</th>
                         <th>Started at</th>
                         <th>Completed at</th>
+                        <th>Duration</th>
                         <th>Start</th>
                         <th>Delete</th>
                     </tr>
@@ -47,6 +48,7 @@
                             <td>{{ todo.timestamp_created }}</td>
                             <td>{{ todo.timestamp_started or 'n/a' }}</td>
                             <td>{{ todo.timestamp_completed or 'n/a' }}</td>
+                            <td>{{ todo.duration or 'n/a' }}</td>
                             <td>
                                 <a class="btn btn-primary"
                                    href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">

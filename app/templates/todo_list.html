@@ -22,6 +22,7 @@
                         <th>Completed</th>
                         <th>Title</th>
                         <th>Created at</th>
+                        <th>Started at</th>
                         <th>Completed at</th>
                         <th>Start</th>
                         <th>Delete</th>
@@ -44,6 +45,13 @@
                                 {% endif %}
                             </td>
                             <td>{{ todo.timestamp_created }}</td>
+                            <td>
+                                {% if todo.timestamp_started is not none %}
+                                    {{ todo.timestamp_started }}
+                                {% else %}
+                                    n / a
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if todo.completed %}
                                     {{ todo.timestamp_completed }}

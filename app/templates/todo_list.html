@@ -23,6 +23,7 @@
                         <th>Title</th>
                         <th>Created at</th>
                         <th>Completed at</th>
+                        <th>Start</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -49,6 +50,12 @@
                                 {% else %}
                                     n / a
                                 {% endif %}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary"
+                                   href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+                                    <i class="fas fa-play"></i>
+                                </a>
                             </td>
                             <td>
                                 <a class="btn btn-secondary"

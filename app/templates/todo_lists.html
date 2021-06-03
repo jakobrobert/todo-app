@@ -17,6 +17,7 @@
         <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="form-group row">
                 <div class="col">
+                    <!-- TODO do not need id, only name -->
                     <input class="form-control" type="text" id="title" name="title" placeholder="Enter todo list title...">
                 </div>
                 <div class="col">
@@ -37,9 +38,23 @@
                     {% for todo_list in todo_lists %}
                         <tr>
                             <td>
+                                <!-- TODO Edit icon button in separate column? -->
                                 <a href="{{ url_for('get_todo_list', id=todo_list.id) }}">
-                                    {{ todo_list.title }}
+                                    Link
                                 </a>
+                                <!-- TODO improve design, e.g. smaller length for input field, need separate divs? -->
+                                <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <!-- TODO do not need id, only name -->
+                                             <input class="form-control" type="text" id="edit-title" name="title"
+                                                    value="{{ todo_list.title }}">
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-primary" type="submit">OK</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </td>
                             <td>{{ todo_list.timestamp_created }}</td>
                             <td>

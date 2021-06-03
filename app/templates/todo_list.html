@@ -39,7 +39,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for todo in todos %}
+                    {% for todo in todos if not todo.completed %}
+                        {% include "todo.html" %}
+                    {% endfor %}
+                    {% for todo in todos if todo.completed %}
                         {% include "todo.html" %}
                     {% endfor %}
                 </tbody>

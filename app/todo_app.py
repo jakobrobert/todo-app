@@ -54,18 +54,20 @@ def get_todo_lists():
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
-def get_todo_list(id):
-    todo_list = TodoList.query.filter_by(id=id).first()
-    todos = todo_list.todos
-    return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
-
-
 @app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
 def add_todo_list():
     title = request.form.get("title")
-    new_todo = TodoList(title=title)
-    db.session.add(new_todo)
+    todo_list = TodoList(title=title)
+    db.session.add(todo_list)
+    db.session.commit()
+    return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:id>/edit-title", methods=["POST"])
+def edit_todo_list_title(id):
+    title = request.form.get("title")
+    todo_list = TodoList.query.filter_by(id=id).first()
+    todo_list.title = title
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
 
@@ -78,6 +80,13 @@ def delete_todo_list(id):
     db.session.delete(todo_list)
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
+def get_todo_list(id):
+    todo_list = TodoList.query.filter_by(id=id).first()
+    todos = todo_list.todos
+    return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
@@ -97,6 +106,15 @@ def update_todo(todo_id, todo_list_id):
         todo.timestamp_completed = func.now()
     else:
         todo.timestamp_completed = None
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
+def edit_todo_title(todo_id, todo_list_id):
+    title = request.form.get("title")
+    todo = Todo.query.filter_by(id=todo_id).first()
+    todo.title = title
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 

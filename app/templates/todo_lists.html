@@ -17,7 +17,7 @@
         <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="form-group row">
                 <div class="col">
-                    <input class="form-control" type="text" id="title" name="title" placeholder="Enter todo list title...">
+                    <input class="form-control" type="text" name="title" placeholder="Enter todo list title...">
                 </div>
                 <div class="col">
                     <button class="btn btn-primary" type="submit">Add</button>
@@ -30,6 +30,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Created at</th>
+                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -37,14 +38,27 @@
                     {% for todo_list in todo_lists %}
                         <tr>
                             <td>
-                                <a href="{{ url_for('get_todo_list', id=todo_list.id) }}">
-                                    {{ todo_list.title }}
-                                </a>
+                                <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
+                                    <div class="form-group row">
+                                        <div class="col">
+                                             <input class="form-control" type="text" name="title"
+                                                    value="{{ todo_list.title }}">
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-primary" type="submit">OK</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </td>
                             <td>{{ todo_list.timestamp_created }}</td>
                             <td>
+                                <a class="btn btn-secondary" href="{{ url_for('get_todo_list', id=todo_list.id) }}">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                            <td>
                                 <a class="btn btn-secondary" href="{{ url_for('delete_todo_list', id=todo_list.id) }}">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    <i class="fas fa-trash" aria-hidden="true"></i>
                                 </a>
                             </td>
                         </tr>

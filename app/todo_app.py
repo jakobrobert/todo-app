@@ -110,6 +110,15 @@ def update_todo(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
+def edit_todo_title(todo_id, todo_list_id):
+    title = request.form.get("title")
+    todo = Todo.query.filter_by(id=todo_id).first()
+    todo.title = title
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
 def start_todo(todo_id, todo_list_id):
     todo = Todo.query.filter_by(id=todo_id).first()

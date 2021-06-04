@@ -5,13 +5,6 @@
                {% if todo.completed %} checked {% endif %}>
     </td>
     <td>
-        <!--
-        {% if todo.completed %}
-            <del>{{ todo.title }}</del>
-        {% else %}
-            {{ todo.title }}
-        {% endif %}
-        -->
         <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
             <div class="form-group row">
                 <div class="col">

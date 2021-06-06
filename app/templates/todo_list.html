@@ -15,7 +15,7 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }}</h1>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
-            <div class="form-group row">
+            <div class="row">
                 <div class="col">
                     <input class="form-control" type="text" name="title" placeholder="Enter todo title...">
                 </div>
@@ -25,29 +25,38 @@
             </div>
         </form>
         <div style="margin-top: 20px;" class="container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Title</th>
-                        <th>Created at</th>
-                        <th>Started at</th>
-                        <th>Completed at</th>
-                        <th>Duration</th>
-                        <th>Start</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for todo in todos if not todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
-                    <tr><td colspan="8"><hr></td></tr>
-                    {% for todo in todos if todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-1">
+                </div>
+                <div class="col-3">
+                    <b>Title</b>
+                </div>
+                <div class="col-2">
+                    <b>Created at</b>
+                </div>
+                <div class="col-2">
+                    <b>Started at</b>
+                </div>
+                <div class="col-2">
+                    <b>Completed at</b>
+                </div>
+                <div class="col-1">
+                    <b>Duration</b>
+                </div>
+                <div class="col-1">
+                    <b>Start</b>
+                </div>
+                <div class="col-1">
+                    <b>Delete</b>
+                </div>
+            </div>
+        {% for todo in todos if not todo.completed %}
+            {% include "todo.html" %}
+        {% endfor %}
+            <hr>
+        {% for todo in todos if todo.completed %}
+            {% include "todo.html" %}
+        {% endfor %}
         </div>
     </div>
 

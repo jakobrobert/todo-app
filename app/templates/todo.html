@@ -1,3 +1,48 @@
+<div class="row">
+    <div class="col-1">
+        <input class="form-check-input" type="checkbox" name="completed"
+               onclick="window.location.href='{{ url_for('update_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
+               {% if todo.completed %} checked {% endif %}>
+    </div>
+    <div class="col-3">
+        <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
+            <div class="row">
+                <div class="col-10">
+                     <textarea class="form-control" name="title">{{ todo.title }}</textarea>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary" type="submit">OK</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-2">
+        {{ todo.timestamp_created }}
+    </div>
+    <div class="col-2">
+        {{ todo.timestamp_started or 'n/a' }}
+    </div>
+    <div class="col-1">
+        {{ todo.timestamp_completed or 'n/a' }}
+    </div>
+    <div class="col-1">
+        {{ todo.duration or 'n/a' }}
+    </div>
+    <div class="col-1">
+        <a class="btn btn-primary"
+           href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-play"></i>
+        </a>
+    </div>
+    <div class="col-1">
+        <a class="btn btn-secondary"
+           href="{{ url_for('delete_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-trash" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<!-- TODO remove -->
+<!--
 <tr>
     <td>
         <input class="form-check-input" type="checkbox" name="completed"
@@ -33,3 +78,4 @@
         </a>
     </td>
 </tr>
+-->

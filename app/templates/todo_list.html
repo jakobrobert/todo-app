@@ -16,10 +16,10 @@
         <h1>{{ title }}</h1>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
             <div class="row">
-                <div class="col">
+                <div class="col-10">
                     <input class="form-control" type="text" name="title" placeholder="Enter todo title...">
                 </div>
-                <div class="col">
+                <div class="col-2">
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </div>
@@ -28,16 +28,16 @@
             <div class="row">
                 <div class="col-1">
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                     <b>Title</b>
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                     <b>Created at</b>
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                     <b>Started at</b>
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                     <b>Completed at</b>
                 </div>
                 <div class="col-1">

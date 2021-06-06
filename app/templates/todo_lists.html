@@ -41,8 +41,7 @@
                                 <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
                                     <div class="form-group row">
                                         <div class="col">
-                                             <input class="form-control" type="text" name="title"
-                                                    value="{{ todo_list.title }}">
+                                             <textarea class="form-control" name="title">{{ todo_list.title }}</textarea>
                                         </div>
                                         <div class="col">
                                             <button class="btn btn-primary" type="submit">OK</button>

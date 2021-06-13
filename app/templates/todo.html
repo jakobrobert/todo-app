@@ -1,11 +1,13 @@
-<div class="row">
-    <div class="col-1">
+<tr>
+    <td>
         <input class="form-check-input" type="checkbox" name="completed"
                onclick="window.location.href='{{ url_for('update_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
                {% if todo.completed %} checked {% endif %}>
-    </div>
-    <div class="col-4">
+    </td>
+    <td>
         <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
+            <!-- TODO make two rows, button in separate row? -->
+            <!-- TODO fine-tune size of textarea, chars per row, num rows -->
             <div class="row">
                 <div class="col-10">
                      <textarea class="form-control" name="title">{{ todo.title }}</textarea>
@@ -15,29 +17,29 @@
                 </div>
             </div>
         </form>
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         {{ todo.timestamp_created }}
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         {{ todo.timestamp_started or 'n/a' }}
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         {{ todo.timestamp_completed or 'n/a' }}
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         {{ todo.duration or 'n/a' }}
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         <a class="btn btn-primary"
            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-play"></i>
         </a>
-    </div>
-    <div class="col-1">
+    </td>
+    <td>
         <a class="btn btn-secondary"
            href="{{ url_for('delete_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-trash" aria-hidden="true"></i>
         </a>
-    </div>
-</div>
+    </td>
+</tr>

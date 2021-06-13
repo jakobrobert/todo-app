@@ -40,11 +40,11 @@
                 </thead>
                 <tbody>
                 {% for todo in todos if not todo.completed %}
-                    {% include "todo_responsive.html" %}
+                    {% include "todo.html" %}
                 {% endfor %}
                     <tr><td colspan="8"><hr></td></tr>
                 {% for todo in todos if todo.completed %}
-                    {% include "todo_responsive.html" %}
+                    {% include "todo.html" %}
                 {% endfor %}
                 </tbody>
             </table>

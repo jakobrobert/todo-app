@@ -15,41 +15,40 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }}</h1>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
-            <div class="form-group row">
-                <div class="col">
+            <div class="row">
+                <div class="col-10">
                     <input class="form-control" type="text" name="title" placeholder="Enter todo title...">
                 </div>
-                <div class="col">
+                <div class="col-2">
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </div>
         </form>
-        <div style="margin-top: 20px;" class="container">
+        <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Title</th>
-                        <th>Created at</th>
-                        <th>Started at</th>
-                        <th>Completed at</th>
-                        <th>Duration</th>
-                        <th>Start</th>
-                        <th>Delete</th>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Started at</th>
+                        <th scope="col">Completed at</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for todo in todos if not todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
+                {% for todo in todos if not todo.completed %}
+                    {% include "todo_table_row.html" %}
+                {% endfor %}
                     <tr><td colspan="8"><hr></td></tr>
-                    {% for todo in todos if todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
+                {% for todo in todos if todo.completed %}
+                    {% include "todo_table_row.html" %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"

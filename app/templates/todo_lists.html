@@ -29,10 +29,12 @@
                 <thead>
                     <tr>
                         <th>
-                            <a class="btn btn-primary btn-sm" href="">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-primary btn-sm" href="">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_descending') }}">
                                 <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                             <br>

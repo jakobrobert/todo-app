@@ -39,6 +39,12 @@ class TodoList(db.Model):
     todos = db.relationship("Todo", backref="todo_list")
 
 
+class Setting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(255))
+    value = db.Column(db.String(255))
+
+
 db.create_all()
 db.session.commit()
 
@@ -133,3 +139,17 @@ def delete_todo(todo_list_id, todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/update_setting", methods=["GET"])
+def update_setting_for_todo_lists():
+    key = request.args.get("key")
+    value = request.args.get("value")
+    setting = Setting.query.filter_by(key=key).first()
+    if setting is None:
+        setting = Setting(key=key, value=value)
+        db.session.add(setting)
+        db.session.commit()
+    setting.value = value
+    db.session.commit()
+    return redirect(url_for("get_todo_lists"))

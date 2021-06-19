@@ -56,17 +56,9 @@ def index():
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
-    todo_lists = TodoList.query.all()
-    # TODO extract sorting into helper method
-    sort_todo_lists_by = Setting.query.filter_by(key='sort_todo_lists_by').first()
-    if sort_todo_lists_by is not None:
-        value = sort_todo_lists_by.value
-        if value == "title_ascending":
-            todo_lists = TodoList.query.order_by(TodoList.title.asc()).all()
-        elif value == "title_descending":
-            todo_lists = TodoList.query.order_by(TodoList.title.desc()).all()
-        else:
-            print("Unknown value for setting 'sort_todo_lists_by'!")
+    query = TodoList.query
+    query = sort_todo_lists_query(query)
+    todo_lists = query.all()
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
 
@@ -163,3 +155,18 @@ def update_setting_for_todo_lists():
     setting.value = value
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
+
+
+def sort_todo_lists_query(query):
+    sort_todo_lists_by = Setting.query.filter_by(key='sort_todo_lists_by').first()
+    if sort_todo_lists_by is None:
+        print("Setting with key 'sort_todo_lists_by' does not exist!")
+        return query
+    value = sort_todo_lists_by.value
+    if value == "title_ascending":
+        return query.order_by(TodoList.title.asc())
+    elif value == "title_descending":
+        return query.order_by(TodoList.title.desc())
+    else:
+        print("Unknown value for setting with key 'sort_todo_lists_by'!")
+        return query

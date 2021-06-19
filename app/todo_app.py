@@ -57,6 +57,16 @@ def index():
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
     todo_lists = TodoList.query.all()
+    # TODO extract sorting into helper method
+    sort_todo_lists_by = Setting.query.filter_by(key='sort_todo_lists_by').first()
+    if sort_todo_lists_by is not None:
+        value = sort_todo_lists_by.value
+        if value == "title_ascending":
+            todo_lists = TodoList.query.order_by(TodoList.title.asc()).all()
+        elif value == "title_descending":
+            todo_lists = TodoList.query.order_by(TodoList.title.desc()).all()
+        else:
+            print("Unknown value for setting 'sort_todo_lists_by'!")
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
 

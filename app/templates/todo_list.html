@@ -15,21 +15,21 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }}</h1>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
-            <div class="form-group row">
-                <div class="col">
+            <div class="row">
+                <div class="col-10">
                     <input class="form-control" type="text" name="title" placeholder="Enter todo title...">
                 </div>
-                <div class="col">
+                <div class="col-2">
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </div>
         </form>
-        <div style="margin-top: 20px;" class="container">
+        <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>
+                        <th scope="col"></th>
+                        <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
@@ -41,7 +41,7 @@
                             <br>
                             Title
                         </th>
-                        <th>
+                        <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
@@ -53,7 +53,7 @@
                             <br>
                             Created at
                         </th>
-                        <th>
+                        <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='started_at_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
@@ -65,7 +65,7 @@
                             <br>
                             Started at
                         </th>
-                        <th>
+                        <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='completed_at_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
@@ -77,19 +77,19 @@
                             <br>
                             Completed at
                         </th>
-                        <th>Duration</th>
-                        <th>Start</th>
-                        <th>Delete</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for todo in todos if not todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
+                {% for todo in todos if not todo.completed %}
+                    {% include "todo_table_row.html" %}
+                {% endfor %}
                     <tr><td colspan="8"><hr></td></tr>
-                    {% for todo in todos if todo.completed %}
-                        {% include "todo.html" %}
-                    {% endfor %}
+                {% for todo in todos if todo.completed %}
+                    {% include "todo_table_row.html" %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>

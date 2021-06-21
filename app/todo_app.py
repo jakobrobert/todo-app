@@ -57,7 +57,9 @@ def index():
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
     query = TodoList.query
-    query = sort_todo_lists_query(query)
+    order_by_clause = create_order_by_clause_for_todo_lists()
+    if order_by_clause is not None:
+        query = query.order_by(order_by_clause)
     todo_lists = query.all()
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
@@ -157,21 +159,19 @@ def update_setting_for_todo_lists():
     return redirect(url_for("get_todo_lists"))
 
 
-# TODO refactor? may only return the clause to reduce duplicated code
-def sort_todo_lists_query(query):
-    sort_todo_lists_by = Setting.query.filter_by(key='sort_todo_lists_by').first()
+def create_order_by_clause_for_todo_lists():
+    sort_todo_lists_by = Setting.query.filter_by(key="sort_todo_lists_by").first()
     if sort_todo_lists_by is None:
-        print("Setting with key 'sort_todo_lists_by' does not exist!")
-        return query
+        return None
     value = sort_todo_lists_by.value
     if value == "title_ascending":
-        return query.order_by(TodoList.title.asc())
+        return TodoList.title.asc()
     elif value == "title_descending":
-        return query.order_by(TodoList.title.desc())
+        return TodoList.title.desc()
     elif value == "created_at_ascending":
-        return query.order_by(TodoList.timestamp_created.asc())
+        return TodoList.timestamp_created.asc()
     elif value == "created_at_descending":
-        return query.order_by(TodoList.timestamp_created.desc())
+        return TodoList.timestamp_created.desc()
     else:
         print("Unknown value for setting with key 'sort_todo_lists_by'!")
-        return query
+        return None

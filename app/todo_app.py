@@ -216,7 +216,6 @@ def create_order_by_clause_for_todos():
         return Todo.timestamp_completed.asc()
     elif value == "completed_at_descending":
         return Todo.timestamp_completed.desc()
-    # TODO duration: need to add column to database, currently is only calculated property
     else:
         print("Unknown value for setting with key 'sort_todos_by'!")
         return None

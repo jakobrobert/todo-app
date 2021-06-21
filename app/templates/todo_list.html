@@ -30,10 +30,12 @@
                     <tr>
                         <th></th>
                         <th>
-                            <a class="btn btn-primary btn-sm" href="">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-primary btn-sm" href="">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_descending') }}">
                                 <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                             <br>

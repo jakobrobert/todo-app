@@ -94,9 +94,13 @@ def delete_todo_list(id):
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
-    todo_list = TodoList.query.filter_by(id=id).first()
-    todos = todo_list.todos
-    return render_template("todo_list.html", title=todo_list.title, todo_list_id=id, todos=todos)
+    title = TodoList.query.filter_by(id=id).first().title
+    query = Todo.query.filter_by(todo_list_id=id)
+    order_by_clause = create_order_by_clause_for_todos()
+    if order_by_clause is not None:
+        query = query.order_by(order_by_clause)
+    todos = query.all()
+    return render_template("todo_list.html", title=title, todo_list_id=id, todos=todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
@@ -145,7 +149,7 @@ def delete_todo(todo_list_id, todo_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/update_setting", methods=["GET"])
+@app.route(URL_PREFIX + "/update_setting_for_todo_lists", methods=["GET"])
 def update_setting_for_todo_lists():
     key = request.args.get("key")
     value = request.args.get("value")
@@ -157,6 +161,20 @@ def update_setting_for_todo_lists():
     setting.value = value
     db.session.commit()
     return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/update_setting_for_todos", methods=["GET"])
+def update_setting_for_todos(todo_list_id):
+    key = request.args.get("key")
+    value = request.args.get("value")
+    setting = Setting.query.filter_by(key=key).first()
+    if setting is None:
+        setting = Setting(key=key, value=value)
+        db.session.add(setting)
+        db.session.commit()
+    setting.value = value
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 def create_order_by_clause_for_todo_lists():
@@ -175,3 +193,14 @@ def create_order_by_clause_for_todo_lists():
     else:
         print("Unknown value for setting with key 'sort_todo_lists_by'!")
         return None
+
+
+def create_order_by_clause_for_todos():
+    sort_todos_by = Setting.query.filter_by(key="sort_todos_by").first()
+    if sort_todos_by is None:
+        return None
+    value = sort_todos_by.value
+    if value == "title_ascending":
+        return Todo.title.asc()
+    elif value == "title_descending":
+        return Todo.title.desc()

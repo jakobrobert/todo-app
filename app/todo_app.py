@@ -157,6 +157,7 @@ def update_setting_for_todo_lists():
     return redirect(url_for("get_todo_lists"))
 
 
+# TODO refactor? may only return the clause to reduce duplicated code
 def sort_todo_lists_query(query):
     sort_todo_lists_by = Setting.query.filter_by(key='sort_todo_lists_by').first()
     if sort_todo_lists_by is None:
@@ -167,6 +168,10 @@ def sort_todo_lists_query(query):
         return query.order_by(TodoList.title.asc())
     elif value == "title_descending":
         return query.order_by(TodoList.title.desc())
+    elif value == "created_at_ascending":
+        return query.order_by(TodoList.timestamp_created.asc())
+    elif value == "created_at_descending":
+        return query.order_by(TodoList.timestamp_created.desc())
     else:
         print("Unknown value for setting with key 'sort_todo_lists_by'!")
         return query

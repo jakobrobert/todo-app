@@ -28,8 +28,30 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Created at</th>
+                        <th scope="col">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_ascending') }}">
+                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_descending') }}">
+                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            </a>
+                            <br>
+                            Title
+                        </th>
+                        <th scope="col">
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='created_at_ascending') }}">
+                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm"
+                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='created_at_descending') }}">
+                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            </a>
+                            <br>
+                            Created at
+                        </th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>

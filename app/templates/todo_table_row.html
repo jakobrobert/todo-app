@@ -4,16 +4,16 @@
                onclick="window.location.href='{{ url_for('update_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
                {% if todo.completed %} checked {% endif %}>
     </td>
+    <td>
+        <input class="form-check-input" type="checkbox" name="high_priority"
+               onclick="window.location.href='{{ url_for('toggle_todo_priority', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
+               {% if todo.high_priority %} checked {% endif %}>
+    </td>
     <td style="min-width:100px">
         <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
             <textarea class="form-control" name="title">{{ todo.title }}</textarea>
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
-    </td>
-    <td>
-        <input class="form-check-input" type="checkbox" name="high_priority"
-               onclick="window.location.href='{{ url_for('toggle_todo_priority', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
-               {% if todo.high_priority %} checked {% endif %}>
     </td>
     <td>
         {{ todo.timestamp_created }}

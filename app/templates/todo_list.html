@@ -28,7 +28,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
+                        <th scope="col">
+                            <i class="fas fa-clipboard-check"></i>
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </th>
                         <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
@@ -41,7 +46,6 @@
                             <br>
                             Title
                         </th>
-                        <th scope="col">High Priority</th>
                         <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_ascending') }}">
@@ -86,7 +90,7 @@
                 <tbody>
                     <tr>
                         <td colspan="9" style="text-align: center;">
-                            <h4>High Priority</h4>
+                            <h4><i class="fas fa-exclamation-triangle"></i> High Priority</h4>
                         </td>
                     </tr>
                 {% for todo in todos if not todo.completed and todo.high_priority %}
@@ -102,7 +106,7 @@
                 {% endfor %}
                     <tr>
                         <td colspan="9" style="text-align: center;">
-                            <h4>Completed</h4>
+                            <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>
                 {% for todo in todos if todo.completed %}

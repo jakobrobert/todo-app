@@ -20,6 +20,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
+    high_priority = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
@@ -129,6 +130,14 @@ def edit_todo_title(todo_id, todo_list_id):
     title = request.form.get("title")
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.title = title
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_priority", methods=["GET"])
+def toggle_todo_priority(todo_id, todo_list_id):
+    todo = Todo.query.filter_by(id=todo_id).first()
+    todo.high_priority = not todo.high_priority
     db.session.commit()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 

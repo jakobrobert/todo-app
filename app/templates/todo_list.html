@@ -28,7 +28,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
+                        <th scope="col">
+                            <i class="fas fa-clipboard-check"></i>
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </th>
                         <th scope="col">
                             <a class="btn btn-primary btn-sm"
                                href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
@@ -83,10 +88,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for todo in todos if not todo.completed %}
+                    <tr>
+                        <td colspan="9" style="text-align: center;">
+                            <h4><i class="fas fa-exclamation-triangle"></i> High Priority</h4>
+                        </td>
+                    </tr>
+                {% for todo in todos if not todo.completed and todo.high_priority %}
                     {% include "todo_table_row.html" %}
                 {% endfor %}
-                    <tr><td colspan="8"><hr></td></tr>
+                    <tr>
+                        <td colspan="9" style="text-align: center;">
+                            <h4>Low Priority</h4>
+                        </td>
+                    </tr>
+                {% for todo in todos if not todo.completed and not todo.high_priority %}
+                    {% include "todo_table_row.html" %}
+                {% endfor %}
+                    <tr>
+                        <td colspan="9" style="text-align: center;">
+                            <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
+                        </td>
+                    </tr>
                 {% for todo in todos if todo.completed %}
                     {% include "todo_table_row.html" %}
                 {% endfor %}

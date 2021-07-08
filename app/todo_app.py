@@ -134,6 +134,14 @@ def edit_todo_title(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_priority", methods=["GET"])
+def toggle_todo_priority(todo_id, todo_list_id):
+    todo = Todo.query.filter_by(id=todo_id).first()
+    todo.high_priority = not todo.high_priority
+    db.session.commit()
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
 def start_todo(todo_id, todo_list_id):
     todo = Todo.query.filter_by(id=todo_id).first()

@@ -84,11 +84,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for todo in todos if (not todo.completed and todo.high_priority) %}
+                {% for todo in todos if not todo.completed and todo.high_priority %}
                     {% include "todo_table_row.html" %}
                 {% endfor %}
                     <tr><td colspan="9"><hr></td></tr>
-                {% for todo in todos if (not todo.completed and not todo.high_priority) %}
+                {% for todo in todos if not todo.completed and not todo.high_priority %}
                     {% include "todo_table_row.html" %}
                 {% endfor %}
                     <tr><td colspan="9"><hr></td></tr>

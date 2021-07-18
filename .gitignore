@@ -2,4 +2,4 @@
 __pycache__/
 
 /app/test.db
-/app/server.ini
+/server.ini

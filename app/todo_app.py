@@ -6,7 +6,7 @@ import configparser
 
 
 config = configparser.ConfigParser()
-config.read("server.ini")
+config.read("../server.ini")
 URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
 DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
 

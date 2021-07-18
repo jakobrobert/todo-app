@@ -2,48 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
-import configparser
+from app import db
+from app import app
+from app import URL_PREFIX
 
-
-config = configparser.ConfigParser()
-config.read("../server.ini")
-URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
-DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
-
-
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    completed = db.Column(db.Boolean, default=False)
-    high_priority = db.Column(db.Boolean, default=False)
-    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
-    timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
-    timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
-    todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
-
-    @property
-    def duration(self):
-        if self.timestamp_started is None or self.timestamp_completed is None:
-            return None
-        return self.timestamp_completed - self.timestamp_started
-
-
-class TodoList(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
-    todos = db.relationship("Todo", backref="todo_list")
-
-
-class Setting(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    key = db.Column(db.String(255))
-    value = db.Column(db.String(255))
+from models.models import TodoList
+from models.models import Todo
+from models.models import Setting
 
 
 db.create_all()

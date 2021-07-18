@@ -17,16 +17,3 @@ class Todo(db.Model):
         if self.timestamp_started is None or self.timestamp_completed is None:
             return None
         return self.timestamp_completed - self.timestamp_started
-
-
-class TodoList(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
-    todos = db.relationship("Todo", backref="todo_list")
-
-
-class Setting(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    key = db.Column(db.String(255))
-    value = db.Column(db.String(255))

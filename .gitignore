@@ -1,5 +1,4 @@
 .idea/
 __pycache__/
 
-/app/test.db
 /server.ini

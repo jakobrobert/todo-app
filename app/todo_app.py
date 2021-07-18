@@ -6,9 +6,9 @@ from app import db
 from app import app
 from app import URL_PREFIX
 
-from models.models import TodoList
-from models.models import Todo
-from models.models import Setting
+from .models.models import TodoList
+from .models.models import Todo
+from .models.models import Setting
 
 
 db.create_all()

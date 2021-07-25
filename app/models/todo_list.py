@@ -17,7 +17,7 @@ class TodoList(db.Model):
     @staticmethod
     def get_all():
         query = TodoList.query
-        order_by_clause = TodoList.create_order_by_clause_for_todo_lists()
+        order_by_clause = TodoList.__create_order_by_clause()
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
         return query.all()
@@ -26,9 +26,8 @@ class TodoList(db.Model):
     def get(id):
         return TodoList.query.filter_by(id=id).first()
 
-    # TODO simplify name
     @staticmethod
-    def create_order_by_clause_for_todo_lists():
+    def __create_order_by_clause():
         sort_todo_lists_by = Setting.get("sort_todo_lists_by")
         if sort_todo_lists_by is None:
             return None

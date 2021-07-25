@@ -23,14 +23,13 @@ class Todo(db.Model):
     @staticmethod
     def get_all_of_todo_list(todo_list_id):
         query = Todo.query.filter_by(todo_list_id=todo_list_id)
-        order_by_clause = Todo.create_order_by_clause_for_todos()
+        order_by_clause = Todo.__create_order_by_clause()
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
         return query.all()
 
-    # TODO simplify name
     @staticmethod
-    def create_order_by_clause_for_todos():
+    def __create_order_by_clause():
         sort_todos_by = Setting.get("sort_todos_by")
         if sort_todos_by is None:
             return None

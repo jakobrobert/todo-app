@@ -55,13 +55,18 @@ def delete_todo_list(id):
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
+    """
     title = TodoList.query.filter_by(id=id).first().title
     query = Todo.query.filter_by(todo_list_id=id)
     order_by_clause = create_order_by_clause_for_todos()
     if order_by_clause is not None:
         query = query.order_by(order_by_clause)
     todos = query.all()
-    return render_template("todo_list.html", title=title, todo_list_id=id, todos=todos)
+    """
+    todo_list = TodoList.get(id=id)
+    title = todo_list.title
+    todos = todo_list.get_todos()
+    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
@@ -159,6 +164,7 @@ def create_order_by_clause_for_todo_lists():
         return None
 
 
+# TODO remove
 def create_order_by_clause_for_todos():
     sort_todos_by = Setting.get("sort_todos_by")
     if sort_todos_by is None:

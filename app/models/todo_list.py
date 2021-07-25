@@ -1,5 +1,6 @@
 from app import db # TODO make all paths relative? change to ..
 from .setting import Setting
+from .todo import Todo
 
 from sqlalchemy import func
 
@@ -10,6 +11,9 @@ class TodoList(db.Model):
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     todos = db.relationship("Todo", backref="todo_list")
 
+    def get_todos(self):
+        return Todo.get_all_of_todo_list(todo_list_id=self.id)
+
     @staticmethod
     def get_all():
         query = TodoList.query
@@ -17,6 +21,10 @@ class TodoList(db.Model):
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
         return query.all()
+
+    @staticmethod
+    def get(id):
+        return TodoList.query.filter_by(id=id).first()
 
     # TODO simplify name
     @staticmethod

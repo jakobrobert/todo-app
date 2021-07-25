@@ -28,34 +28,27 @@ def get_todo_lists():
 @app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
 def add_todo_list():
     title = request.form.get("title")
-    todo_list = TodoList(title=title)
-    db.session.add(todo_list)
-    db.session.commit()
+    TodoList.add(title)
     return redirect(url_for("get_todo_lists"))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>/edit-title", methods=["POST"])
 def edit_todo_list_title(id):
     title = request.form.get("title")
-    todo_list = TodoList.query.filter_by(id=id).first()
-    todo_list.title = title
-    db.session.commit()
+    todo_list = TodoList.get(id)
+    todo_list.set_title(title)
     return redirect(url_for("get_todo_lists"))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>/delete", methods=["GET"])
 def delete_todo_list(id):
-    todo_list = TodoList.query.filter_by(id=id).first()
-    for todo in todo_list.todos:
-        db.session.delete(todo)
-    db.session.delete(todo_list)
-    db.session.commit()
+    TodoList.delete(id)
     return redirect(url_for("get_todo_lists"))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
-    todo_list = TodoList.get(id=id)
+    todo_list = TodoList.get(id)
     title = todo_list.title
     todos = todo_list.get_todos()
     return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos)

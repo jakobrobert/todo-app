@@ -11,6 +11,10 @@ class TodoList(db.Model):
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     todos = db.relationship("Todo", backref="todo_list")
 
+    def set_title(self, title):
+        self.title = title
+        db.session.commit()
+
     def get_todos(self):
         return Todo.get_all_of_todo_list(todo_list_id=self.id)
 
@@ -25,6 +29,20 @@ class TodoList(db.Model):
     @staticmethod
     def get(id):
         return TodoList.query.filter_by(id=id).first()
+
+    @staticmethod
+    def add(title):
+        todo_list = TodoList(title=title)
+        db.session.add(todo_list)
+        db.session.commit()
+
+    @staticmethod
+    def delete(id):
+        todo_list = TodoList.get(id)
+        for todo in todo_list.todos:
+            db.session.delete(todo)
+        db.session.delete(todo_list)
+        db.session.commit()
 
     @staticmethod
     def __create_order_by_clause():

@@ -1,6 +1,3 @@
-from flask import render_template, request, redirect, url_for
-from sqlalchemy import func
-
 from app import db
 from app import app
 from app import URL_PREFIX
@@ -8,6 +5,9 @@ from app import URL_PREFIX
 from .models.todo import Todo
 from .models.todo_list import TodoList
 from .models.setting import Setting
+
+from flask import render_template, request, redirect, url_for
+from sqlalchemy import func
 
 
 db.create_all()
@@ -21,11 +21,7 @@ def index():
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
-    query = TodoList.query
-    order_by_clause = create_order_by_clause_for_todo_lists()
-    if order_by_clause is not None:
-        query = query.order_by(order_by_clause)
-    todo_lists = query.all()
+    todo_lists = TodoList.get_all()
     return render_template("todo_lists.html", todo_lists=todo_lists)
 
 

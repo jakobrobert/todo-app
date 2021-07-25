@@ -21,7 +21,7 @@ class TodoList(db.Model):
     # TODO simplify name
     @staticmethod
     def create_order_by_clause_for_todo_lists():
-        sort_todo_lists_by = Setting.query.filter_by(key="sort_todo_lists_by").first()
+        sort_todo_lists_by = Setting.get("sort_todo_lists_by")
         if sort_todo_lists_by is None:
             return None
         value = sort_todo_lists_by.value

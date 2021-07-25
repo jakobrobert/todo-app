@@ -136,16 +136,11 @@ def update_setting_for_todo_lists():
 def update_setting_for_todos(todo_list_id):
     key = request.args.get("key")
     value = request.args.get("value")
-    setting = Setting.query.filter_by(key=key).first()
-    if setting is None:
-        setting = Setting(key=key, value=value)
-        db.session.add(setting)
-        db.session.commit()
-    setting.value = value
-    db.session.commit()
+    Setting.set(key, value)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+# TODO remove
 def create_order_by_clause_for_todo_lists():
     sort_todo_lists_by = Setting.query.filter_by(key="sort_todo_lists_by").first()
     if sort_todo_lists_by is None:
@@ -165,7 +160,7 @@ def create_order_by_clause_for_todo_lists():
 
 
 def create_order_by_clause_for_todos():
-    sort_todos_by = Setting.query.filter_by(key="sort_todos_by").first()
+    sort_todos_by = Setting.get("sort_todos_by")
     if sort_todos_by is None:
         return None
     value = sort_todos_by.value

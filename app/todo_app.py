@@ -7,7 +7,6 @@ from .models.todo_list import TodoList
 from .models.setting import Setting
 
 from flask import render_template, request, redirect, url_for
-from sqlalchemy import func
 
 
 db.create_all()

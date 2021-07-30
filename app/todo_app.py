@@ -1,6 +1,6 @@
-from app import db
-from app import app
-from app import URL_PREFIX
+from . import db
+from . import app
+from . import URL_PREFIX
 
 from .models.todo import Todo
 from .models.todo_list import TodoList

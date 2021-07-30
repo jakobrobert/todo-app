@@ -1,4 +1,4 @@
-from app import db # TODO make all paths relative? change to ..
+from .. import db
 from .setting import Setting
 from .todo import Todo
 

@@ -20,6 +20,30 @@ class Todo(db.Model):
             return None
         return self.timestamp_completed - self.timestamp_started
 
+    def update(self):
+        self.completed = not self.completed
+        if self.completed:
+            self.timestamp_completed = func.now()
+        else:
+            self.timestamp_completed = None
+        db.session.commit()
+
+    def set_title(self, title):
+        self.title = title
+        db.session.commit()
+
+    def toggle_priority(self):
+        self.high_priority = not self.high_priority
+        db.session.commit()
+
+    def start(self):
+        self.timestamp_started = func.now()
+        db.session.commit()
+
+    @staticmethod
+    def get(id):
+        return Todo.query.filter_by(id=id).first()
+
     @staticmethod
     def get_all_of_todo_list(todo_list_id):
         query = Todo.query.filter_by(todo_list_id=todo_list_id)
@@ -27,6 +51,18 @@ class Todo(db.Model):
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
         return query.all()
+
+    @staticmethod
+    def add(title, todo_list_id):
+        todo = Todo(title=title, todo_list_id=todo_list_id)
+        db.session.add(todo)
+        db.session.commit()
+
+    @staticmethod
+    def delete(id):
+        todo = Todo.get(id)
+        db.session.delete(todo)
+        db.session.commit()
 
     @staticmethod
     def __create_order_by_clause():

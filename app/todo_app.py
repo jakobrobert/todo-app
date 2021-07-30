@@ -57,54 +57,43 @@ def get_todo_list(id):
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
 def add_todo(todo_list_id):
     title = request.form.get("title")
-    todo = Todo(title=title, todo_list_id=todo_list_id)
-    db.session.add(todo)
-    db.session.commit()
+    Todo.add(title, todo_list_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+# TODO rename to toggle_todo_completed ?
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/update", methods=["GET"])
 def update_todo(todo_id, todo_list_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
-    todo.completed = not todo.completed
-    if todo.completed:
-        todo.timestamp_completed = func.now()
-    else:
-        todo.timestamp_completed = None
-    db.session.commit()
+    todo = Todo.get(todo_id)
+    todo.update()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
 def edit_todo_title(todo_id, todo_list_id):
     title = request.form.get("title")
-    todo = Todo.query.filter_by(id=todo_id).first()
-    todo.title = title
-    db.session.commit()
+    todo = Todo.get(todo_id)
+    todo.set_title(title)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_priority", methods=["GET"])
 def toggle_todo_priority(todo_id, todo_list_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
-    todo.high_priority = not todo.high_priority
-    db.session.commit()
+    todo = Todo.get(todo_id)
+    todo.toggle_priority()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
 def start_todo(todo_id, todo_list_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
-    todo.timestamp_started = func.now()
-    db.session.commit()
+    todo = Todo.get(todo_id)
+    todo.start()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
-def delete_todo(todo_list_id, todo_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
-    db.session.delete(todo)
-    db.session.commit()
+def delete_todo(todo_id, todo_list_id):
+    Todo.delete(todo_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

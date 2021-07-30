@@ -19,16 +19,16 @@ class TodoList(db.Model):
         return Todo.get_all_of_todo_list(todo_list_id=self.id)
 
     @staticmethod
+    def get(id):
+        return TodoList.query.filter_by(id=id).first()
+
+    @staticmethod
     def get_all():
         query = TodoList.query
         order_by_clause = TodoList.__create_order_by_clause()
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
         return query.all()
-
-    @staticmethod
-    def get(id):
-        return TodoList.query.filter_by(id=id).first()
 
     @staticmethod
     def add(title):

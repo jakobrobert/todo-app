@@ -20,7 +20,7 @@ class Todo(db.Model):
             return None
         return self.timestamp_completed - self.timestamp_started
 
-    def update(self):
+    def toggle_completed(self):
         self.completed = not self.completed
         if self.completed:
             self.timestamp_completed = func.now()

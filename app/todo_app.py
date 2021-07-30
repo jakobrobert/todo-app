@@ -60,19 +60,18 @@ def add_todo(todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-# TODO rename to toggle_todo_completed ?
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/update", methods=["GET"])
-def update_todo(todo_id, todo_list_id):
-    todo = Todo.get(todo_id)
-    todo.update()
-    return redirect(url_for("get_todo_list", id=todo_list_id))
-
-
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
 def edit_todo_title(todo_id, todo_list_id):
     title = request.form.get("title")
     todo = Todo.get(todo_id)
     todo.set_title(title)
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_completed", methods=["GET"])
+def toggle_todo_completed(todo_id, todo_list_id):
+    todo = Todo.get(todo_id)
+    todo.toggle_completed()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

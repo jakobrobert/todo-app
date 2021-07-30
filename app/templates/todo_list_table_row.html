@@ -1,0 +1,23 @@
+<tr>
+    <tr>
+        <td style="min-width:100px">
+            <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
+                <textarea class="form-control" name="title">{{ todo_list.title }}</textarea>
+                <button class="btn btn-primary" type="submit">OK</button>
+            </form>
+        </td>
+        <td>
+            {{ todo_list.timestamp_created }}
+        </td>
+        <td>
+            <a class="btn btn-secondary" href="{{ url_for('get_todo_list', id=todo_list.id) }}">
+                <i class="fas fa-edit" aria-hidden="true"></i>
+            </a>
+        </td>
+        <td>
+            <a class="btn btn-secondary" href="{{ url_for('delete_todo_list', id=todo_list.id) }}">
+                <i class="fas fa-trash" aria-hidden="true"></i>
+            </a>
+        </td>
+    </tr>
+</tr>

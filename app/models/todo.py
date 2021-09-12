@@ -1,4 +1,4 @@
-from .. import db
+from todo_app import db
 from .setting import Setting
 
 from sqlalchemy import func

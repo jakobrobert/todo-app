@@ -13,6 +13,7 @@ class Todo(db.Model):
     timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
+    long_term_todo_id = db.Column(db.Integer, db.ForeignKey("long_term_todo.id"))
 
     @property
     def duration(self):

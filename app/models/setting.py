@@ -17,6 +17,6 @@ class Setting(db.Model):
             setting = Setting(key=key, value=value)
             db.session.add(setting)
             db.session.commit()
-            # TODO missing return?
+            return
         setting.value = value
         db.session.commit()

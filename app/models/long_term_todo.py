@@ -33,6 +33,14 @@ class LongTermTodo(db.Model):
         return LongTermTodo.query.filter_by(id=id).first()
 
     @staticmethod
+    def get_all():
+        query = LongTermTodo.query
+        order_by_clause = LongTermTodo.__create_order_by_clause()
+        if order_by_clause is not None:
+            query = query.order_by(order_by_clause)
+        return query.all()
+
+    @staticmethod
     def add(title):
         lt_todo = LongTermTodo(title=title)
         db.session.add(lt_todo)

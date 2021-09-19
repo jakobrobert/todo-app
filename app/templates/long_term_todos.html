@@ -13,8 +13,8 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }}</h1>
-        <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
+        <h1>Long Term Todos</h1>
+        <form action="{{ url_for('add_long_term_todo') }}" method="post">
             <div class="row">
                 <div class="col-10">
                     <input class="form-control" type="text" name="title" placeholder="Enter title...">
@@ -32,15 +32,12 @@
                             <i class="fas fa-clipboard-check"></i>
                         </th>
                         <th scope="col">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </th>
-                        <th scope="col">
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='title_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_descending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='title_descending') }}">
                                 <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                             <br>
@@ -48,11 +45,11 @@
                         </th>
                         <th scope="col">
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_ascending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='created_at_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_descending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='created_at_descending') }}">
                                 <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                             <br>
@@ -60,57 +57,36 @@
                         </th>
                         <th scope="col">
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='started_at_ascending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='completed_at_ascending') }}">
                                 <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='started_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Started at
-                        </th>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='completed_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='completed_at_descending') }}">
+                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='completed_at_descending') }}">
                                 <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                             <br>
                             Completed at
                         </th>
                         <th scope="col">Duration</th>
-                        <th scope="col">Start</th>
                         <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="9" style="text-align: center;">
-                            <h4><i class="fas fa-exclamation-triangle"></i> High Priority</h4>
+                        <td colspan="6" style="text-align: center;">
+                            <h4>Not Completed</h4>
                         </td>
                     </tr>
-                {% for todo in todos if not todo.completed and todo.high_priority %}
-                    {% include "todo_table_row.html" %}
+                {% for long_term_todo in long_term_todos if not long_term_todo.completed %}
+                    {% include "long_term_todo_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="9" style="text-align: center;">
-                            <h4>Low Priority</h4>
-                        </td>
-                    </tr>
-                {% for todo in todos if not todo.completed and not todo.high_priority %}
-                    {% include "todo_table_row.html" %}
-                {% endfor %}
-                    <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="6" style="text-align: center;">
                             <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>
-                {% for todo in todos if todo.completed %}
-                    {% include "todo_table_row.html" %}
+                {% for long_term_todo in long_term_todos if long_term_todo.completed %}
+                    {% include "long_term_todo_table_row.html" %}
                 {% endfor %}
                 </tbody>
             </table>

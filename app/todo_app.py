@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 
 from models.todo import Todo
 from models.todo_list import TodoList
+from models.long_term_todo import LongTermTodo
 from models.setting import Setting
 
 

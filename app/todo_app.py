@@ -28,8 +28,8 @@ db.session.commit()
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
     # TODO do properly, create home page with links to todo_lists and long_term_todos
-    # return redirect(url_for("get_todo_lists"))
-    return redirect(url_for("get_long_term_todos"))
+    return redirect(url_for("get_todo_lists"))
+    # return redirect(url_for("get_long_term_todos"))
 
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
@@ -71,6 +71,13 @@ def get_todo_list(id):
 def add_todo(todo_list_id):
     title = request.form.get("title")
     Todo.add(title, todo_list_id)
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add-by-long-term-todo", methods=["POST"])
+def add_todo_by_long_term_todo(todo_list_id):
+    long_term_todo_id = request.form.get("long_term_todo_id")
+    Todo.add_by_long_term_todo(long_term_todo_id, todo_list_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

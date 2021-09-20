@@ -29,10 +29,9 @@
             <div class="row">
                 <div class="col-10">
                     <select class="form-control" name="long_term_todo_id">
-                        <!-- TODO replace by real data -->
-                        <option value="3">Einkaufen</option>
-                        <option value="4">Arbeit</option>
-                        <option value="5">Keyboard üben</option>
+                    {% for long_term_todo in long_term_todos %}
+                        <option value="{{ long_term_todo.id }}">{{ long_term_todo.title }}</option>
+                    {% endfor %}
                     </select>
                 </div>
                 <div class="col-2">

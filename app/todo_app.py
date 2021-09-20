@@ -64,7 +64,8 @@ def get_todo_list(id):
     todo_list = TodoList.get(id)
     title = todo_list.title
     todos = todo_list.get_todos()
-    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos)
+    long_term_todos = LongTermTodo.get_all()
+    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])

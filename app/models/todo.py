@@ -55,6 +55,14 @@ class Todo(db.Model):
         return query.all()
 
     @staticmethod
+    def get_all_of_long_term_todo(long_term_todo_id):
+        query = Todo.query.filter_by(long_term_todo_id=long_term_todo_id)
+        order_by_clause = Todo.__create_order_by_clause()
+        if order_by_clause is not None:
+            query = query.order_by(order_by_clause)
+        return query.all()
+
+    @staticmethod
     def add(title, todo_list_id):
         todo = Todo(title=title, todo_list_id=todo_list_id)
         db.session.add(todo)

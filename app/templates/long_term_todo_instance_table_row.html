@@ -1,0 +1,29 @@
+<tr>
+    <!-- TODO make everything readonly, remove buttons for editing -->
+    <td>
+        <input class="form-check-input" type="checkbox" name="completed"
+               {% if todo.completed %} checked {% endif %}>
+    </td>
+    <td>
+        <input class="form-check-input" type="checkbox" name="high_priority"
+               {% if todo.high_priority %} checked {% endif %}>
+    </td>
+    <td style="min-width:100px">
+        <form>
+            <textarea class="form-control" name="title">{{ todo.title }}</textarea>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+    </td>
+    <td>
+        {{ todo.timestamp_created }}
+    </td>
+    <td>
+        {{ todo.timestamp_started or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.timestamp_completed or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.duration or 'n/a' }}
+    </td>
+</tr>

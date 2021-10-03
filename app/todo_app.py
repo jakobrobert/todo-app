@@ -123,6 +123,14 @@ def get_long_term_todos():
     return render_template("long_term_todos.html", long_term_todos=long_term_todos)
 
 
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
+def get_long_term_todo(id):
+    long_term_todo = LongTermTodo.get(id)
+    title = long_term_todo.title
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=long_term_todo.id)
+    return render_template("long_term_todo.html", title=title, todos=todos)
+
+
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
 def add_long_term_todo():
     title = request.form.get("title")

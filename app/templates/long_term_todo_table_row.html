@@ -21,6 +21,12 @@
     </td>
     <td>
         <a class="btn btn-secondary"
+           href="{{ url_for('get_long_term_todo', id=long_term_todo.id) }}">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+        </a>
+    </td>
+    <td>
+        <a class="btn btn-secondary"
            href="{{ url_for('delete_long_term_todo', id=long_term_todo.id) }}">
             <i class="fas fa-trash" aria-hidden="true"></i>
         </a>

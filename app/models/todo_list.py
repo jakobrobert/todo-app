@@ -1,6 +1,5 @@
 from todo_app import db
 from .setting import Setting
-from .todo import Todo
 
 from sqlalchemy import func
 
@@ -13,9 +12,6 @@ class TodoList(db.Model):
     def set_title(self, title):
         self.title = title
         db.session.commit()
-
-    def get_todos(self):
-        return Todo.get_all_of_todo_list(todo_list_id=self.id)
 
     @staticmethod
     def get(id):

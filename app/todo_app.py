@@ -63,7 +63,7 @@ def delete_todo_list(id):
 def get_todo_list(id):
     todo_list = TodoList.get(id)
     title = todo_list.title
-    todos = todo_list.get_todos()
+    todos = Todo.get_all_of_todo_list(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
     return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos)
 
@@ -127,7 +127,7 @@ def get_long_term_todos():
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     title = long_term_todo.title
-    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=long_term_todo.id)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     return render_template("long_term_todo.html", title=title, todos=todos)
 
 

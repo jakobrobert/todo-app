@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 
 from models.todo import Todo
 from models.todo_list import TodoList
+from models.long_term_todo import LongTermTodo
 from models.setting import Setting
 
 
@@ -26,7 +27,7 @@ db.session.commit()
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
-    return redirect(url_for("get_todo_lists"))
+    return render_template("index.html")
 
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
@@ -60,14 +61,23 @@ def delete_todo_list(id):
 def get_todo_list(id):
     todo_list = TodoList.get(id)
     title = todo_list.title
-    todos = todo_list.get_todos()
-    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos)
+    todos = Todo.get_all_of_todo_list(todo_list_id=id)
+    long_term_todos = LongTermTodo.get_all()
+    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
 def add_todo(todo_list_id):
     title = request.form.get("title")
     Todo.add(title, todo_list_id)
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add-by-long-term-todo", methods=["POST"])
+def add_todo_by_long_term_todo(todo_list_id):
+    long_term_todo_id = request.form.get("long_term_todo_id")
+    long_term_todo = LongTermTodo.get(long_term_todo_id)
+    long_term_todo.add_todo(todo_list_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
@@ -79,7 +89,7 @@ def edit_todo_title(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_completed", methods=["GET"])
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle-completed", methods=["GET"])
 def toggle_todo_completed(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
     todo.toggle_completed()
@@ -106,6 +116,49 @@ def delete_todo(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+@app.route(URL_PREFIX + "/long_term_todos", methods=["GET"])
+def get_long_term_todos():
+    long_term_todos = LongTermTodo.get_all()
+    return render_template("long_term_todos.html", long_term_todos=long_term_todos)
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
+def get_long_term_todo(id):
+    long_term_todo = LongTermTodo.get(id)
+    title = long_term_todo.title
+    duration = long_term_todo.duration
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    return render_template("long_term_todo.html", title=title, duration=duration, todos=todos)
+
+
+@app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
+def add_long_term_todo():
+    title = request.form.get("title")
+    LongTermTodo.add(title)
+    return redirect(url_for("get_long_term_todos"))
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/edit-title", methods=["POST"])
+def edit_long_term_todo_title(id):
+    title = request.form.get("title")
+    long_term_todo = LongTermTodo.get(id)
+    long_term_todo.set_title(title)
+    return redirect(url_for("get_long_term_todos"))
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/toggle-completed", methods=["GET"])
+def toggle_long_term_todo_completed(id):
+    long_term_todo = LongTermTodo.get(id)
+    long_term_todo.toggle_completed()
+    return redirect(url_for("get_long_term_todos"))
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/delete", methods=["GET"])
+def delete_long_term_todo(id):
+    LongTermTodo.delete(id)
+    return redirect(url_for("get_long_term_todos"))
+
+
 @app.route(URL_PREFIX + "/update_setting_for_todo_lists", methods=["GET"])
 def update_setting_for_todo_lists():
     key = request.args.get("key")
@@ -120,3 +173,11 @@ def update_setting_for_todos(todo_list_id):
     value = request.args.get("value")
     Setting.set(key, value)
     return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/update_setting_for_long_term_todos", methods=["GET"])
+def update_setting_for_long_term_todos():
+    key = request.args.get("key")
+    value = request.args.get("value")
+    Setting.set(key, value)
+    return redirect(url_for("get_long_term_todos"))

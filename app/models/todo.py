@@ -1,4 +1,5 @@
 from todo_app import db
+
 from .setting import Setting
 
 from sqlalchemy import func
@@ -13,6 +14,7 @@ class Todo(db.Model):
     timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
+    long_term_todo_id = db.Column(db.Integer, db.ForeignKey("long_term_todo.id"))
 
     @property
     def duration(self):
@@ -47,6 +49,14 @@ class Todo(db.Model):
     @staticmethod
     def get_all_of_todo_list(todo_list_id):
         query = Todo.query.filter_by(todo_list_id=todo_list_id)
+        order_by_clause = Todo.__create_order_by_clause()
+        if order_by_clause is not None:
+            query = query.order_by(order_by_clause)
+        return query.all()
+
+    @staticmethod
+    def get_all_of_long_term_todo(long_term_todo_id):
+        query = Todo.query.filter_by(long_term_todo_id=long_term_todo_id)
         order_by_clause = Todo.__create_order_by_clause()
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)

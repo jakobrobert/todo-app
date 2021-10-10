@@ -14,10 +14,26 @@
 <body>
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }}</h1>
+        <br>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
             <div class="row">
                 <div class="col-10">
-                    <input class="form-control" type="text" name="title" placeholder="Enter todo title...">
+                    <input class="form-control" type="text" name="title" id="title" placeholder="Enter title...">
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <form action="{{ url_for('add_todo_by_long_term_todo', todo_list_id=todo_list_id) }}" method="post">
+            <div class="row">
+                <div class="col-10">
+                    <select class="form-control" name="long_term_todo_id">
+                    {% for long_term_todo in long_term_todos %}
+                        <option value="{{ long_term_todo.id }}">{{ long_term_todo.title }}</option>
+                    {% endfor %}
+                    </select>
                 </div>
                 <div class="col-2">
                     <button class="btn btn-primary" type="submit">Add</button>
@@ -83,13 +99,14 @@
                             Completed at
                         </th>
                         <th scope="col">Duration</th>
+                        <th scope="col">Long<br>Term<br>Todo</th>
                         <th scope="col">Start</th>
                         <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4><i class="fas fa-exclamation-triangle"></i> High Priority</h4>
                         </td>
                     </tr>
@@ -97,7 +114,7 @@
                     {% include "todo_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4>Low Priority</h4>
                         </td>
                     </tr>
@@ -105,7 +122,7 @@
                     {% include "todo_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>

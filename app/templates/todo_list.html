@@ -111,7 +111,7 @@
                         </td>
                     </tr>
                 {% for todo in todos if not todo.completed and todo.high_priority %}
-                    {% include "todo_table_row.html" %}
+                    {% include "todo_list_table_row.html" %}
                 {% endfor %}
                     <tr>
                         <td colspan="10" style="text-align: center;">

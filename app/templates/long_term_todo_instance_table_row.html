@@ -24,4 +24,10 @@
     <td>
         {{ todo.duration or 'n/a' }}
     </td>
+    <td>
+        <a class="btn btn-secondary"
+           href="{{ url_for('get_todo_list', id=todo.todo_list_id) }}">
+            <i class="fas fa-level-up-alt"></i>
+        </a>
+    </td>
 </tr>

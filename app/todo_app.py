@@ -27,9 +27,7 @@ db.session.commit()
 
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
-    # TODO do properly, create home page with links to todo_lists and long_term_todos
-    return redirect(url_for("get_todo_lists"))
-    # return redirect(url_for("get_long_term_todos"))
+    return render_template("index.html")
 
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])

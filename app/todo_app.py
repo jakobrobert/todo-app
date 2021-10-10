@@ -76,7 +76,8 @@ def add_todo(todo_list_id):
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add-by-long-term-todo", methods=["POST"])
 def add_todo_by_long_term_todo(todo_list_id):
     long_term_todo_id = request.form.get("long_term_todo_id")
-    Todo.add_by_long_term_todo(long_term_todo_id, todo_list_id)
+    long_term_todo = LongTermTodo.get(long_term_todo_id)
+    long_term_todo.add_todo(todo_list_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

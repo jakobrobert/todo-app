@@ -18,7 +18,6 @@ class LongTermTodo(db.Model):
     @property
     def duration(self):
         todos = Todo.get_all_of_long_term_todo(self.id)
-        print(len(todos))
         total_duration = datetime.timedelta(seconds=0)
         for todo in todos:
             if todo.duration is not None:

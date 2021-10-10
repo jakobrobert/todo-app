@@ -125,8 +125,9 @@ def get_long_term_todos():
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     title = long_term_todo.title
+    duration = long_term_todo.duration
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
-    return render_template("long_term_todo.html", title=title, todos=todos)
+    return render_template("long_term_todo.html", title=title, duration=duration, todos=todos)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])

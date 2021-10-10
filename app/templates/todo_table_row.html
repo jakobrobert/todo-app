@@ -28,6 +28,16 @@
         {{ todo.duration or 'n/a' }}
     </td>
     <td>
+        {% if todo.long_term_todo_id %}
+        <a class="btn btn-secondary"
+           href="{{ url_for('get_long_term_todo', id=todo.long_term_todo_id) }}">
+            <i class="fas fa-level-up-alt"></i>
+        </a>
+        {% else %}
+        n/a
+        {% endif %}
+    </td>
+    <td>
         <a class="btn btn-primary"
            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-play"></i>

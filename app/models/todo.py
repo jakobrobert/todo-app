@@ -1,5 +1,5 @@
 from todo_app import db
-from .long_term_todo import LongTermTodo
+
 from .setting import Setting
 
 from sqlalchemy import func
@@ -65,13 +65,6 @@ class Todo(db.Model):
     @staticmethod
     def add(title, todo_list_id):
         todo = Todo(title=title, todo_list_id=todo_list_id)
-        db.session.add(todo)
-        db.session.commit()
-
-    @staticmethod
-    def add_by_long_term_todo(long_term_todo_id, todo_list_id):
-        long_term_todo = LongTermTodo.get(long_term_todo_id)
-        todo = Todo(title=long_term_todo.title, long_term_todo_id=long_term_todo_id, todo_list_id=todo_list_id)
         db.session.add(todo)
         db.session.commit()
 

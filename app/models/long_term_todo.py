@@ -1,4 +1,8 @@
+import datetime
+
 from todo_app import db
+
+from .todo import Todo
 from .setting import Setting
 
 from sqlalchemy import func
@@ -13,8 +17,13 @@ class LongTermTodo(db.Model):
 
     @property
     def duration(self):
-        # TODO total duration of all todos referencing this LT todo
-        pass
+        todos = Todo.get_all_of_long_term_todo(self.id)
+        print(len(todos))
+        total_duration = datetime.timedelta(seconds=0)
+        for todo in todos:
+            if todo.duration is not None:
+                total_duration += todo.duration
+        return total_duration
 
     def toggle_completed(self):
         self.completed = not self.completed
@@ -42,14 +51,19 @@ class LongTermTodo(db.Model):
 
     @staticmethod
     def add(title):
-        lt_todo = LongTermTodo(title=title)
-        db.session.add(lt_todo)
+        long_term_todo = LongTermTodo(title=title)
+        db.session.add(long_term_todo)
         db.session.commit()
 
     @staticmethod
     def delete(id):
         lt_todo = LongTermTodo.get(id)
         db.session.delete(lt_todo)
+        db.session.commit()
+
+    def add_todo(self, todo_list_id):
+        todo = Todo(title=self.title, long_term_todo_id=self.id, todo_list_id=todo_list_id)
+        db.session.add(todo)
         db.session.commit()
 
     @staticmethod

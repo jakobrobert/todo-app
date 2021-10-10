@@ -14,6 +14,7 @@
 <body>
     <div style="margin-top: 50px;" class="container">
         <h1>Long Term Todos</h1>
+        <br>
         <form action="{{ url_for('add_long_term_todo') }}" method="post">
             <div class="row">
                 <div class="col-10">
@@ -79,7 +80,7 @@
                         </td>
                     </tr>
                 {% for long_term_todo in long_term_todos if not long_term_todo.completed %}
-                    {% include "long_term_todo_table_row.html" %}
+                    {% include "long_term_todos_table_row.html" %}
                 {% endfor %}
                     <tr>
                         <td colspan="7" style="text-align: center;">
@@ -87,7 +88,7 @@
                         </td>
                     </tr>
                 {% for long_term_todo in long_term_todos if long_term_todo.completed %}
-                    {% include "long_term_todo_table_row.html" %}
+                    {% include "long_term_todos_table_row.html" %}
                 {% endfor %}
                 </tbody>
             </table>

@@ -1,0 +1,34 @@
+<tr>
+    <td>
+        <input class="form-check-input" type="checkbox" name="completed"
+               onclick="window.location.href='{{ url_for('toggle_long_term_todo_completed', id=long_term_todo.id) }}'"
+               {% if long_term_todo.completed %} checked {% endif %}>
+    </td>
+    <td style="min-width:100px">
+        <form action="{{ url_for('edit_long_term_todo_title', id=long_term_todo.id) }}" method="post">
+            <textarea class="form-control" name="title">{{ long_term_todo.title }}</textarea>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+    </td>
+    <td>
+        {{ long_term_todo.timestamp_created }}
+    </td>
+    <td>
+        {{ long_term_todo.timestamp_completed or 'n/a' }}
+    </td>
+    <td>
+        {{ long_term_todo.duration or 'n/a' }}
+    </td>
+    <td>
+        <a class="btn btn-secondary"
+           href="{{ url_for('get_long_term_todo', id=long_term_todo.id) }}">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+        </a>
+    </td>
+    <td>
+        <a class="btn btn-secondary"
+           href="{{ url_for('delete_long_term_todo', id=long_term_todo.id) }}">
+            <i class="fas fa-trash" aria-hidden="true"></i>
+        </a>
+    </td>
+</tr>

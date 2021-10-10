@@ -14,6 +14,7 @@
 <body>
     <div style="margin-top: 50px;" class="container">
         <h1>Todo Lists</h1>
+        <br>
         <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="row">
                 <div class="col-10">
@@ -52,13 +53,17 @@
                             <br>
                             Created at
                         </th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col">
+                            Edit
+                        </th>
+                        <th scope="col">
+                            Delete
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for todo_list in todo_lists %}
-                    {% include "todo_list_table_row.html" %}
+                    {% include "todo_lists_table_row.html" %}
                 {% endfor %}
                 </tbody>
             </table>

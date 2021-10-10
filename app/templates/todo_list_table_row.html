@@ -1,23 +1,52 @@
 <tr>
-    <tr>
-        <td style="min-width:100px">
-            <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
-                <textarea class="form-control" name="title">{{ todo_list.title }}</textarea>
-                <button class="btn btn-primary" type="submit">OK</button>
-            </form>
-        </td>
-        <td>
-            {{ todo_list.timestamp_created }}
-        </td>
-        <td>
-            <a class="btn btn-secondary" href="{{ url_for('get_todo_list', id=todo_list.id) }}">
-                <i class="fas fa-edit" aria-hidden="true"></i>
-            </a>
-        </td>
-        <td>
-            <a class="btn btn-secondary" href="{{ url_for('delete_todo_list', id=todo_list.id) }}">
-                <i class="fas fa-trash" aria-hidden="true"></i>
-            </a>
-        </td>
-    </tr>
+    <td>
+        <input class="form-check-input" type="checkbox" name="completed"
+               onclick="window.location.href='{{ url_for('toggle_todo_completed', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
+               {% if todo.completed %} checked {% endif %}>
+    </td>
+    <td>
+        <input class="form-check-input" type="checkbox" name="high_priority"
+               onclick="window.location.href='{{ url_for('toggle_todo_priority', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
+               {% if todo.high_priority %} checked {% endif %}>
+    </td>
+    <td style="min-width:100px">
+        <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
+            <textarea class="form-control" name="title">{{ todo.title }}</textarea>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+    </td>
+    <td>
+        {{ todo.timestamp_created }}
+    </td>
+    <td>
+        {{ todo.timestamp_started or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.timestamp_completed or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.duration or 'n/a' }}
+    </td>
+    <td>
+        {% if todo.long_term_todo_id %}
+        <a class="btn btn-secondary"
+           href="{{ url_for('get_long_term_todo', id=todo.long_term_todo_id) }}">
+            <i class="fas fa-level-up-alt"></i>
+        </a>
+        {% else %}
+        n/a
+        {% endif %}
+    </td>
+    <td>
+        <a class="btn btn-primary"
+           href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-play"></i>
+        </a>
+    </td>
+    <td>
+        <a class="btn btn-secondary"
+           href="{{ url_for('delete_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-trash" aria-hidden="true"></i>
+        </a>
+    </td>
 </tr>

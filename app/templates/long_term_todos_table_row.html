@@ -20,6 +20,12 @@
         {{ long_term_todo.duration or 'n/a' }}
     </td>
     <td>
+        {{ long_term_todo.progress or 'n/a' }}
+    </td>
+    <td>
+        {{ long_term_todo.progress_goal or 'n/a' }}
+    </td>
+    <td>
         <a class="btn btn-secondary"
            href="{{ url_for('get_long_term_todo', id=long_term_todo.id) }}">
             <i class="fas fa-info-circle" aria-hidden="true"></i>

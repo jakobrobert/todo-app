@@ -14,6 +14,8 @@ class LongTermTodo(db.Model):
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
+    progress = db.Column(db.Integer)
+    progress_goal = db.Column(db.Integer)
 
     @property
     def duration(self):

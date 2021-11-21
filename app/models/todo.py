@@ -15,6 +15,7 @@ class Todo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
     long_term_todo_id = db.Column(db.Integer, db.ForeignKey("long_term_todo.id"))
+    progress = db.Column(db.Integer)
 
     @property
     def duration(self):

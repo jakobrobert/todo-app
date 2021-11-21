@@ -38,6 +38,12 @@
         {% endif %}
     </td>
     <td>
+        {{ todo.progress or 'n/a' }}
+    </td>
+    <td>
+        {{ 'n/a' }} <!-- TODO need to access long_term_todo.progress_goal -->
+    </td>
+    <td>
         <a class="btn btn-primary"
            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-play"></i>

@@ -140,7 +140,8 @@ def get_long_term_todo(id):
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
 def add_long_term_todo():
     title = request.form.get("title")
-    LongTermTodo.add(title)
+    progress_goal = request.form.get("progress_goal")
+    LongTermTodo.add(title, progress_goal)
     return redirect(url_for("get_long_term_todos"))
 
 

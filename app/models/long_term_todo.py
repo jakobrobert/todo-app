@@ -26,6 +26,15 @@ class LongTermTodo(db.Model):
                 total_duration += todo.duration
         return total_duration
 
+    @property
+    def progress(self):
+        todos = Todo.get_all_of_long_term_todo(self.id)
+        max_progress = 0
+        for todo in todos:
+            if todo.progress is not None and todo.progress > max_progress:
+                max_progress = todo.progress
+        return max_progress
+
     def toggle_completed(self):
         self.completed = not self.completed
         if self.completed:
@@ -51,15 +60,15 @@ class LongTermTodo(db.Model):
         return query.all()
 
     @staticmethod
-    def add(title):
-        long_term_todo = LongTermTodo(title=title)
+    def add(title, progress_goal):
+        long_term_todo = LongTermTodo(title=title, progress_goal=progress_goal)
         db.session.add(long_term_todo)
         db.session.commit()
 
     @staticmethod
     def delete(id):
-        lt_todo = LongTermTodo.get(id)
-        db.session.delete(lt_todo)
+        long_term_todo = LongTermTodo.get(id)
+        db.session.delete(long_term_todo)
         db.session.commit()
 
     def add_todo(self, todo_list_id):

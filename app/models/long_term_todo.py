@@ -35,6 +35,12 @@ class LongTermTodo(db.Model):
                 max_progress = todo.progress
         return max_progress
 
+    @property
+    def progress_in_percents(self):
+        if self.progress_goal is None or self.progress is None:
+            return None
+        return round(100.0 * self.progress / self.progress_goal, 1)
+
     def toggle_completed(self):
         self.completed = not self.completed
         if self.completed:

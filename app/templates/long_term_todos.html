@@ -70,13 +70,14 @@
                         <th scope="col">Duration</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>Goal</th>
+                        <th scope="col">Progress<br>in %</th>
                         <th scope="col">Details</th>
                         <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4>Not Completed</h4>
                         </td>
                     </tr>
@@ -84,7 +85,7 @@
                     {% include "long_term_todos_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="9" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>

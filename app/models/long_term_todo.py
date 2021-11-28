@@ -78,7 +78,8 @@ class LongTermTodo(db.Model):
         db.session.commit()
 
     def add_todo(self, todo_list_id):
-        todo = Todo(title=self.title, long_term_todo_id=self.id, todo_list_id=todo_list_id)
+        todo = Todo(title=self.title, long_term_todo_id=self.id, progress_goal=self.progress_goal,
+                    todo_list_id=todo_list_id)
         db.session.add(todo)
         db.session.commit()
 

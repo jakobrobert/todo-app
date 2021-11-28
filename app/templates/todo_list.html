@@ -98,6 +98,7 @@
                         <th scope="col">Long<br>Term<br>Todo</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>Goal</th>
+                        <th scope="col">Progress<br>in %</th>
                         <th scope="col">Start</th>
                         <th scope="col">Delete</th>
                     </tr>
@@ -112,7 +113,7 @@
                     {% include "todo_list_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="12" style="text-align: center;">
+                        <td colspan="13" style="text-align: center;">
                             <h4>Low Priority</h4>
                         </td>
                     </tr>
@@ -120,7 +121,7 @@
                     {% include "todo_list_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="12" style="text-align: center;">
+                        <td colspan="13" style="text-align: center;">
                             <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>

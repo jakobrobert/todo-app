@@ -38,13 +38,20 @@
         {% endif %}
     </td>
     <td>
-        {{ todo.progress or 'n/a' }}
+        {% if todo.long_term_todo_id %} <!-- TODO also check if progress is defined -->
+        <form action="{{ url_for('edit_todo_progress', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
+            <input class="form-control" type="number" name="progress" min="0" value="{{ todo.progress }}">
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+        {% else %}
+        n/a
+        {% endif %}
     </td>
     <td>
         {{ 'n/a' }} <!-- TODO need to access long_term_todo.progress_goal -->
     </td>
     <td>
-        {{ 'n/a' }} <!-- TODO add property progess_in_percents -->
+        {{ 'n/a' }} <!-- TODO add property progress_in_percents -->
     </td>
     <td>
         <a class="btn btn-primary"

@@ -13,43 +13,31 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }}</h1>
+        <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
-        <h3>Duration: {{ duration }}</h3>
+        <h4>Duration: {{ long_term_todo.duration }}</h4>
+        <h4>Progress: {{ long_term_todo.progress or 'n/a' }}</h4>
+        <h4>Progress Goal: {{ long_term_todo.progress_goal or 'n/a' }}</h4>
+        <h4>Progress in %: {{ long_term_todo.progress_in_percents or 'n/a' }}</h4>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">
-                            <i class="fas fa-clipboard-check"></i>
-                        </th>
-                        <th scope="col">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </th>
-                        <th scope="col">
-                            Title
-                        </th>
-                        <th scope="col">
-                            Created at
-                        </th>
-                        <th scope="col">
-                            Started at
-                        </th>
-                        <th scope="col">
-                            Completed at
-                        </th>
-                        <th scope="col">
-                            Duration
-                        </th>
-                        <th scope="col">
-                            Todo<br>
-                            List
-                        </th>
+                        <th scope="col"><i class="fas fa-clipboard-check"></i></th>
+                        <th scope="col"><i class="fas fa-exclamation-triangle"></i></th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Started at</th>
+                        <th scope="col">Completed at</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Progress</th>
+                        <th scope="col">Progress<br>in %</th>
+                        <th scope="col">Todo<br>List</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="8" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4>Not Completed</h4>
                         </td>
                     </tr>
@@ -57,7 +45,7 @@
                     {% include "long_term_todo_table_row.html" %}
                 {% endfor %}
                     <tr>
-                        <td colspan="8" style="text-align: center;">
+                        <td colspan="10" style="text-align: center;">
                             <h4><i class="fas fa-clipboard-check"></i> Completed</h4>
                         </td>
                     </tr>

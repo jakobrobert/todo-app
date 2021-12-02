@@ -20,6 +20,18 @@
         {{ long_term_todo.duration or 'n/a' }}
     </td>
     <td>
+        {{ long_term_todo.progress or 'n/a' }}
+    </td>
+    <td>
+        <form action="{{ url_for('edit_long_term_todo_progress_goal',id=long_term_todo.id) }}" method="post">
+            <input class="form-control" type="number" name="progress_goal" min="0" value="{{ long_term_todo.progress_goal }}">
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+    </td>
+    <td>
+        {{ long_term_todo.progress_in_percents or 'n/a' }}
+    </td>
+    <td>
         <a class="btn btn-secondary"
            href="{{ url_for('get_long_term_todo', id=long_term_todo.id) }}">
             <i class="fas fa-info-circle" aria-hidden="true"></i>

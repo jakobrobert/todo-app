@@ -103,6 +103,14 @@ def toggle_todo_priority(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit_progress", methods=["POST"])
+def edit_todo_progress(todo_id, todo_list_id):
+    progress = request.form.get("progress")
+    todo = Todo.get(todo_id)
+    todo.set_progress(progress)
+    return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
 def start_todo(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
@@ -125,16 +133,15 @@ def get_long_term_todos():
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
-    title = long_term_todo.title
-    duration = long_term_todo.duration
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
-    return render_template("long_term_todo.html", title=title, duration=duration, todos=todos)
+    return render_template("long_term_todo.html", long_term_todo=long_term_todo, todos=todos)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
 def add_long_term_todo():
     title = request.form.get("title")
-    LongTermTodo.add(title)
+    progress_goal = request.form.get("progress_goal")
+    LongTermTodo.add(title, progress_goal)
     return redirect(url_for("get_long_term_todos"))
 
 
@@ -143,6 +150,17 @@ def edit_long_term_todo_title(id):
     title = request.form.get("title")
     long_term_todo = LongTermTodo.get(id)
     long_term_todo.set_title(title)
+    return redirect(url_for("get_long_term_todos"))
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/edit-progress-goal", methods=["POST"])
+def edit_long_term_todo_progress_goal(id):
+    progress_goal = request.form.get("progress_goal")
+    long_term_todo = LongTermTodo.get(id)
+    long_term_todo.set_progress_goal(progress_goal)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    for todo in todos:
+        todo.set_progress_goal(progress_goal)
     return redirect(url_for("get_long_term_todos"))
 
 
@@ -181,3 +199,7 @@ def update_setting_for_long_term_todos():
     value = request.args.get("value")
     Setting.set(key, value)
     return redirect(url_for("get_long_term_todos"))
+
+
+def calculate_progress_in_percents(progress, progress_goal):
+    return 42

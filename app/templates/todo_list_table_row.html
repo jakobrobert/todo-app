@@ -38,6 +38,22 @@
         {% endif %}
     </td>
     <td>
+        {% if todo.progress_goal %}
+        <form action="{{ url_for('edit_todo_progress', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
+            <input class="form-control" type="number" name="progress" min="0" value="{{ todo.progress }}">
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+        {% else %}
+        n/a
+        {% endif %}
+    </td>
+    <td>
+        {{ todo.progress_goal or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.progress_in_percents or 'n/a' }}
+    </td>
+    <td>
         <a class="btn btn-primary"
            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-play"></i>

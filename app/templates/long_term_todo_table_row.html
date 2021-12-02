@@ -25,6 +25,12 @@
         {{ todo.duration or 'n/a' }}
     </td>
     <td>
+        {{ todo.progress or 'n/a' }}
+    </td>
+    <td>
+        {{ todo.progress_in_percents or 'n/a' }}
+    </td>
+    <td>
         <a class="btn btn-secondary"
            href="{{ url_for('get_todo_list', id=todo.todo_list_id) }}">
             <i class="fas fa-level-up-alt"></i>

@@ -1,11 +1,11 @@
-import datetime
-
 from todo_app import db
+from utils import Utils
 
 from .todo import Todo
 from .setting import Setting
 
 from sqlalchemy import func
+import datetime
 
 
 class LongTermTodo(db.Model):
@@ -14,6 +14,7 @@ class LongTermTodo(db.Model):
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
+    progress_goal = db.Column(db.Integer)
 
     @property
     def duration(self):
@@ -23,6 +24,21 @@ class LongTermTodo(db.Model):
             if todo.duration is not None:
                 total_duration += todo.duration
         return total_duration
+
+    @property
+    def progress(self):
+        todos = Todo.get_all_of_long_term_todo(self.id)
+        max_progress = None
+        for todo in todos:
+            if todo.progress is None:
+                continue
+            if max_progress is None or todo.progress > max_progress:
+                max_progress = todo.progress
+        return max_progress
+
+    @property
+    def progress_in_percents(self):
+        return Utils.calculate_progress_in_percents(self.progress, self.progress_goal)
 
     def toggle_completed(self):
         self.completed = not self.completed
@@ -34,6 +50,10 @@ class LongTermTodo(db.Model):
 
     def set_title(self, title):
         self.title = title
+        db.session.commit()
+
+    def set_progress_goal(self, progress_goal):
+        self.progress_goal = progress_goal
         db.session.commit()
 
     @staticmethod
@@ -49,19 +69,20 @@ class LongTermTodo(db.Model):
         return query.all()
 
     @staticmethod
-    def add(title):
-        long_term_todo = LongTermTodo(title=title)
+    def add(title, progress_goal):
+        long_term_todo = LongTermTodo(title=title, progress_goal=progress_goal)
         db.session.add(long_term_todo)
         db.session.commit()
 
     @staticmethod
     def delete(id):
-        lt_todo = LongTermTodo.get(id)
-        db.session.delete(lt_todo)
+        long_term_todo = LongTermTodo.get(id)
+        db.session.delete(long_term_todo)
         db.session.commit()
 
     def add_todo(self, todo_list_id):
-        todo = Todo(title=self.title, long_term_todo_id=self.id, todo_list_id=todo_list_id)
+        todo = Todo(title=self.title, long_term_todo_id=self.id, progress_goal=self.progress_goal,
+                    todo_list_id=todo_list_id)
         db.session.add(todo)
         db.session.commit()
 

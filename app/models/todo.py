@@ -1,4 +1,5 @@
 from todo_app import db
+from utils import Utils
 
 from .setting import Setting
 
@@ -15,12 +16,22 @@ class Todo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     todo_list_id = db.Column(db.Integer, db.ForeignKey("todo_list.id"))
     long_term_todo_id = db.Column(db.Integer, db.ForeignKey("long_term_todo.id"))
+    progress = db.Column(db.Integer)
+    progress_goal = db.Column(db.Integer)
 
     @property
     def duration(self):
         if self.timestamp_started is None or self.timestamp_completed is None:
             return None
         return self.timestamp_completed - self.timestamp_started
+
+    @property
+    def progress_in_percents(self):
+        return Utils.calculate_progress_in_percents(self.progress, self.progress_goal)
+
+    def set_title(self, title):
+        self.title = title
+        db.session.commit()
 
     def toggle_completed(self):
         self.completed = not self.completed
@@ -30,12 +41,16 @@ class Todo(db.Model):
             self.timestamp_completed = None
         db.session.commit()
 
-    def set_title(self, title):
-        self.title = title
-        db.session.commit()
-
     def toggle_priority(self):
         self.high_priority = not self.high_priority
+        db.session.commit()
+
+    def set_progress(self, progress):
+        self.progress = progress
+        db.session.commit()
+
+    def set_progress_goal(self, progress_goal):
+        self.progress_goal = progress_goal
         db.session.commit()
 
     def start(self):

@@ -14,7 +14,7 @@ class LongTermTodo(db.Model):
     completed = db.Column(db.Boolean, default=False)
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
-    progress = db.Column(db.Integer)
+    progress = db.Column(db.Integer) # TODO remove? progress is calculated property
     progress_goal = db.Column(db.Integer)
 
     @property
@@ -29,9 +29,11 @@ class LongTermTodo(db.Model):
     @property
     def progress(self):
         todos = Todo.get_all_of_long_term_todo(self.id)
-        max_progress = 0
+        max_progress = None
         for todo in todos:
-            if todo.progress is not None and todo.progress > max_progress:
+            if todo.progress is None:
+                continue
+            if max_progress is None or todo.progress > max_progress:
                 max_progress = todo.progress
         return max_progress
 
@@ -39,6 +41,7 @@ class LongTermTodo(db.Model):
     def progress_in_percents(self):
         if self.progress_goal is None or self.progress is None:
             return None
+        # TODO split up to make more readable
         return round(100.0 * self.progress / self.progress_goal, 1)
 
     def toggle_completed(self):

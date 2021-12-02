@@ -133,8 +133,13 @@ def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     title = long_term_todo.title
     duration = long_term_todo.duration
+    progress = long_term_todo.progress
+    progress_goal = long_term_todo.progress_goal
+    progress_in_percents = long_term_todo.progress_in_percents
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
-    return render_template("long_term_todo.html", title=title, duration=duration, todos=todos)
+    # TODO refactor: too many properties, pass long_term_todo
+    return render_template("long_term_todo.html", title=title, duration=duration, progress=progress,
+                           progress_goal=progress_goal, progress_in_percents=progress_in_percents, todos=todos)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])

@@ -24,6 +24,8 @@ class Todo(db.Model):
             return None
         return self.timestamp_completed - self.timestamp_started
 
+    # TODO add properties for progress
+
     def toggle_completed(self):
         self.completed = not self.completed
         if self.completed:

@@ -38,7 +38,7 @@
         {% endif %}
     </td>
     <td>
-        {% if todo.long_term_todo_id %} <!-- TODO and check if progress_goal is defined -->
+        {% if todo.progress_goal %}
         <form action="{{ url_for('edit_todo_progress', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
             <input class="form-control" type="number" name="progress" min="0" value="{{ todo.progress }}">
             <button class="btn btn-primary" type="submit">OK</button>

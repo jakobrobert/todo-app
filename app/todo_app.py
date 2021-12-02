@@ -153,6 +153,17 @@ def edit_long_term_todo_title(id):
     return redirect(url_for("get_long_term_todos"))
 
 
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/edit-progress-goal", methods=["POST"])
+def edit_long_term_todo_progress_goal(id):
+    progress_goal = request.form.get("progress_goal")
+    long_term_todo = LongTermTodo.get(id)
+    long_term_todo.set_progress_goal(progress_goal)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    for todo in todos:
+        todo.set_progress_goal(progress_goal)
+    return redirect(url_for("get_long_term_todos"))
+
+
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/toggle-completed", methods=["GET"])
 def toggle_long_term_todo_completed(id):
     long_term_todo = LongTermTodo.get(id)

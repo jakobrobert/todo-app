@@ -52,6 +52,10 @@ class LongTermTodo(db.Model):
         self.title = title
         db.session.commit()
 
+    def set_progress_goal(self, progress_goal):
+        self.progress_goal = progress_goal
+        db.session.commit()
+
     @staticmethod
     def get(id):
         return LongTermTodo.query.filter_by(id=id).first()

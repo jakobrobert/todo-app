@@ -49,6 +49,10 @@ class Todo(db.Model):
         self.progress = progress
         db.session.commit()
 
+    def set_progress_goal(self, progress_goal):
+        self.progress_goal = progress_goal
+        db.session.commit()
+
     def start(self):
         self.timestamp_started = func.now()
         db.session.commit()

@@ -23,7 +23,10 @@
         {{ long_term_todo.progress or 'n/a' }}
     </td>
     <td>
-        {{ long_term_todo.progress_goal or 'n/a' }}
+        <form action="{{ url_for('edit_long_term_todo_progress_goal',id=long_term_todo.id) }}" method="post">
+            <input class="form-control" type="number" name="progress_goal" min="0" value="{{ long_term_todo.progress_goal }}">
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
     </td>
     <td>
         {{ long_term_todo.progress_in_percents or 'n/a' }}

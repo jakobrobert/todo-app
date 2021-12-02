@@ -13,7 +13,7 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }}</h1>
+        <h1>{{ title }} [Todo List]</h1>
         <br>
         <h3>Add new Todo</h3>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">

@@ -13,12 +13,12 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }}</h1>
+        <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
-        <h4>Duration: {{ duration }}</h4>
-        <h4>Progress: {{ progress or 'n/a' }}</h4>
-        <h4>Progress Goal: {{ progress_goal or 'n/a' }}</h4>
-        <h4>Progress in %: {{ progress_in_percents or 'n/a' }}</h4>
+        <h4>Duration: {{ long_term_todo.duration }}</h4>
+        <h4>Progress: {{ long_term_todo.progress or 'n/a' }}</h4>
+        <h4>Progress Goal: {{ long_term_todo.progress_goal or 'n/a' }}</h4>
+        <h4>Progress in %: {{ long_term_todo.progress_in_percents or 'n/a' }}</h4>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

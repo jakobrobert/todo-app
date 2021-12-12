@@ -1,6 +1,8 @@
 from todo_app import db
 from .setting import Setting
 
+from .todo import Todo
+
 from sqlalchemy import func
 
 
@@ -33,9 +35,10 @@ class TodoList(db.Model):
 
     @staticmethod
     def delete(id):
-        todo_list = TodoList.get(id)
-        for todo in todo_list.todos:
+        todos = Todo.get_all_of_todo_list(todo_list_id=id)
+        for todo in todos:
             db.session.delete(todo)
+        todo_list = TodoList.get(id)
         db.session.delete(todo_list)
         db.session.commit()
 

@@ -16,10 +16,17 @@
         </form>
     </td>
     <td>
-        <a class="btn btn-primary"
-           href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+    {% if todo.started_and_not_completed %}
+        <a class="btn btn-danger"
+            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-stop"></i>
+        </a>
+    {% else %}
+        <a class="btn btn-success"
+            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-play"></i>
         </a>
+    {% endif %}
     </td>
     <td>
         {{ todo.timestamp_created }}

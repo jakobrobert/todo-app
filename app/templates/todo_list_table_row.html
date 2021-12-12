@@ -18,7 +18,7 @@
     <td>
     {% if todo.completed %}
         n/a
-    {% elif todo.started %}
+    {% elif todo.timestamp_started %}
         <a class="btn btn-danger"
             href="{{ url_for('stop_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-stop"></i>

@@ -20,6 +20,10 @@ class Todo(db.Model):
     progress_goal = db.Column(db.Integer)
 
     @property
+    def started_and_not_completed(self):
+        return self.timestamp_started is not None and self.timestamp_completed is None
+
+    @property
     def duration(self):
         if self.timestamp_started is None or self.timestamp_completed is None:
             return None

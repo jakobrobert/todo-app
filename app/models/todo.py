@@ -61,6 +61,10 @@ class Todo(db.Model):
         self.timestamp_started = func.now()
         db.session.commit()
 
+    def stop(self):
+        self.timestamp_started = None
+        db.session.commit()
+
     @staticmethod
     def get(id):
         return Todo.query.filter_by(id=id).first()

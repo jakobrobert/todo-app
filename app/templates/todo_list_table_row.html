@@ -18,7 +18,7 @@
     <td>
     {% if todo.started_and_not_completed %}
         <a class="btn btn-danger"
-            href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            href="{{ url_for('stop_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
             <i class="fas fa-stop"></i>
         </a>
     {% else %}

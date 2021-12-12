@@ -1,5 +1,5 @@
 <tr>
-    <td style="min-width:100px">
+    <td style="min-width: 175px">
         <form action="{{ url_for('edit_todo_list_title', id=todo_list.id) }}" method="post">
             <textarea class="form-control" name="title">{{ todo_list.title }}</textarea>
             <button class="btn btn-primary" type="submit">OK</button>

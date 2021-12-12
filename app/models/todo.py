@@ -21,7 +21,7 @@ class Todo(db.Model):
 
     @property
     def started_and_not_completed(self):
-        return self.timestamp_started is not None and self.timestamp_completed is None
+        return self.timestamp_started is not None and not self.completed
 
     @property
     def duration(self):
@@ -59,6 +59,10 @@ class Todo(db.Model):
 
     def start(self):
         self.timestamp_started = func.now()
+        db.session.commit()
+
+    def stop(self):
+        self.timestamp_started = None
         db.session.commit()
 
     @staticmethod

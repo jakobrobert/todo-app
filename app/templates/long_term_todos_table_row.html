@@ -4,7 +4,7 @@
                onclick="window.location.href='{{ url_for('toggle_long_term_todo_completed', id=long_term_todo.id) }}'"
                {% if long_term_todo.completed %} checked {% endif %}>
     </td>
-    <td style="min-width:100px">
+    <td style="min-width: 175px">
         <form action="{{ url_for('edit_long_term_todo_title', id=long_term_todo.id) }}" method="post">
             <textarea class="form-control" name="title">{{ long_term_todo.title }}</textarea>
             <button class="btn btn-primary" type="submit">OK</button>

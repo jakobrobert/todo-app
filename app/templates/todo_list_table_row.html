@@ -9,11 +9,17 @@
                onclick="window.location.href='{{ url_for('toggle_todo_priority', todo_id=todo.id, todo_list_id=todo_list_id) }}'"
                {% if todo.high_priority %} checked {% endif %}>
     </td>
-    <td style="min-width:100px">
+    <td style="min-width: 175px">
         <form action="{{ url_for('edit_todo_title', todo_id=todo.id, todo_list_id=todo_list_id) }}" method="post">
             <textarea class="form-control" name="title">{{ todo.title }}</textarea>
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
+    </td>
+    <td>
+        <a class="btn btn-primary"
+           href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
+            <i class="fas fa-play"></i>
+        </a>
     </td>
     <td>
         {{ todo.timestamp_created }}
@@ -52,12 +58,6 @@
     </td>
     <td>
         {{ todo.progress_in_percents or 'n/a' }}
-    </td>
-    <td>
-        <a class="btn btn-primary"
-           href="{{ url_for('start_todo', todo_id=todo.id, todo_list_id=todo_list_id) }}">
-            <i class="fas fa-play"></i>
-        </a>
     </td>
     <td>
         <a class="btn btn-secondary"

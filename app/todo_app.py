@@ -208,5 +208,8 @@ def update_setting_for_long_term_todos():
     return redirect(url_for("get_long_term_todos"))
 
 
-def calculate_progress_in_percents(progress, progress_goal):
-    return 42
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-chart", methods=["GET"])
+def get_long_term_todo_duration_chart(id):
+    long_term_todo = LongTermTodo.get(id)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    return render_template("long_term_todo_duration_chart.html", long_term_todo=long_term_todo, todos=todos)

@@ -29,9 +29,7 @@
         -->
         <script>
             const canvas = document.getElementById("durationChart");
-            console.log(canvas);
             const ctx = canvas.getContext("2d");
-            console.log(ctx);
 
             const chart = new Chart(ctx, {
                 type: "line",
@@ -41,7 +39,7 @@
                     datasets:
                     [
                         {
-                            label: "Data points",
+                            label: "Duration (seconds)",
                             data: {{ values | safe }},
                             fill: false,
                             borderColor: "gray",
@@ -53,8 +51,6 @@
                     responsive: false
                 }
             });
-
-            console.log(chart);
         </script>
     </div>
 

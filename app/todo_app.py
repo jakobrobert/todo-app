@@ -213,38 +213,20 @@ def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
-    # TODO create labels and values from the todos. labels = dates. values = duration for each date.
+    labels = []
+    values = []
 
-    labels = [
-        "01-01-2021",
-        "02-01-2021",
-        "03-01-2021",
-        "04-01-2021",
-        "05-01-2021",
-        "06-01-2021",
-        "07-01-2021",
-        "08-01-2021",
-        "09-01-2021",
-        "10-01-2021",
-    ]
+    # TODO to fill gaps with 0: find lowest and highest date
+    # then iterate through entire time span for each day. find corresponding todo, if none exists, fill with 0
+    for todo in todos:
+        if todo.timestamp_completed is None or todo.duration is None:
+            continue
 
-    values = [
-        1,
-        3,
-        0,
-        5,
-        2,
-        4,
-        7,
-        4,
-        2,
-        1
-    ]
+        label = str(todo.timestamp_completed)  # TODO should only include the date, no time
+        value = todo.duration.seconds
+        labels.append(label)
+        values.append(value)
 
     return render_template("long_term_todo_duration_chart.html", URL_PREFIX=URL_PREFIX,
-                           title=long_term_todo.title, total_duration=long_term_todo.duration, labels=labels, values=values)
-
-
-@app.route(URL_PREFIX + "/static/js/long_term_todo_duration_chart.js")
-def get_long_term_todo_duration_chart_script():
-    pass
+                           title=long_term_todo.title, total_duration=long_term_todo.duration,
+                           labels=labels, values=values)

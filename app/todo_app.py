@@ -222,11 +222,11 @@ def get_long_term_todo_duration_chart(id):
         if todo.timestamp_completed is None or todo.duration is None:
             continue
 
-        label = str(todo.timestamp_completed)  # TODO should only include the date, no time
+        label = str(todo.timestamp_completed.date())
         value = todo.duration.seconds
         labels.append(label)
         values.append(value)
 
-    return render_template("long_term_todo_duration_chart.html", URL_PREFIX=URL_PREFIX,
+    return render_template("long_term_todo_duration_chart.html",
                            title=long_term_todo.title, total_duration=long_term_todo.duration,
                            labels=labels, values=values)

@@ -258,7 +258,7 @@ def get_long_term_todo_duration_chart(id):
             # There is no to-do for the current date, so fill the value with 0
             values.append(0)
         else:
-            value = todo_for_curr_date.duration.seconds
+            value = todo_for_curr_date.duration.total_seconds() / 60
             values.append(value)
 
     return render_template("long_term_todo_duration_chart.html",

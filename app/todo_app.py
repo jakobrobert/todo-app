@@ -1,8 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-import configparser
-
 from flask import render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+
+import configparser
+import datetime
 
 config = configparser.ConfigParser()
 config.read("../server.ini")
@@ -208,5 +209,53 @@ def update_setting_for_long_term_todos():
     return redirect(url_for("get_long_term_todos"))
 
 
-def calculate_progress_in_percents(progress, progress_goal):
-    return 42
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-chart", methods=["GET"])
+def get_long_term_todo_duration_chart(id):
+    long_term_todo = LongTermTodo.get(id)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+
+    # Collect all dates
+    all_dates = []
+    for todo in todos:
+        if todo.timestamp_completed is None:
+            continue
+
+        curr_date = todo.timestamp_completed.date()
+        all_dates.append(curr_date)
+
+    # Iterate through the each day and fill the data for the chart
+    labels = []
+    values = []
+    one_day = datetime.timedelta(days=1)
+    curr_date = min(all_dates)
+    end_date = max(all_dates)
+    while curr_date <= end_date:
+        date_label = str(curr_date)
+        labels.append(date_label)
+
+        todo = __find_todo_for_date(todos, curr_date)
+        if todo is None:
+            # There is no to-do for the current date, so fill the value with 0
+            values.append(0)
+        else:
+            duration_in_minutes = todo.duration.total_seconds() / 60
+            values.append(duration_in_minutes)
+
+        curr_date += one_day
+
+    return render_template("long_term_todo_duration_chart.html",
+                           title=long_term_todo.title, total_duration=long_term_todo.duration,
+                           labels=labels, values=values)
+
+
+def __find_todo_for_date(todos, date):
+    todo_for_curr_date = None
+    for todo in todos:
+        if todo.timestamp_completed is None:
+            continue
+
+        todo_date = todo.timestamp_completed.date()
+        if todo_date == date:
+            todo_for_curr_date = todo
+            break
+    return todo_for_curr_date

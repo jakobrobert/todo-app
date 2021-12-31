@@ -238,7 +238,8 @@ def get_long_term_todo_duration_chart(id):
             # Fill value with total duration for the current date
             duration_in_seconds = 0
             for todo in todos_for_date:
-                duration_in_seconds += todo.duration.total_seconds()
+                if todo.duration is not None:
+                    duration_in_seconds += todo.duration.total_seconds()
 
             duration_in_minutes = duration_in_seconds / 60
             values.append(duration_in_minutes)

@@ -233,13 +233,17 @@ def get_long_term_todo_duration_chart(id):
         date_label = str(curr_date)
         labels.append(date_label)
 
-        todo = __find_todo_for_date(todos, curr_date)
-        if todo is None:
+        todos_for_date = __find_todos_for_date(todos, curr_date)
+        if todos_for_date:
+            duration_in_seconds = 0
+            for todo in todos_for_date:
+                duration_in_seconds += todo.duration.total_seconds()
+
+            duration_in_minutes = duration_in_seconds / 60
+            values.append(duration_in_minutes)
+        else:
             # There is no to-do for the current date, so fill the value with 0
             values.append(0)
-        else:
-            duration_in_minutes = todo.duration.total_seconds() / 60
-            values.append(duration_in_minutes)
 
         curr_date += one_day
 
@@ -248,14 +252,14 @@ def get_long_term_todo_duration_chart(id):
                            labels=labels, values=values)
 
 
-def __find_todo_for_date(todos, date):
-    todo_for_curr_date = None
+def __find_todos_for_date(todos, date):
+    todos_for_date = []
     for todo in todos:
         if todo.timestamp_completed is None:
             continue
 
         todo_date = todo.timestamp_completed.date()
         if todo_date == date:
-            todo_for_curr_date = todo
-            break
-    return todo_for_curr_date
+            todos_for_date.append(todo)
+
+    return todos_for_date

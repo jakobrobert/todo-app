@@ -235,6 +235,7 @@ def get_long_term_todo_duration_chart(id):
 
         todos_for_date = __find_todos_for_date(todos, curr_date)
         if todos_for_date:
+            # Fill value with total duration for the current date
             duration_in_seconds = 0
             for todo in todos_for_date:
                 duration_in_seconds += todo.duration.total_seconds()

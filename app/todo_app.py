@@ -213,14 +213,7 @@ def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
-    # Collect all dates
-    all_dates = []
-    for todo in todos:
-        if todo.timestamp_completed is None:
-            continue
-
-        curr_date = todo.timestamp_completed.date()
-        all_dates.append(curr_date)
+    all_dates = __collect_dates_of_todos(todos)
 
     # Iterate through the each day and fill the data for the chart
     labels = []
@@ -265,6 +258,17 @@ def get_long_term_todo_progress_chart(id):
     return render_template("long_term_todo_progress_chart.html",
                            title=long_term_todo.title, progress_goal=long_term_todo.progress_goal,
                            labels=labels, values=values)
+
+
+def __collect_dates_of_todos(todos):
+    all_dates = []
+    for todo in todos:
+        if todo.timestamp_completed is None:
+            continue
+
+        curr_date = todo.timestamp_completed.date()
+        all_dates.append(curr_date)
+    return all_dates
 
 
 def __find_todos_for_date(todos, date):

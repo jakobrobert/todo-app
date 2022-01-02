@@ -19,11 +19,10 @@
         <br>
         <h4>Progress Goal: {{ progress_goal }}</h4>
         <br>
-        <h4>{{ show_as_percents }}</h4>
         <label for="as_percents">As percents:</label>
         <!-- Also including the url in the condition. Passing 'not as_percents' does not work, always passes False. -->
         <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
-           {% if show_as_percents == 'True' %}
+           {% if as_percents == 'True' %}
                onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo_id, as_percents=False) }}'"
                checked
            {% else %}

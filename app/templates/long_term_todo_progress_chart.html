@@ -17,17 +17,17 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }} [Long Term Todo]</h1>
         <br>
-        <h4>Progress Goal: {{ total_duration }}</h4>
+        <h4>Progress Goal: {{ progress_goal }}</h4>
 
-        <canvas id="durationChart" width="400" height="400"></canvas>
+        <canvas id="chart" width="400" height="400"></canvas>
 
         <!--
         Inline script is hacky, but did not manage to do it in the recommended way.
-        If trying: url_for('static', filename='js/long_term_todo_duration_chart.js')
+        If trying: url_for('static', filename='js/long_term_todo_progress_chart.js')
         Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
         -->
         <script>
-            const canvas = document.getElementById("durationChart");
+            const canvas = document.getElementById("chart");
             const ctx = canvas.getContext("2d");
 
             const chart = new Chart(ctx, {
@@ -38,7 +38,7 @@
                     datasets:
                     [
                         {
-                            label: "Duration (minutes)",
+                            label: "Progress",
                             data: {{ values | safe }},
                             fill: false,
                             borderColor: "gray",

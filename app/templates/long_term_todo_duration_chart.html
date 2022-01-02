@@ -19,7 +19,7 @@
         <br>
         <h4>Total Duration: {{ total_duration }}</h4>
 
-        <canvas id="durationChart" width="400" height="400"></canvas>
+        <canvas id="chart" width="400" height="400"></canvas>
 
         <!--
         Inline script is hacky, but did not manage to do it in the recommended way.
@@ -27,7 +27,7 @@
         Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
         -->
         <script>
-            const canvas = document.getElementById("durationChart");
+            const canvas = document.getElementById("chart");
             const ctx = canvas.getContext("2d");
 
             const chart = new Chart(ctx, {

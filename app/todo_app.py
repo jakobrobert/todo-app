@@ -21,7 +21,6 @@ from models.todo_list import TodoList
 from models.long_term_todo import LongTermTodo
 from models.setting import Setting
 
-
 db.create_all()
 db.session.commit()
 
@@ -251,6 +250,20 @@ def get_long_term_todo_duration_chart(id):
 
     return render_template("long_term_todo_duration_chart.html",
                            title=long_term_todo.title, total_duration=long_term_todo.duration,
+                           labels=labels, values=values)
+
+
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
+def get_long_term_todo_progress_chart(id):
+    long_term_todo = LongTermTodo.get(id)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+
+    # TODO fill labels and values
+    labels = []
+    values = []
+
+    return render_template("long_term_todo_progress_chart.html",
+                           title=long_term_todo.title, progress_goal=long_term_todo.progress_goal,
                            labels=labels, values=values)
 
 

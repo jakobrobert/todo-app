@@ -22,6 +22,11 @@
         <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_chart', id=long_term_todo.id) }}">
             Show duration chart
         </a>
+        {% if long_term_todo.progress_goal %}
+        <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id) }}">
+            Show progress chart
+        </a>
+        {% endif %}
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

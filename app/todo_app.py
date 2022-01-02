@@ -286,9 +286,7 @@ def get_long_term_todo_progress_chart(id):
 
     # TODO clean up: pass long_term_todo object instead of separate variables
     return render_template("long_term_todo_progress_chart.html",
-                           title=long_term_todo.title, progress_goal=long_term_todo.progress_goal,
-                           long_term_todo_id=id, as_percents=as_percents,
-                           labels=labels, values=values)
+                           long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
 
 
 def __collect_dates_of_todos(todos):

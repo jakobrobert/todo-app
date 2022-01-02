@@ -15,18 +15,18 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }} [Long Term Todo]</h1>
+        <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
-        <h4>Progress Goal: {{ progress_goal }}</h4>
+        <h4>Progress Goal: {{ long_term_todo.progress_goal }}</h4>
         <br>
-        <label for="as_percents">As percents:</label>
+        <label for="as_percents">As percents: </label>
         <!-- Also including the url in the condition. Passing 'not as_percents' does not work, always passes False. -->
         <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
            {% if as_percents == 'True' %}
-               onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo_id, as_percents=False) }}'"
+               onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id, as_percents=False) }}'"
                checked
            {% else %}
-                onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo_id, as_percents=True) }}'"
+                onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id, as_percents=True) }}'"
            {% endif %}
         >
 

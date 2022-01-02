@@ -15,15 +15,26 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ title }} [Long Term Todo]</h1>
+        <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
-        <h4>Total Duration: {{ total_duration }}</h4>
+        <h4>Progress Goal: {{ long_term_todo.progress_goal }}</h4>
+        <br>
+        <label for="as_percents">As percents: </label>
+        <!-- Also including the url in the condition. Passing 'not as_percents' does not work, always passes False. -->
+        <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
+           {% if as_percents %}
+               onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id, as_percents=False) }}'"
+               checked
+           {% else %}
+                onclick="window.location.href='{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id, as_percents=True) }}'"
+           {% endif %}
+        >
 
         <canvas id="chart" width="400" height="400"></canvas>
 
         <!--
         Inline script is hacky, but did not manage to do it in the recommended way.
-        If trying: url_for('static', filename='js/long_term_todo_duration_chart.js')
+        If trying: url_for('static', filename='js/long_term_todo_progress_chart.js')
         Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
         -->
         <script>
@@ -38,7 +49,7 @@
                     datasets:
                     [
                         {
-                            label: "Duration (minutes)",
+                            label: "Progress",
                             data: {{ values | safe }},
                             fill: false,
                             borderColor: "gray",

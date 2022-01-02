@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 import configparser
 import datetime
 
+from utils import Utils
+
 config = configparser.ConfigParser()
 config.read("../server.ini")
 URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
@@ -20,7 +22,6 @@ from models.todo import Todo
 from models.todo_list import TodoList
 from models.long_term_todo import LongTermTodo
 from models.setting import Setting
-
 
 db.create_all()
 db.session.commit()
@@ -214,14 +215,7 @@ def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
-    # Collect all dates
-    all_dates = []
-    for todo in todos:
-        if todo.timestamp_completed is None:
-            continue
-
-        curr_date = todo.timestamp_completed.date()
-        all_dates.append(curr_date)
+    all_dates = __collect_dates_of_todos(todos)
 
     # Iterate through the each day and fill the data for the chart
     labels = []
@@ -254,8 +248,71 @@ def get_long_term_todo_duration_chart(id):
                            labels=labels, values=values)
 
 
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
+def get_long_term_todo_progress_chart(id):
+    as_percents_arg = request.args.get("as_percents")
+    as_percents = False
+    if as_percents_arg == 'True':
+        as_percents = True
+
+    long_term_todo = LongTermTodo.get(id)
+    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+
+    all_dates = __collect_dates_of_todos(todos)
+
+    # Iterate through the each day and fill the data for the chart
+    labels = []
+    values = []
+    one_day = datetime.timedelta(days=1)
+    curr_date = min(all_dates)
+    end_date = max(all_dates)
+    while curr_date <= end_date:
+        date_label = str(curr_date)
+        labels.append(date_label)
+
+        progress = 0
+        todos_for_date = __find_todos_for_date(todos, curr_date)
+        if todos_for_date:
+            # Get maximum progress for the current date
+            for todo in todos_for_date:
+                if todo.progress is not None and todo.progress > progress:
+                    progress = todo.progress
+
+        if progress == 0:
+            # There is no valid value for the current date, so fill the value with the last one
+            if len(values) >= 1:
+                values.append(values[-1])
+            else:
+                values.append(0)
+        else:
+            value = progress
+            if as_percents:
+                value = Utils.calculate_progress_in_percents(progress, long_term_todo.progress_goal)
+
+            values.append(value)
+
+        curr_date += one_day
+
+    return render_template("long_term_todo_progress_chart.html",
+                           long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
+
+
+def __collect_dates_of_todos(todos):
+    all_dates = []
+
+    for todo in todos:
+        if todo.timestamp_completed is None:
+            continue
+
+        curr_date = todo.timestamp_completed.date()
+        all_dates.append(curr_date)
+
+    return all_dates
+
+
 def __find_todos_for_date(todos, date):
     todos_for_date = []
+
     for todo in todos:
         if todo.timestamp_completed is None:
             continue

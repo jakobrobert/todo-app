@@ -251,9 +251,32 @@ def get_long_term_todo_progress_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
-    # TODO fill labels and values
+    all_dates = __collect_dates_of_todos(todos)
+
+    # Iterate through the each day and fill the data for the chart
     labels = []
     values = []
+    one_day = datetime.timedelta(days=1)
+    curr_date = min(all_dates)
+    end_date = max(all_dates)
+    while curr_date <= end_date:
+        date_label = str(curr_date)
+        labels.append(date_label)
+
+        todos_for_date = __find_todos_for_date(todos, curr_date)
+        if todos_for_date:
+            # Fill value with maximum progress for the current date
+            progress = 0
+            for todo in todos_for_date:
+                if todo.progress is not None and todo.progress > progress:
+                    progress = todo.progress
+
+            values.append(progress)
+        else:
+            # There is no to-do for the current date, so fill the value with 0
+            values.append(0)
+
+        curr_date += one_day
 
     return render_template("long_term_todo_progress_chart.html",
                            title=long_term_todo.title, progress_goal=long_term_todo.progress_goal,
@@ -262,17 +285,20 @@ def get_long_term_todo_progress_chart(id):
 
 def __collect_dates_of_todos(todos):
     all_dates = []
+
     for todo in todos:
         if todo.timestamp_completed is None:
             continue
 
         curr_date = todo.timestamp_completed.date()
         all_dates.append(curr_date)
+
     return all_dates
 
 
 def __find_todos_for_date(todos, date):
     todos_for_date = []
+
     for todo in todos:
         if todo.timestamp_completed is None:
             continue

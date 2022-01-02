@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 import configparser
 import datetime
 
+from utils import Utils
+
 config = configparser.ConfigParser()
 config.read("../server.ini")
 URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
@@ -249,6 +251,10 @@ def get_long_term_todo_duration_chart(id):
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
 def get_long_term_todo_progress_chart(id):
     as_percents = request.args.get("as_percents")
+    if as_percents:
+        print("as_percents is True")
+    else:
+        print("as_percents is False")
 
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
@@ -265,26 +271,28 @@ def get_long_term_todo_progress_chart(id):
         date_label = str(curr_date)
         labels.append(date_label)
 
-        value = 0
+        progress = 0
         todos_for_date = __find_todos_for_date(todos, curr_date)
         if todos_for_date:
-            # Fill value with maximum progress for the current date
-            progress = 0
+            # Get maximum progress for the current date
             for todo in todos_for_date:
                 if todo.progress is not None and todo.progress > progress:
                     progress = todo.progress
 
-            value = progress
-
-        # There is no valid value for the current date, so fill the value with the last one
-        if value == 0 and len(values) >= 1:
-            value = values[-1]
-
-        values.append(value)
+        if progress == 0:
+            # There is no valid value for the current date, so fill the value with the last one
+            if len(values) >= 1:
+                values.append(values[-1])
+            else:
+                values.append(0)
+        else:
+            if as_percents:
+                print("as_percents is True")
+                value = Utils.calculate_progress_in_percents(progress, long_term_todo.progress_goal)
+                values.append(value)
 
         curr_date += one_day
 
-    # TODO clean up: pass long_term_todo object instead of separate variables
     return render_template("long_term_todo_progress_chart.html",
                            long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
 

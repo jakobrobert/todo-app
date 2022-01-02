@@ -263,6 +263,7 @@ def get_long_term_todo_progress_chart(id):
         date_label = str(curr_date)
         labels.append(date_label)
 
+        value = 0
         todos_for_date = __find_todos_for_date(todos, curr_date)
         if todos_for_date:
             # Fill value with maximum progress for the current date
@@ -271,10 +272,13 @@ def get_long_term_todo_progress_chart(id):
                 if todo.progress is not None and todo.progress > progress:
                     progress = todo.progress
 
-            values.append(progress)
-        else:
-            # There is no to-do for the current date, so fill the value with 0
-            values.append(0)
+            value = progress
+
+        # There is no valid value for the current date, so fill the value with the last one
+        if value == 0 and len(values) >= 1:
+            value = values[-1]
+
+        values.append(value)
 
         curr_date += one_day
 

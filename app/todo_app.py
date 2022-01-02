@@ -250,11 +250,10 @@ def get_long_term_todo_duration_chart(id):
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
 def get_long_term_todo_progress_chart(id):
-    as_percents = request.args.get("as_percents")
-    if as_percents:
-        print("as_percents is True")
-    else:
-        print("as_percents is False")
+    as_percents_arg = request.args.get("as_percents")
+    as_percents = False
+    if as_percents_arg == 'True':
+        as_percents = True
 
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
@@ -286,10 +285,11 @@ def get_long_term_todo_progress_chart(id):
             else:
                 values.append(0)
         else:
+            value = progress
             if as_percents:
-                print("as_percents is True")
                 value = Utils.calculate_progress_in_percents(progress, long_term_todo.progress_goal)
-                values.append(value)
+
+            values.append(value)
 
         curr_date += one_day
 

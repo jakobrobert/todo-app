@@ -248,6 +248,9 @@ def get_long_term_todo_duration_chart(id):
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
 def get_long_term_todo_progress_chart(id):
+    as_percents = request.args.get("as_percents")
+    print(as_percents)
+
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
@@ -282,8 +285,10 @@ def get_long_term_todo_progress_chart(id):
 
         curr_date += one_day
 
+    # TODO clean up: pass long_term_todo object instead of separate variables
     return render_template("long_term_todo_progress_chart.html",
                            title=long_term_todo.title, progress_goal=long_term_todo.progress_goal,
+                           long_term_todo_id=id, show_as_percents=as_percents,
                            labels=labels, values=values)
 
 

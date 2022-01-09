@@ -35,7 +35,14 @@ def index():
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
     todo_lists = TodoList.get_all()
-    return render_template("todo_lists.html", todo_lists=todo_lists)
+
+    sort_todo_lists_by = Setting.get(key="sort_todo_lists_by").value
+    split_index = sort_todo_lists_by.rindex("_")  # find the last underscore
+    sort_by = sort_todo_lists_by[:split_index]
+    ascending_or_descending = sort_todo_lists_by[split_index + 1:]
+
+    return render_template("todo_lists.html", todo_lists=todo_lists,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])

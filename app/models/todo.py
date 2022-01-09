@@ -86,8 +86,8 @@ class Todo(db.Model):
         return query.all()
 
     @staticmethod
-    def add(title, todo_list_id):
-        todo = Todo(title=title, todo_list_id=todo_list_id)
+    def add(title, high_priority, todo_list_id):
+        todo = Todo(title=title, high_priority=high_priority, todo_list_id=todo_list_id)
         db.session.add(todo)
         db.session.commit()
 

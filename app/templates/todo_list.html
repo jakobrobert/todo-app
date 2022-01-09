@@ -21,6 +21,10 @@
                 <label for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="title">
             </div>
+            <div class="form-group">
+                <label for="high_priority_new_todo">High Priority</label>
+                <input class="form-check" type="checkbox" id="high_priority_new_todo" name="high_priority">
+            </div>
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
@@ -33,6 +37,10 @@
                     <option value="{{ long_term_todo.id }}">{{ long_term_todo.title }}</option>
                 {% endfor %}
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="high_priority_long_term_todo">High Priority</label>
+                <input class="form-check" type="checkbox" id="high_priority_long_term_todo" name="high_priority">
             </div>
             <button class="btn btn-primary" type="submit">Add</button>
         </form>

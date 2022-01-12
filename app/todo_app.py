@@ -230,22 +230,13 @@ def update_setting_for_long_term_todos():
 
 @app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
 def sort_todo_lists():
-    sort_by = request.form.get("sort_by")
-    ascending_or_descending = request.form.get("ascending_or_descending")
-    key = "sort_todo_lists_by"
-    value = f"{sort_by}_{ascending_or_descending}"
-    Setting.set(key, value)
+    __handle_sort_request(setting_key="sort_todo_lists_by")
     return redirect(url_for("get_todo_lists"))
 
 
 @app.route(URL_PREFIX + "/sort_todos/<int:todo_list_id>", methods=["POST"])
 def sort_todos(todo_list_id):
-    # TODO copy pasted code, might create helper function
-    sort_by = request.form.get("sort_by")
-    ascending_or_descending = request.form.get("ascending_or_descending")
-    key = "sort_todos_by"
-    value = f"{sort_by}_{ascending_or_descending}"
-    Setting.set(key, value)
+    __handle_sort_request(setting_key="sort_todos_by")
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
@@ -348,6 +339,14 @@ def __get_ascending_or_descending(setting_key):
     split_index = setting_value.rindex("_")  # find the last underscore
     ascending_or_descending = setting_value[split_index + 1:]  # take part of string after the last underscore
     return ascending_or_descending
+
+
+def __handle_sort_request(setting_key):
+    sort_by = request.form.get("sort_by")
+    ascending_or_descending = request.form.get("ascending_or_descending")
+    key = setting_key
+    value = f"{sort_by}_{ascending_or_descending}"
+    Setting.set(key, value)
 
 
 def __collect_dates_of_todos(todos):

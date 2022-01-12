@@ -36,10 +36,9 @@ def index():
 def get_todo_lists():
     todo_lists = TodoList.get_all()
 
-    sort_todo_lists_by = Setting.get(key="sort_todo_lists_by").value
-    split_index = sort_todo_lists_by.rindex("_")  # find the last underscore
-    sort_by = sort_todo_lists_by[:split_index]
-    ascending_or_descending = sort_todo_lists_by[split_index + 1:]
+    setting_key = "sort_todo_lists_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
 
     return render_template("todo_lists.html", todo_lists=todo_lists,
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
@@ -74,11 +73,9 @@ def get_todo_list(id):
     todos = Todo.get_all_of_todo_list(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
 
-    # TODO copy pasted code, maybe helper function?
-    sort_todos_by = Setting.get(key="sort_todos_by").value
-    split_index = sort_todos_by.rindex("_")  # find the last underscore
-    sort_by = sort_todos_by[:split_index]
-    ascending_or_descending = sort_todos_by[split_index + 1:]
+    setting_key = "sort_todos_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
 
     return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos,
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
@@ -337,6 +334,20 @@ def get_long_term_todo_progress_chart(id):
 
     return render_template("long_term_todo_progress_chart.html",
                            long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
+
+
+def __get_sort_by(setting_key):
+    setting_value = Setting.get(key=setting_key).value
+    split_index = setting_value.rindex("_")  # find the last underscore
+    sort_by = setting_value[:split_index]  # take part of string before the last underscore
+    return sort_by
+
+
+def __get_ascending_or_descending(setting_key):
+    setting_value = Setting.get(key=setting_key).value
+    split_index = setting_value.rindex("_")  # find the last underscore
+    ascending_or_descending = setting_value[split_index + 1:]  # take part of string after the last underscore
+    return ascending_or_descending
 
 
 def __collect_dates_of_todos(todos):

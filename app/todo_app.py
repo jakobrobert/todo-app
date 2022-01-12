@@ -69,10 +69,19 @@ def delete_todo_list(id):
 @app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
     todo_list = TodoList.get(id)
+
     title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
-    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos)
+
+    # TODO copy pasted code, maybe helper function?
+    sort_todos_by = Setting.get(key="sort_todos_by").value
+    split_index = sort_todos_by.rindex("_")  # find the last underscore
+    sort_by = sort_todos_by[:split_index]
+    ascending_or_descending = sort_todos_by[split_index + 1:]
+
+    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
@@ -204,16 +213,6 @@ def update_setting_for_todo_lists():
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
-def sort_todo_lists():
-    sort_by = request.form.get("sort_by")
-    ascending_or_descending = request.form.get("ascending_or_descending")
-    key = "sort_todo_lists_by"
-    value = f"{sort_by}_{ascending_or_descending}"
-    Setting.set(key, value)
-    return redirect(url_for("get_todo_lists"))
-
-
 # TODO remove later
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/update_setting_for_todos", methods=["GET"])
 def update_setting_for_todos(todo_list_id):
@@ -230,6 +229,27 @@ def update_setting_for_long_term_todos():
     value = request.args.get("value")
     Setting.set(key, value)
     return redirect(url_for("get_long_term_todos"))
+
+
+@app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
+def sort_todo_lists():
+    sort_by = request.form.get("sort_by")
+    ascending_or_descending = request.form.get("ascending_or_descending")
+    key = "sort_todo_lists_by"
+    value = f"{sort_by}_{ascending_or_descending}"
+    Setting.set(key, value)
+    return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/sort_todos/<int:todo_list_id>", methods=["POST"])
+def sort_todos(todo_list_id):
+    # TODO copy pasted code, might create helper function
+    sort_by = request.form.get("sort_by")
+    ascending_or_descending = request.form.get("ascending_or_descending")
+    key = "sort_todos_by"
+    value = f"{sort_by}_{ascending_or_descending}"
+    Setting.set(key, value)
+    return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-chart", methods=["GET"])

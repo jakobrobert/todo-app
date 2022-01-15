@@ -85,6 +85,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <!-- Clean up: one line per th so is consistent to rest -->
                         <th scope="col">
                             <i class="fas fa-clipboard-check"></i>
                         </th>
@@ -92,52 +93,18 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </th>
                         <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='title_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
                             Title
                         </th>
-                        <th scope="col">Start</th>
                         <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='created_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
+                            Start
+                        </th>
+                        <th scope="col">
                             Created at
                         </th>
                         <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='started_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='started_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
                             Started at
                         </th>
                         <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='completed_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todos', todo_list_id=todo_list_id, key='sort_todos_by', value='completed_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
                             Completed at
                         </th>
                         <th scope="col">Duration</th>

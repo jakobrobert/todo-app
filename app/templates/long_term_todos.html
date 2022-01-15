@@ -65,42 +65,9 @@
                 <thead>
                     <tr>
                         <th scope="col"><i class="fas fa-clipboard-check"></i></th>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='title_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='title_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Title
-                        </th>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='created_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='created_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Created at
-                        </th>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='completed_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_long_term_todos', key='sort_long_term_todos_by', value='completed_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Completed at
-                        </th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Completed at</th>
                         <th scope="col">Duration</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>Goal</th>

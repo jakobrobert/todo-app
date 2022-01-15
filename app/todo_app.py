@@ -35,7 +35,13 @@ def index():
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
     todo_lists = TodoList.get_all()
-    return render_template("todo_lists.html", todo_lists=todo_lists)
+
+    setting_key = "sort_todo_lists_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
+
+    return render_template("todo_lists.html", todo_lists=todo_lists,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
@@ -65,7 +71,13 @@ def get_todo_list(id):
     title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
-    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos)
+
+    setting_key = "sort_todos_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
+
+    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
@@ -138,7 +150,13 @@ def delete_todo(todo_id, todo_list_id):
 @app.route(URL_PREFIX + "/long_term_todos", methods=["GET"])
 def get_long_term_todos():
     long_term_todos = LongTermTodo.get_all()
-    return render_template("long_term_todos.html", long_term_todos=long_term_todos)
+
+    setting_key = "sort_long_term_todos_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
+
+    return render_template("long_term_todos.html", long_term_todos=long_term_todos,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
@@ -188,27 +206,21 @@ def delete_long_term_todo(id):
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/update_setting_for_todo_lists", methods=["GET"])
-def update_setting_for_todo_lists():
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
+@app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
+def sort_todo_lists():
+    __handle_sort_request(setting_key="sort_todo_lists_by")
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/update_setting_for_todos", methods=["GET"])
-def update_setting_for_todos(todo_list_id):
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
+@app.route(URL_PREFIX + "/sort_todos/<int:todo_list_id>", methods=["POST"])
+def sort_todos(todo_list_id):
+    __handle_sort_request(setting_key="sort_todos_by")
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/update_setting_for_long_term_todos", methods=["GET"])
-def update_setting_for_long_term_todos():
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
+@app.route(URL_PREFIX + "/sort_long_term_todos", methods=["POST"])
+def sort_long_term_todos():
+    __handle_sort_request(setting_key="sort_long_term_todos_by")
     return redirect(url_for("get_long_term_todos"))
 
 
@@ -297,6 +309,28 @@ def get_long_term_todo_progress_chart(id):
 
     return render_template("long_term_todo_progress_chart.html",
                            long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
+
+
+def __get_sort_by(setting_key):
+    setting_value = Setting.get(key=setting_key).value
+    split_index = setting_value.rindex("_")  # find the last underscore
+    sort_by = setting_value[:split_index]  # take part of string before the last underscore
+    return sort_by
+
+
+def __get_ascending_or_descending(setting_key):
+    setting_value = Setting.get(key=setting_key).value
+    split_index = setting_value.rindex("_")  # find the last underscore
+    ascending_or_descending = setting_value[split_index + 1:]  # take part of string after the last underscore
+    return ascending_or_descending
+
+
+def __handle_sort_request(setting_key):
+    sort_by = request.form.get("sort_by")
+    ascending_or_descending = request.form.get("ascending_or_descending")
+    key = setting_key
+    value = f"{sort_by}_{ascending_or_descending}"
+    Setting.set(key, value)
 
 
 def __collect_dates_of_todos(todos):

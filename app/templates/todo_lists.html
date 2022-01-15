@@ -16,49 +16,49 @@
         <h1>Todo Lists</h1>
         <br>
         <form action="{{ url_for('add_todo_list') }}" method="post">
-            <div class="row">
-                <div class="col-10">
-                    <input class="form-control" type="text" name="title" placeholder="Enter todo list title...">
-                </div>
-                <div class="col-2">
-                    <button class="btn btn-primary" type="submit">Add</button>
-                </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="title">
             </div>
+            <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+        <br>
+        <form action="{{ url_for('sort_todo_lists') }}" method="post">
+            <div class="form-group">
+                <label for="sort_by">Sort by</label>
+                <select class="form-control" id="sort_by" name="sort_by">
+                    <option value="title"
+                            {% if sort_by == "title" %} selected {% endif %}>
+                        Title
+                    </option>
+                    <option value="created_at"
+                            {% if sort_by == "created_at" %} selected {% endif %}>
+                        Created at
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="ascending_or_descending">
+                    <option value="ascending"
+                            {% if ascending_or_descending == "ascending" %} selected {% endif %}>
+                        Ascending
+                    </option>
+                    <option value="descending"
+                            {% if ascending_or_descending == "descending" %} selected {% endif %}>
+                        Descending
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">OK</button>
         </form>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='title_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Title
-                        </th>
-                        <th scope="col">
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='created_at_ascending') }}">
-                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ url_for('update_setting_for_todo_lists', key='sort_todo_lists_by', value='created_at_descending') }}">
-                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                            <br>
-                            Created at
-                        </th>
-                        <th scope="col">
-                            Edit
-                        </th>
-                        <th scope="col">
-                            Delete
-                        </th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>

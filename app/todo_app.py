@@ -68,7 +68,6 @@ def delete_todo_list(id):
 @app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
     todo_list = TodoList.get(id)
-
     title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
@@ -151,7 +150,13 @@ def delete_todo(todo_id, todo_list_id):
 @app.route(URL_PREFIX + "/long_term_todos", methods=["GET"])
 def get_long_term_todos():
     long_term_todos = LongTermTodo.get_all()
-    return render_template("long_term_todos.html", long_term_todos=long_term_todos)
+
+    setting_key = "sort_long_term_todos_by"
+    sort_by = __get_sort_by(setting_key)
+    ascending_or_descending = __get_ascending_or_descending(setting_key)
+
+    return render_template("long_term_todos.html", long_term_todos=long_term_todos,
+                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
@@ -238,6 +243,12 @@ def sort_todo_lists():
 def sort_todos(todo_list_id):
     __handle_sort_request(setting_key="sort_todos_by")
     return redirect(url_for("get_todo_list", id=todo_list_id))
+
+
+@app.route(URL_PREFIX + "/sort_long_term_todos", methods=["POST"])
+def sort_long_term_todos():
+    __handle_sort_request(setting_key="sort_long_term_todos_by")
+    return redirect(url_for("get_long_term_todos"))
 
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-chart", methods=["GET"])

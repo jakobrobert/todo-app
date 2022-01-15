@@ -26,6 +26,40 @@
             </div>
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
+        <br>
+        <!-- TODO NOW adjust -->
+        <form action="{{ url_for('sort_long_term_todos') }}" method="post">
+            <div class="form-group">
+                <label for="sort_by">Sort by</label>
+                <select class="form-control" id="sort_by" name="sort_by">
+                    <option value="title"
+                            {% if sort_by == "title" %} selected {% endif %}>
+                        Title
+                    </option>
+                    <option value="created_at"
+                            {% if sort_by == "created_at" %} selected {% endif %}>
+                        Created at
+                    </option>
+                    <option value="completed_at"
+                            {% if sort_by == "completed_at" %} selected {% endif %}>
+                        Completed at
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="ascending_or_descending">
+                    <option value="ascending"
+                            {% if ascending_or_descending == "ascending" %} selected {% endif %}>
+                        Ascending
+                    </option>
+                    <option value="descending"
+                            {% if ascending_or_descending == "descending" %} selected {% endif %}>
+                        Descending
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

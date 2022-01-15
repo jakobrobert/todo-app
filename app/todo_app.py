@@ -206,33 +206,6 @@ def delete_long_term_todo(id):
     return redirect(url_for("get_long_term_todos"))
 
 
-# TODO remove later
-@app.route(URL_PREFIX + "/update_setting_for_todo_lists", methods=["GET"])
-def update_setting_for_todo_lists():
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
-    return redirect(url_for("get_todo_lists"))
-
-
-# TODO remove later
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/update_setting_for_todos", methods=["GET"])
-def update_setting_for_todos(todo_list_id):
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
-    return redirect(url_for("get_todo_list", id=todo_list_id))
-
-
-# TODO remove later
-@app.route(URL_PREFIX + "/update_setting_for_long_term_todos", methods=["GET"])
-def update_setting_for_long_term_todos():
-    key = request.args.get("key")
-    value = request.args.get("value")
-    Setting.set(key, value)
-    return redirect(url_for("get_long_term_todos"))
-
-
 @app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
 def sort_todo_lists():
     __handle_sort_request(setting_key="sort_todo_lists_by")

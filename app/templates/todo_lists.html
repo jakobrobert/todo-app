@@ -35,6 +35,10 @@
                             {% if sort_by == "created_at" %} selected {% endif %}>
                         Created at
                     </option>
+                    <option value="none"
+                            {% if sort_by == "none" %} selected {% endif %}>
+                        None
+                    </option>
                 </select>
             </div>
             <div class="form-group">
@@ -46,6 +50,10 @@
                     <option value="descending"
                             {% if ascending_or_descending == "descending" %} selected {% endif %}>
                         Descending
+                    </option>
+                    <option value="none"
+                            {% if ascending_or_descending == "none" %} selected {% endif %}>
+                        None
                     </option>
                 </select>
             </div>

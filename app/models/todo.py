@@ -99,10 +99,14 @@ class Todo(db.Model):
 
     @staticmethod
     def __create_order_by_clause():
-        sort_todos_by = Setting.get("sort_todos_by")
-        if sort_todos_by is None:
+        sort_by = Setting.get("sort_todos_by")
+        if sort_by is None:
             return None
-        value = sort_todos_by.value
+
+        value = sort_by.value
+        if value is None:
+            return None
+
         if value == "title_ascending":
             return Todo.title.asc()
         elif value == "title_descending":
@@ -120,5 +124,4 @@ class Todo(db.Model):
         elif value == "completed_at_descending":
             return Todo.timestamp_completed.desc()
         else:
-            print("Unknown value for setting with key 'sort_todos_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_todos_by': {value}")

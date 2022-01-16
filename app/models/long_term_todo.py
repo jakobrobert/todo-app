@@ -91,7 +91,11 @@ class LongTermTodo(db.Model):
         sort_by = Setting.get("sort_long_term_todos_by")
         if sort_by is None:
             return None
+
         value = sort_by.value
+        if value is None:
+            return None
+
         if value == "title_ascending":
             return LongTermTodo.title.asc()
         elif value == "title_descending":
@@ -105,5 +109,4 @@ class LongTermTodo(db.Model):
         elif value == "completed_at_descending":
             return LongTermTodo.timestamp_completed.desc()
         else:
-            print("Unknown value for setting with key 'sort_long_term_todos_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_long_term_todos_by': {value}")

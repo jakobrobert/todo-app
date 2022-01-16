@@ -44,10 +44,14 @@ class TodoList(db.Model):
 
     @staticmethod
     def __create_order_by_clause():
-        sort_todo_lists_by = Setting.get("sort_todo_lists_by")
-        if sort_todo_lists_by is None:
+        sort_by = Setting.get("sort_todo_lists_by")
+        if sort_by is None:
             return None
-        value = sort_todo_lists_by.value
+
+        value = sort_by.value
+        if value is None:
+            return None
+
         if value == "title_ascending":
             return TodoList.title.asc()
         elif value == "title_descending":
@@ -57,5 +61,4 @@ class TodoList(db.Model):
         elif value == "created_at_descending":
             return TodoList.timestamp_created.desc()
         else:
-            print("Unknown value for setting with key 'sort_todo_lists_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_todo_lists_by': {value}")

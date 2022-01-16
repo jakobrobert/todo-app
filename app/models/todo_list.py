@@ -48,6 +48,8 @@ class TodoList(db.Model):
         if sort_todo_lists_by is None:
             return None
         value = sort_todo_lists_by.value
+        if value is None:
+            return None
         if value == "title_ascending":
             return TodoList.title.asc()
         elif value == "title_descending":

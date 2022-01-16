@@ -313,24 +313,22 @@ def get_long_term_todo_progress_chart(id):
 
 def __get_sort_by(setting_key):
     setting = Setting.get(key=setting_key)
-    if setting is None:
+    if setting is None or setting.value is None:
         return "none"
 
-    setting_value = setting.value
-    split_index = setting_value.rindex("_")  # find the last underscore
-    sort_by = setting_value[:split_index]  # take part of string before the last underscore
+    split_index = setting.value.rindex("_")  # find the last underscore
+    sort_by = setting.value[:split_index]  # take part of string before the last underscore
 
     return sort_by
 
 
 def __get_ascending_or_descending(setting_key):
     setting = Setting.get(key=setting_key)
-    if setting is None:
+    if setting is None or setting.value is None:
         return "none"
 
-    setting_value = setting.value
-    split_index = setting_value.rindex("_")  # find the last underscore
-    ascending_or_descending = setting_value[split_index + 1:]  # take part of string after the last underscore
+    split_index = setting.value.rindex("_")  # find the last underscore
+    ascending_or_descending = setting.value[split_index + 1:]  # take part of string after the last underscore
 
     return ascending_or_descending
 
@@ -339,7 +337,10 @@ def __handle_sort_request(setting_key):
     sort_by = request.form.get("sort_by")
     ascending_or_descending = request.form.get("ascending_or_descending")
     key = setting_key
-    value = f"{sort_by}_{ascending_or_descending}"
+    if sort_by == "none" or ascending_or_descending == "none":
+        value = None
+    else:
+        value = f"{sort_by}_{ascending_or_descending}"
     Setting.set(key, value)
 
 

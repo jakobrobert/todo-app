@@ -314,7 +314,7 @@ def get_long_term_todo_progress_chart(id):
 def __get_sort_by(setting_key):
     setting = Setting.get(key=setting_key)
     if setting is None:
-        return None
+        return "none"
 
     setting_value = setting.value
     split_index = setting_value.rindex("_")  # find the last underscore
@@ -326,7 +326,7 @@ def __get_sort_by(setting_key):
 def __get_ascending_or_descending(setting_key):
     setting = Setting.get(key=setting_key)
     if setting is None:
-        return None
+        return "none"
 
     setting_value = setting.value
     split_index = setting_value.rindex("_")  # find the last underscore

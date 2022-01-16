@@ -57,5 +57,4 @@ class TodoList(db.Model):
         elif value == "created_at_descending":
             return TodoList.timestamp_created.desc()
         else:
-            print("Unknown value for setting with key 'sort_todo_lists_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_todo_lists_by': {value}")

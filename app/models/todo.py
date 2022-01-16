@@ -120,5 +120,4 @@ class Todo(db.Model):
         elif value == "completed_at_descending":
             return Todo.timestamp_completed.desc()
         else:
-            print("Unknown value for setting with key 'sort_todos_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_todos_by': {value}")

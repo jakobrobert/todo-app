@@ -105,5 +105,4 @@ class LongTermTodo(db.Model):
         elif value == "completed_at_descending":
             return LongTermTodo.timestamp_completed.desc()
         else:
-            print("Unknown value for setting with key 'sort_long_term_todos_by'!")
-            return None
+            raise ValueError(f"Unknown value for setting with key 'sort_long_term_todos_by': {value}")

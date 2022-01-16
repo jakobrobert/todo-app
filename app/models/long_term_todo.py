@@ -91,7 +91,11 @@ class LongTermTodo(db.Model):
         sort_by = Setting.get("sort_long_term_todos_by")
         if sort_by is None:
             return None
+
         value = sort_by.value
+        if value is None:
+            return None
+
         if value == "title_ascending":
             return LongTermTodo.title.asc()
         elif value == "title_descending":

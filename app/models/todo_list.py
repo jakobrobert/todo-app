@@ -44,12 +44,14 @@ class TodoList(db.Model):
 
     @staticmethod
     def __create_order_by_clause():
-        sort_todo_lists_by = Setting.get("sort_todo_lists_by")
-        if sort_todo_lists_by is None:
+        sort_by = Setting.get("sort_todo_lists_by")
+        if sort_by is None:
             return None
-        value = sort_todo_lists_by.value
+
+        value = sort_by.value
         if value is None:
             return None
+
         if value == "title_ascending":
             return TodoList.title.asc()
         elif value == "title_descending":

@@ -314,7 +314,12 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
     labels = []
     values = []
 
+    if not todos:
+        return labels, values
+
     all_dates = __collect_dates_of_todos(todos)
+    if not all_dates:
+        return labels, values
 
     # Iterate through the each day and fill the data for the chart
     one_day = datetime.timedelta(days=1)

@@ -1,4 +1,4 @@
-<tr {% if todo.timestamp_started and not todo.completed %} class="bg-warning" {% endif %}>
+<tr {% if todo.is_running %} class="bg-warning" {% endif %}>
     <td>
         <input class="form-check-input" type="checkbox" name="completed"
                onclick="window.location.href='{{ url_for('toggle_todo_completed', todo_id=todo.id, todo_list_id=todo_list_id) }}'"

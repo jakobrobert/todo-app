@@ -4,6 +4,7 @@ from utils import Utils
 from .setting import Setting
 
 from sqlalchemy import func
+from datetime import datetime
 
 
 class Todo(db.Model):
@@ -25,8 +26,13 @@ class Todo(db.Model):
 
     @property
     def duration(self):
-        if self.timestamp_started is None or self.timestamp_completed is None:
+        if self.timestamp_started is None:
             return None
+
+        if self.timestamp_completed is None:
+            # TODO remove milliseconds part
+            return datetime.now() - self.timestamp_started
+
         return self.timestamp_completed - self.timestamp_started
 
     @property

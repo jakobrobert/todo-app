@@ -30,8 +30,8 @@ class Todo(db.Model):
             return None
 
         if self.timestamp_completed is None:
-            # TODO remove milliseconds part
-            return datetime.now() - self.timestamp_started
+            current_timestamp = datetime.now().replace(microsecond=0)
+            return current_timestamp - self.timestamp_started
 
         return self.timestamp_completed - self.timestamp_started
 

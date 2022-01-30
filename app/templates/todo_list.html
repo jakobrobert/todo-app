@@ -111,10 +111,18 @@
                 <tbody>
                     <tr>
                         <td colspan="13" style="text-align: center;">
+                            <h4><i class="fas fa-play-circle"></i> Running</h4>
+                        </td>
+                    </tr>
+                {% for todo in todos if todo.is_running %}
+                    {% include "todo_list_table_row.html" %}
+                {% endfor %}
+                    <tr>
+                        <td colspan="13" style="text-align: center;">
                             <h4><i class="fas fa-exclamation-triangle"></i> High Priority</h4>
                         </td>
                     </tr>
-                {% for todo in todos if not todo.completed and todo.high_priority %}
+                {% for todo in todos if todo.high_priority and not todo.is_running and not todo.completed %}
                     {% include "todo_list_table_row.html" %}
                 {% endfor %}
                     <tr>
@@ -122,7 +130,7 @@
                             <h4>Low Priority</h4>
                         </td>
                     </tr>
-                {% for todo in todos if not todo.completed and not todo.high_priority %}
+                {% for todo in todos if not todo.high_priority and not todo.is_running and not todo.completed %}
                     {% include "todo_list_table_row.html" %}
                 {% endfor %}
                     <tr>

@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label for="long_term_todo_id">Long Term Todo</label>
                 <select class="form-control" id="long_term_todo_id" name="long_term_todo_id">
-                {% for long_term_todo in long_term_todos %}
+                {% for long_term_todo in long_term_todos if not long_term_todo.completed%}
                     <option value="{{ long_term_todo.id }}">{{ long_term_todo.title }}</option>
                 {% endfor %}
                 </select>

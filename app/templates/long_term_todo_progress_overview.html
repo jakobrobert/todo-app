@@ -30,46 +30,7 @@
            {% endif %}
         >
 
-        <!-- TODO move canvas and script tag into separate file -->
-        <canvas id="chart" width="400" height="400"></canvas>
-
-        <!--
-        Inline script is hacky, but did not manage to do it in the recommended way.
-        If trying: url_for('static', filename='js/long_term_todo_progress_chart.js')
-        Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
-        -->
-        <script>
-            const canvas = document.getElementById("chart");
-            const ctx = canvas.getContext("2d");
-
-            const chart = new Chart(ctx, {
-                type: "line",
-                data: {
-                    // safe -> Jinja2 pastes the data directly and does not convert it to a string
-                    labels: {{ labels | safe }},
-                    datasets:
-                    [
-                        {
-                            label: "Progress",
-                            data: {{ values | safe }},
-                            fill: false,
-                            borderColor: "gray",
-                            borderWidth: 1.0,
-                            lineTension: 0.1,
-                            lineWidth: 1.0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: false,
-                    elements: {
-                        point: {
-                            radius: 2.0
-                        }
-                    }
-                }
-            });
-        </script>
+        {% include "long_term_todo_progress_chart.html" %}
 
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
@@ -83,6 +44,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- TODO should contain one entry for each day, as in the graph. So also explicit entries for days without a completed entry -->
                     <!-- TODO Distinguish Completed & Not Completed by highlighting color (similar to highlighting for Running) -->
                     {% for todo in todos %}
                         {% include "long_term_todo_progress_table_row.html" %}

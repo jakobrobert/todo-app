@@ -235,8 +235,8 @@ def get_long_term_todo_duration_chart(id):
                            labels=labels, values=values)
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-chart", methods=["GET"])
-def get_long_term_todo_progress_chart(id):
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-overview", methods=["GET"])
+def get_long_term_todo_progress_overview(id):
     as_percents_arg = request.args.get("as_percents")
     as_percents = False
     if as_percents_arg == 'True':
@@ -247,7 +247,7 @@ def get_long_term_todo_progress_chart(id):
     progress_goal = long_term_todo.progress_goal
     labels, values = __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
 
-    return render_template("long_term_todo_progress_chart.html",
+    return render_template("long_term_todo_progress_overview.html",
                            long_term_todo=long_term_todo, as_percents=as_percents, labels=labels, values=values)
 
 

@@ -26,7 +26,7 @@
         </h4>
         {% if long_term_todo.progress_goal %}
         <h4>
-            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_progress_chart', id=long_term_todo.id, as_percents=False) }}">
+            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=False) }}">
                 Show progress chart
             </a>
         </h4>

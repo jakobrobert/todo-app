@@ -32,22 +32,23 @@
 
         {% include "long_term_todo_progress_chart.html" %}
 
+        <!-- TODO need more data for the table then just for the chart. e.g Completed / Not Completed for each day. -->
+        <!-- possible solution: extract logic from todo_app.py -> __get_labels_and_values_for_progress_chart and create data structure, pass this to template -->
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"><i class="fas fa-clipboard-check"></i></th>
-                        <th scope="col">Title</th>
                         <th scope="col">Date</th>
                         <th scope="col">Progress</th>
-                        <th scope="col">Progress<br>in %</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- TODO should contain one entry for each day, as in the graph. So also explicit entries for days without a completed entry -->
                     <!-- TODO Distinguish Completed & Not Completed by highlighting color (similar to highlighting for Running) -->
-                    {% for todo in todos %}
-                        {% include "long_term_todo_progress_table_row.html" %}
+                    {% for i in range(labels|length) %}
+                        <tr>
+                            <td> {{ labels[i] }}</td>
+                            <td> {{ values[i] }}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

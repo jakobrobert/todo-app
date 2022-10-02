@@ -32,26 +32,24 @@
 
         {% include "long_term_todo_progress_chart.html" %}
 
-        <!-- TODO need more data for the table then just for the chart: Completed (does any completed entry exist at this date?), Progress in % -->
-        <!-- possible solution: extract logic from todo_app.py -> __get_labels_and_values_for_progress_chart and create data structure, pass this to template -->
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Completed</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Has Progress</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>in %</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- TODO Distinguish Completed & Not Completed by highlighting color (similar to highlighting for Running) -->
-                    {% for i in range(labels|length) %}
+                    {% for item in table_data %}
                         <tr>
-                            <td> TODO </td>
-                            <td> {{ labels[i] }}</td>
-                            <td> {{ values[i] }}</td>
-                            <td> TODO </td>
+                            <td> {{ item["date"] }}</td>
+                            <td> {{ item["has_progress"] }} </td>
+                            <td> {{ item["progress"] }}</td>
+                            <td> {{ item["progress_in_percents"] }} </td>
                         </tr>
                     {% endfor %}
                 </tbody>

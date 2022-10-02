@@ -246,10 +246,13 @@ def get_long_term_todo_progress_overview(id):
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
     labels, values = __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
+    table_data = __get_data_for_progress_overview(todos, progress_goal)
+    print(table_data)
 
     return render_template(
         "long_term_todo_progress_overview.html",
-        long_term_todo=long_term_todo, as_percents=as_percents, todos=todos, labels=labels, values=values)
+        long_term_todo=long_term_todo, as_percents=as_percents, todos=todos,
+        labels=labels, values=values, table_data=table_data)
 
 
 def __get_sort_by(setting_key):
@@ -334,7 +337,7 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
     if not all_dates:
         return labels, values
 
-    # Iterate through the each day and fill the data for the chart
+    # Iterate through each day and fill the data for the chart
     one_day = datetime.timedelta(days=1)
     curr_date = min(all_dates)
     end_date = max(all_dates)
@@ -351,7 +354,7 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
                     progress = todo.progress
 
         if progress == 0:
-            # There is no valid value for the current date, so fill the value with the last one
+            # There is no valid progress value for the current date, so fill the value with the previous one
             if len(values) >= 1:
                 values.append(values[-1])
             else:
@@ -366,6 +369,56 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
         curr_date += one_day
 
     return labels, values
+
+
+def __get_data_for_progress_overview(todos, progress_goal):
+    result = []
+
+    if not todos:
+        return result
+
+    all_dates = __collect_dates_of_todos(todos)
+    if not all_dates:
+        return result
+
+    # TODO CLEANUP duplicated code with __get_labels_and_values_for_progress_chart.
+    #  probably the ...chart method can be based on this one to get labels & values
+    # Iterate through each day & fill the data
+    one_day = datetime.timedelta(days=1)
+    curr_date = min(all_dates)
+    end_date = max(all_dates)
+    while curr_date <= end_date:
+        curr_item = {}
+
+        curr_item["date"] = str(curr_date)
+        curr_item["has_progress"] = False
+
+        progress = 0
+        todos_for_date = __find_todos_for_date(todos, curr_date)
+        if todos_for_date:
+            # Get maximum progress for the current date
+            for todo in todos_for_date:
+                if todo.progress is not None and todo.progress > progress:
+                    progress = todo.progress
+
+        if progress == 0:
+            # There is no valid progress value for the current date, so fill the value with the last one
+            if len(result) >= 1:
+                curr_item["progress"] = result[-1]["progress"]
+                curr_item["progress_in_percents"] = result[-1]["progress_in_percents"]
+            else:
+                curr_item["progress"] = 0
+                curr_item["progress_in_percents"] = 0
+        else:
+            curr_item["has_progress"] = True
+            curr_item["progress"] = progress
+            curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+
+        result.append(curr_item)
+
+        curr_date += one_day
+
+    return result
 
 
 def __collect_dates_of_todos(todos):

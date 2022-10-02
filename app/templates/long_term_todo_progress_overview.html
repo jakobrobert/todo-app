@@ -43,9 +43,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- TODO Distinguish Completed & Not Completed by highlighting color (similar to highlighting for Running) -->
                     {% for item in table_data %}
-                        <tr>
+                        <tr {% if item["has_progress"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
                             <td> {{ item["has_progress"] }} </td>
                             <td> {{ item["progress"] }}</td>

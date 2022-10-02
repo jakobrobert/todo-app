@@ -380,8 +380,6 @@ def __get_data_for_progress_overview(todos, progress_goal):
     if not all_dates:
         return result
 
-    # TODO CLEANUP duplicated code with __get_labels_and_values_for_progress_chart.
-    #  probably the ...chart method can be based on this one to get labels & values
     # Iterate through each day & fill the data
     one_day = datetime.timedelta(days=1)
     curr_date = min(all_dates)

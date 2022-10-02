@@ -247,7 +247,6 @@ def get_long_term_todo_progress_overview(id):
     progress_goal = long_term_todo.progress_goal
     labels, values = __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
     table_data = __get_data_for_progress_overview(todos, progress_goal)
-    print(table_data)
 
     return render_template(
         "long_term_todo_progress_overview.html",

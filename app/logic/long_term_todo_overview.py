@@ -10,22 +10,6 @@ class LongTermTodoOverview:
 
     # TODO rename new methods
     def get_labels_and_values_for_duration_chart_NEW(self):
-        return self.get_labels_and_values_for_duration_chart()
-
-    def get_labels_and_values_for_progress_chart_NEW(self, progress_goal, as_percents):
-        return self.get_labels_and_values_for_progress_chart(progress_goal, as_percents)
-
-    def get_data_for_progress_overview_NEW(self, progress_goal):
-        return self.get_data_for_progress_overview(progress_goal)
-
-    def __collect_dates_of_todos_NEW(self):
-        return self.collect_dates_of_todos()
-
-    def __find_todos_for_date_NEW(self, date):
-        return self.find_todos_for_date(date)
-
-    # TODO inline methods
-    def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []
 
@@ -62,7 +46,7 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_labels_and_values_for_progress_chart(self, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart_NEW(self, progress_goal, as_percents):
         labels = []
         values = []
 
@@ -106,7 +90,7 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_data_for_progress_overview(self, progress_goal):
+    def get_data_for_progress_overview_NEW(self, progress_goal):
         result = []
 
         if not self.todos:
@@ -152,6 +136,12 @@ class LongTermTodoOverview:
             curr_date += one_day
 
         return result
+
+    def __collect_dates_of_todos_NEW(self):
+        return self.collect_dates_of_todos()
+
+    def __find_todos_for_date_NEW(self, date):
+        return self.find_todos_for_date(date)
 
     def collect_dates_of_todos(self):
         all_dates = []

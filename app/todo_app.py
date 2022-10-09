@@ -307,7 +307,7 @@ def __get_labels_and_values_for_duration_chart(todos):
         date_label = str(curr_date)
         labels.append(date_label)
 
-        todos_for_date = __find_todos_for_date(todos, curr_date)
+        todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
         if todos_for_date:
             # Fill value with total duration for the current date
             duration_in_seconds = 0
@@ -346,7 +346,7 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
         labels.append(date_label)
 
         progress = 0
-        todos_for_date = __find_todos_for_date(todos, curr_date)
+        todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
         if todos_for_date:
             # Get maximum progress for the current date
             for todo in todos_for_date:
@@ -392,7 +392,7 @@ def __get_data_for_progress_overview(todos, progress_goal):
         curr_item["has_progress"] = False
 
         progress = 0
-        todos_for_date = __find_todos_for_date(todos, curr_date)
+        todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
         if todos_for_date:
             # Get maximum progress for the current date
             for todo in todos_for_date:
@@ -417,7 +417,3 @@ def __get_data_for_progress_overview(todos, progress_goal):
         curr_date += one_day
 
     return result
-
-
-def __find_todos_for_date(todos, date):
-    return LongTermTodoOverview.find_todos_for_date(todos, date)

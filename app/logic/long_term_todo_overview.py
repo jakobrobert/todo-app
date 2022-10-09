@@ -8,6 +8,23 @@ class LongTermTodoOverview:
     def __init__(self, todos):
         self.todos = todos
 
+    # TODO rename new methods
+    def get_labels_and_values_for_duration_chart_NEW(self):
+        return LongTermTodoOverview.get_labels_and_values_for_duration_chart(self.todos)
+
+    def get_labels_and_values_for_progress_chart_NEW(self, progress_goal, as_percents):
+        return LongTermTodoOverview.get_labels_and_values_for_progress_chart(self.todos, progress_goal, as_percents)
+
+    def get_data_for_progress_overview_NEW(self, progress_goal):
+        return LongTermTodoOverview.get_data_for_progress_overview(self.todos, progress_goal)
+
+    def __collect_dates_of_todos_NEW(self):
+        return LongTermTodoOverview.collect_dates_of_todos(self.todos)
+
+    def __find_todos_for_date_NEW(self):
+        return LongTermTodoOverview.find_todos_for_date(self.todos)
+
+    # TODO inline static methods
     @staticmethod
     def get_labels_and_values_for_duration_chart(todos):
         labels = []

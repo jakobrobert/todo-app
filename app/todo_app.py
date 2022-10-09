@@ -3,10 +3,8 @@ from flask import render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 import configparser
-import datetime
 
 from logic.long_term_todo_overview import LongTermTodoOverview
-from utils import Utils
 
 config = configparser.ConfigParser()
 config.read("../server.ini")
@@ -229,7 +227,7 @@ def sort_long_term_todos():
 def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
-    labels, values = __get_labels_and_values_for_duration_chart(todos)
+    labels, values = LongTermTodoOverview.get_labels_and_values_for_duration_chart(todos)
 
     return render_template("long_term_todo_duration_chart.html",
                            title=long_term_todo.title, total_duration=long_term_todo.duration,
@@ -246,8 +244,8 @@ def get_long_term_todo_progress_overview(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
-    labels, values = __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
-    table_data = __get_data_for_progress_overview(todos, progress_goal)
+    labels, values = LongTermTodoOverview.get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
+    table_data = LongTermTodoOverview.get_data_for_progress_overview(todos, progress_goal)
 
     return render_template(
         "long_term_todo_progress_overview.html",
@@ -286,15 +284,3 @@ def __handle_sort_request(setting_key):
     else:
         value = f"{sort_by}_{ascending_or_descending}"
     Setting.set(key, value)
-
-
-def __get_labels_and_values_for_duration_chart(todos):
-    return LongTermTodoOverview.get_labels_and_values_for_duration_chart(todos)
-
-
-def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents):
-    return LongTermTodoOverview.get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
-
-
-def __get_data_for_progress_overview(todos, progress_goal):
-    return LongTermTodoOverview.get_data_for_progress_overview(todos, progress_goal)

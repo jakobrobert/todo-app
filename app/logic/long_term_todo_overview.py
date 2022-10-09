@@ -10,30 +10,30 @@ class LongTermTodoOverview:
 
     # TODO rename new methods
     def get_labels_and_values_for_duration_chart_NEW(self):
-        return LongTermTodoOverview.get_labels_and_values_for_duration_chart(self.todos)
+        return self.get_labels_and_values_for_duration_chart(self.todos)
 
     def get_labels_and_values_for_progress_chart_NEW(self, progress_goal, as_percents):
-        return LongTermTodoOverview.get_labels_and_values_for_progress_chart(self.todos, progress_goal, as_percents)
+        return self.get_labels_and_values_for_progress_chart(self.todos, progress_goal, as_percents)
 
     def get_data_for_progress_overview_NEW(self, progress_goal):
-        return LongTermTodoOverview.get_data_for_progress_overview(self.todos, progress_goal)
+        return self.get_data_for_progress_overview(self.todos, progress_goal)
 
     def __collect_dates_of_todos_NEW(self):
-        return LongTermTodoOverview.collect_dates_of_todos(self.todos)
+        return self.collect_dates_of_todos(self.todos)
 
     def __find_todos_for_date_NEW(self, date):
-        return LongTermTodoOverview.find_todos_for_date(self.todos, date)
+        return self.find_todos_for_date(self.todos, date)
 
-    # TODO inline static methods
-    @staticmethod
-    def get_labels_and_values_for_duration_chart(todos):
+    # TODO first inline methods
+    # TODO then use self.todos & remove todos param
+    def get_labels_and_values_for_duration_chart(self, todos):
         labels = []
         values = []
 
         if not todos:
             return labels, values
 
-        all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos(todos)
         if not all_dates:
             return labels, values
 
@@ -45,7 +45,7 @@ class LongTermTodoOverview:
             date_label = str(curr_date)
             labels.append(date_label)
 
-            todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(todos, curr_date)
             if todos_for_date:
                 # Fill value with total duration for the current date
                 duration_in_seconds = 0
@@ -63,15 +63,14 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    @staticmethod
-    def get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart(self, todos, progress_goal, as_percents):
         labels = []
         values = []
 
         if not todos:
             return labels, values
 
-        all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos(todos)
         if not all_dates:
             return labels, values
 
@@ -84,7 +83,7 @@ class LongTermTodoOverview:
             labels.append(date_label)
 
             progress = 0
-            todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(todos, curr_date)
             if todos_for_date:
                 # Get maximum progress for the current date
                 for todo in todos_for_date:
@@ -108,14 +107,13 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    @staticmethod
-    def get_data_for_progress_overview(todos, progress_goal):
+    def get_data_for_progress_overview(self, todos, progress_goal):
         result = []
 
         if not todos:
             return result
 
-        all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos(todos)
         if not all_dates:
             return result
 
@@ -130,7 +128,7 @@ class LongTermTodoOverview:
             curr_item["has_progress"] = False
 
             progress = 0
-            todos_for_date = LongTermTodoOverview.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(todos, curr_date)
             if todos_for_date:
                 # Get maximum progress for the current date
                 for todo in todos_for_date:
@@ -156,8 +154,7 @@ class LongTermTodoOverview:
 
         return result
 
-    @staticmethod
-    def collect_dates_of_todos(todos):
+    def collect_dates_of_todos(self, todos):
         all_dates = []
 
         for todo in todos:
@@ -169,8 +166,7 @@ class LongTermTodoOverview:
 
         return all_dates
 
-    @staticmethod
-    def find_todos_for_date(todos, date):
+    def find_todos_for_date(self, todos, date):
         todos_for_date = []
 
         for todo in todos:

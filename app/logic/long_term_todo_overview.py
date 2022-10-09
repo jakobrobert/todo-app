@@ -138,26 +138,17 @@ class LongTermTodoOverview:
         return result
 
     def __collect_dates_of_todos_NEW(self):
-        return self.collect_dates_of_todos()
-
-    def __find_todos_for_date_NEW(self, date):
-        return self.find_todos_for_date(date)
-
-    def collect_dates_of_todos(self):
         all_dates = []
-
         for todo in self.todos:
             if todo.timestamp_completed is None:
                 continue
 
             curr_date = todo.timestamp_completed.date()
             all_dates.append(curr_date)
-
         return all_dates
 
-    def find_todos_for_date(self, date):
+    def __find_todos_for_date_NEW(self, date):
         todos_for_date = []
-
         for todo in self.todos:
             if todo.timestamp_completed is None:
                 continue
@@ -165,6 +156,5 @@ class LongTermTodoOverview:
             todo_date = todo.timestamp_completed.date()
             if todo_date == date:
                 todos_for_date.append(todo)
-
         return todos_for_date
 

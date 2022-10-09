@@ -295,7 +295,7 @@ def __get_labels_and_values_for_duration_chart(todos):
     if not todos:
         return labels, values
 
-    all_dates = __collect_dates_of_todos(todos)
+    all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
     if not all_dates:
         return labels, values
 
@@ -333,7 +333,7 @@ def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents
     if not todos:
         return labels, values
 
-    all_dates = __collect_dates_of_todos(todos)
+    all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
     if not all_dates:
         return labels, values
 
@@ -377,7 +377,7 @@ def __get_data_for_progress_overview(todos, progress_goal):
     if not todos:
         return result
 
-    all_dates = __collect_dates_of_todos(todos)
+    all_dates = LongTermTodoOverview.collect_dates_of_todos(todos)
     if not all_dates:
         return result
 
@@ -417,10 +417,6 @@ def __get_data_for_progress_overview(todos, progress_goal):
         curr_date += one_day
 
     return result
-
-
-def __collect_dates_of_todos(todos):
-    return LongTermTodoOverview.collect_dates_of_todos(todos)
 
 
 def __find_todos_for_date(todos, date):

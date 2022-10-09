@@ -10,30 +10,29 @@ class LongTermTodoOverview:
 
     # TODO rename new methods
     def get_labels_and_values_for_duration_chart_NEW(self):
-        return self.get_labels_and_values_for_duration_chart(self.todos)
+        return self.get_labels_and_values_for_duration_chart()
 
     def get_labels_and_values_for_progress_chart_NEW(self, progress_goal, as_percents):
-        return self.get_labels_and_values_for_progress_chart(self.todos, progress_goal, as_percents)
+        return self.get_labels_and_values_for_progress_chart(progress_goal, as_percents)
 
     def get_data_for_progress_overview_NEW(self, progress_goal):
-        return self.get_data_for_progress_overview(self.todos, progress_goal)
+        return self.get_data_for_progress_overview(progress_goal)
 
     def __collect_dates_of_todos_NEW(self):
-        return self.collect_dates_of_todos(self.todos)
+        return self.collect_dates_of_todos()
 
     def __find_todos_for_date_NEW(self, date):
-        return self.find_todos_for_date(self.todos, date)
+        return self.find_todos_for_date(date)
 
-    # TODO first inline methods
-    # TODO then use self.todos & remove todos param
-    def get_labels_and_values_for_duration_chart(self, todos):
+    # TODO inline methods
+    def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []
 
-        if not todos:
+        if not self.todos:
             return labels, values
 
-        all_dates = self.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos()
         if not all_dates:
             return labels, values
 
@@ -45,7 +44,7 @@ class LongTermTodoOverview:
             date_label = str(curr_date)
             labels.append(date_label)
 
-            todos_for_date = self.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(curr_date)
             if todos_for_date:
                 # Fill value with total duration for the current date
                 duration_in_seconds = 0
@@ -63,14 +62,14 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_labels_and_values_for_progress_chart(self, todos, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart(self, progress_goal, as_percents):
         labels = []
         values = []
 
-        if not todos:
+        if not self.todos:
             return labels, values
 
-        all_dates = self.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos()
         if not all_dates:
             return labels, values
 
@@ -83,7 +82,7 @@ class LongTermTodoOverview:
             labels.append(date_label)
 
             progress = 0
-            todos_for_date = self.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(curr_date)
             if todos_for_date:
                 # Get maximum progress for the current date
                 for todo in todos_for_date:
@@ -107,13 +106,13 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_data_for_progress_overview(self, todos, progress_goal):
+    def get_data_for_progress_overview(self, progress_goal):
         result = []
 
-        if not todos:
+        if not self.todos:
             return result
 
-        all_dates = self.collect_dates_of_todos(todos)
+        all_dates = self.collect_dates_of_todos()
         if not all_dates:
             return result
 
@@ -128,7 +127,7 @@ class LongTermTodoOverview:
             curr_item["has_progress"] = False
 
             progress = 0
-            todos_for_date = self.find_todos_for_date(todos, curr_date)
+            todos_for_date = self.find_todos_for_date(curr_date)
             if todos_for_date:
                 # Get maximum progress for the current date
                 for todo in todos_for_date:
@@ -154,10 +153,10 @@ class LongTermTodoOverview:
 
         return result
 
-    def collect_dates_of_todos(self, todos):
+    def collect_dates_of_todos(self):
         all_dates = []
 
-        for todo in todos:
+        for todo in self.todos:
             if todo.timestamp_completed is None:
                 continue
 
@@ -166,10 +165,10 @@ class LongTermTodoOverview:
 
         return all_dates
 
-    def find_todos_for_date(self, todos, date):
+    def find_todos_for_date(self, date):
         todos_for_date = []
 
-        for todo in todos:
+        for todo in self.todos:
             if todo.timestamp_completed is None:
                 continue
 

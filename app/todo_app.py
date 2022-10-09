@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import configparser
 import datetime
 
+from logic.long_term_todo_overview import LongTermTodoOverview
 from utils import Utils
 
 config = configparser.ConfigParser()
@@ -419,16 +420,7 @@ def __get_data_for_progress_overview(todos, progress_goal):
 
 
 def __collect_dates_of_todos(todos):
-    all_dates = []
-
-    for todo in todos:
-        if todo.timestamp_completed is None:
-            continue
-
-        curr_date = todo.timestamp_completed.date()
-        all_dates.append(curr_date)
-
-    return all_dates
+    return LongTermTodoOverview.collect_dates_of_todos(todos)
 
 
 def __find_todos_for_date(todos, date):

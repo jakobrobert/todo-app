@@ -6,7 +6,7 @@ from utils import Utils
 
 class LongTermTodoOverview:
     @staticmethod
-    def __get_labels_and_values_for_duration_chart(todos):
+    def get_labels_and_values_for_duration_chart(todos):
         labels = []
         values = []
 
@@ -44,7 +44,7 @@ class LongTermTodoOverview:
         return labels, values
 
     @staticmethod
-    def __get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents):
         labels = []
         values = []
 

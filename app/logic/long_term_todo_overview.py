@@ -21,8 +21,8 @@ class LongTermTodoOverview:
     def __collect_dates_of_todos_NEW(self):
         return LongTermTodoOverview.collect_dates_of_todos(self.todos)
 
-    def __find_todos_for_date_NEW(self):
-        return LongTermTodoOverview.find_todos_for_date(self.todos)
+    def __find_todos_for_date_NEW(self, date):
+        return LongTermTodoOverview.find_todos_for_date(self.todos, date)
 
     # TODO inline static methods
     @staticmethod

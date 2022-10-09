@@ -5,6 +5,9 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
+    def __init__(self, todos):
+        self.todos = todos
+
     @staticmethod
     def get_labels_and_values_for_duration_chart(todos):
         labels = []

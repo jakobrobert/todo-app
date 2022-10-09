@@ -227,7 +227,9 @@ def sort_long_term_todos():
 def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
-    labels, values = LongTermTodoOverview.get_labels_and_values_for_duration_chart(todos)
+
+    long_term_todo_overview = LongTermTodoOverview(todos)
+    labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart_NEW()
 
     return render_template("long_term_todo_duration_chart.html",
                            title=long_term_todo.title, total_duration=long_term_todo.duration,
@@ -244,8 +246,10 @@ def get_long_term_todo_progress_overview(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
-    labels, values = LongTermTodoOverview.get_labels_and_values_for_progress_chart(todos, progress_goal, as_percents)
-    table_data = LongTermTodoOverview.get_data_for_progress_overview(todos, progress_goal)
+
+    long_term_todo_overview = LongTermTodoOverview(todos)
+    labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart_NEW(progress_goal, as_percents)
+    table_data = long_term_todo_overview.get_data_for_progress_overview_NEW(progress_goal)
 
     return render_template(
         "long_term_todo_progress_overview.html",

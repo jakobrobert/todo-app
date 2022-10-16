@@ -49,43 +49,14 @@ class LongTermTodoOverview:
         labels = []
         values = []
 
-        if not self.todos:
+        data_items = self.get_data_for_progress_overview(progress_goal)
+        if not data_items:
             return labels, values
 
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return labels, values
-
-        # Iterate through each day and fill the data for the chart
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(all_dates)
-        end_date = max(all_dates)
-        while curr_date <= end_date:
-            date_label = str(curr_date)
-            labels.append(date_label)
-
-            progress = 0
-            todos_for_date = self.__find_todos_for_date(curr_date)
-            if todos_for_date:
-                # Get maximum progress for the current date
-                for todo in todos_for_date:
-                    if todo.progress is not None and todo.progress > progress:
-                        progress = todo.progress
-
-            if progress == 0:
-                # There is no valid progress value for the current date, so fill the value with the previous one
-                if len(values) >= 1:
-                    values.append(values[-1])
-                else:
-                    values.append(0)
-            else:
-                value = progress
-                if as_percents:
-                    value = Utils.calculate_progress_in_percents(progress, progress_goal)
-
-                values.append(value)
-
-            curr_date += one_day
+        # TODO adjust to consider "as_percents" param
+        for item in data_items:
+            labels.append(item["date"])
+            values.append(item["progress"])
 
         return labels, values
 

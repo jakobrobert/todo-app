@@ -22,17 +22,9 @@ class LongTermTodoOverview:
         todos_by_date = self.__map_todos_to_dates(all_dates)
         for item in todos_by_date:
             labels.append(item["date"])
-            todos_for_date = item["todos"]
+            todos_for_date = item["todos"] # TODO inline
 
-            # TODO extract function to get duration_in_minutes
-            duration_in_minutes = 0
-            if todos_for_date:
-                duration_in_seconds = 0
-                for todo in todos_for_date:
-                    if todo.duration is not None:
-                        duration_in_seconds += todo.duration.total_seconds()
-
-                duration_in_minutes = duration_in_seconds / 60
+            duration_in_minutes = LongTermTodoOverview.__get_duration_in_minutes_for_todos(todos_for_date)
 
             values.append(duration_in_minutes)
 
@@ -140,3 +132,18 @@ class LongTermTodoOverview:
             curr_date += one_day
 
         return result
+
+    @staticmethod
+    def __get_duration_in_minutes_for_todos(todos):
+        # TODO simplify further
+        duration_in_minutes = 0
+        if todos:
+            duration_in_seconds = 0
+
+            for todo in todos:
+                if todo.duration is not None:
+                    duration_in_seconds += todo.duration.total_seconds()
+
+            duration_in_minutes = duration_in_seconds / 60
+
+        return duration_in_minutes

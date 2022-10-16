@@ -62,13 +62,8 @@ class LongTermTodoOverview:
             curr_item["date"] = item["date"]
             curr_item["has_progress"] = False
 
-            progress = 0
             todos_for_date = item["todos"]
-            if todos_for_date:
-                # Get maximum progress for the current date
-                for todo in todos_for_date:
-                    if todo.progress is not None and todo.progress > progress:
-                        progress = todo.progress
+            progress = self.__get_max_progress_for_todos(todos_for_date)
 
             if progress == 0:
                 # There is no valid progress value for the current date, so fill the value with the last one
@@ -142,3 +137,14 @@ class LongTermTodoOverview:
                 total_duration_in_seconds += todo.duration.total_seconds()
 
         return total_duration_in_seconds / 60
+
+    @staticmethod
+    def __get_max_progress_for_todos(todos_for_date):
+        progress = 0
+
+        if todos_for_date:
+            for todo in todos_for_date:
+                if todo.progress is not None and todo.progress > progress:
+                    progress = todo.progress
+
+        return progress

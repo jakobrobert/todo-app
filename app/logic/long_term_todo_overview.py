@@ -53,10 +53,13 @@ class LongTermTodoOverview:
         if not data_items:
             return labels, values
 
-        # TODO adjust to consider "as_percents" param
         for item in data_items:
             labels.append(item["date"])
-            values.append(item["progress"])
+
+            if as_percents:
+                values.append(item["progress_in_percents"])
+            else:
+                values.append(item["progress"])
 
         return labels, values
 

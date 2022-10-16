@@ -134,3 +134,21 @@ class LongTermTodoOverview:
                 todos_for_date.append(todo)
 
         return todos_for_date
+
+    def __map_todos_to_dates(self, all_dates):
+        result = []
+
+        one_day = datetime.timedelta(days=1)
+        curr_date = min(all_dates)
+        end_date = max(all_dates)
+
+        while curr_date <= end_date:
+            curr_item = {
+                "date": str(curr_date),
+                "todos": self.__find_todos_for_date(curr_date)
+            }
+
+            result.append(curr_item)
+            curr_date += one_day
+
+        return result

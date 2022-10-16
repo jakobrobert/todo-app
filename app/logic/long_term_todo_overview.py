@@ -67,18 +67,15 @@ class LongTermTodoOverview:
         if not all_dates:
             return result
 
-        # Iterate through each day & fill the data
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(all_dates)
-        end_date = max(all_dates)
-        while curr_date <= end_date:
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        for item in todos_by_date:
             curr_item = {}
 
-            curr_item["date"] = str(curr_date)
+            curr_item["date"] = item["date"]
             curr_item["has_progress"] = False
 
             progress = 0
-            todos_for_date = self.__find_todos_for_date(curr_date)
+            todos_for_date = item["todos"]
             if todos_for_date:
                 # Get maximum progress for the current date
                 for todo in todos_for_date:
@@ -99,8 +96,6 @@ class LongTermTodoOverview:
                 curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 
             result.append(curr_item)
-
-            curr_date += one_day
 
         return result
 

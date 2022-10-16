@@ -19,15 +19,11 @@ class LongTermTodoOverview:
         if not all_dates:
             return labels, values
 
-        # Iterate through the each day and fill the data for the chart
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(all_dates)
-        end_date = max(all_dates)
-        while curr_date <= end_date:
-            date_label = str(curr_date)
-            labels.append(date_label)
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        for item in todos_by_date:
+            labels.append(item["date"])
+            todos_for_date = item["todos"]
 
-            todos_for_date = self.__find_todos_for_date(curr_date)
             if todos_for_date:
                 # Fill value with total duration for the current date
                 duration_in_seconds = 0
@@ -40,8 +36,6 @@ class LongTermTodoOverview:
             else:
                 # There is no to-do for the current date, so fill the value with 0
                 values.append(0)
-
-            curr_date += one_day
 
         return labels, values
 

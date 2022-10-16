@@ -24,18 +24,17 @@ class LongTermTodoOverview:
             labels.append(item["date"])
             todos_for_date = item["todos"]
 
+            # TODO extract function to get duration_in_minutes
+            duration_in_minutes = 0
             if todos_for_date:
-                # Fill value with total duration for the current date
                 duration_in_seconds = 0
                 for todo in todos_for_date:
                     if todo.duration is not None:
                         duration_in_seconds += todo.duration.total_seconds()
 
                 duration_in_minutes = duration_in_seconds / 60
-                values.append(duration_in_minutes)
-            else:
-                # There is no to-do for the current date, so fill the value with 0
-                values.append(0)
+
+            values.append(duration_in_minutes)
 
         return labels, values
 

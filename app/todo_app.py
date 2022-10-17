@@ -249,12 +249,13 @@ def get_long_term_todo_progress_overview(id):
 
     long_term_todo_overview = LongTermTodoOverview(todos)
     labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(progress_goal, as_percents)
+    max_value = 100 if as_percents else progress_goal
     table_data = long_term_todo_overview.get_data_for_progress_overview(progress_goal)
 
     return render_template(
         "long_term_todo_progress_overview.html",
         long_term_todo=long_term_todo, as_percents=as_percents, todos=todos,
-        labels=labels, values=values, table_data=table_data)
+        labels=labels, values=values, max_value=max_value, table_data=table_data)
 
 
 def __get_sort_by(setting_key):

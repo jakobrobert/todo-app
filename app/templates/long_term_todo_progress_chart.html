@@ -28,6 +28,13 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             ]
         },
         options: {
+            scales: {
+                y: {
+                    type: "linear",
+                    min: 0,
+                    max: {{ max_value }},
+                }
+            },
             responsive: false,
             elements: {
                 point: {

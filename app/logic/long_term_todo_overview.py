@@ -146,14 +146,14 @@ class LongTermTodoOverview:
             curr_item["relative_progress"] = 0
             curr_item["relative_progress_in_percents"] = 0
 
-            if prev_item is not None:
-                curr_item["progress"] = prev_item["progress"]
-                curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
+            if prev_item is None:
+                curr_item["progress"] = 0
+                curr_item["progress_in_percents"] = 0
 
                 return
 
-            curr_item["progress"] = 0
-            curr_item["progress_in_percents"] = 0
+            curr_item["progress"] = prev_item["progress"]
+            curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
 
             return
 
@@ -161,13 +161,14 @@ class LongTermTodoOverview:
         curr_item["progress"] = progress
         curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 
-        if prev_item is not None:
-            relative_progress = progress - prev_item["progress"]
-            curr_item["relative_progress"] = relative_progress
-            # TODO CLEANUP line too long
-            curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(relative_progress, progress_goal)
+        # TODO CLEANUP duplicated code. just set relative_progress to callback, then run the same code
+        if prev_item is None:
+            curr_item["relative_progress"] = progress
+            curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 
             return
 
-        curr_item["relative_progress"] = progress
-        curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+        relative_progress = progress - prev_item["progress"]
+        curr_item["relative_progress"] = relative_progress
+        curr_item["relative_progress_in_percents"] = \
+            Utils.calculate_progress_in_percents(relative_progress, progress_goal)

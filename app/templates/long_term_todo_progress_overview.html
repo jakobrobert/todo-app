@@ -40,6 +40,7 @@
                         <th scope="col">Has Progress</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>in %</th>
+                        <th scope="col">Relative<br>Progress</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +50,7 @@
                             <td> {{ item["has_progress"] }} </td>
                             <td> {{ item["progress"] }}</td>
                             <td> {{ item["progress_in_percents"] }} </td>
+                            <td> {{ item["relative_progress"] }} </td>
                         </tr>
                     {% endfor %}
                 </tbody>

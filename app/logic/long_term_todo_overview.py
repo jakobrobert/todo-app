@@ -64,18 +64,8 @@ class LongTermTodoOverview:
 
             progress = self.__get_max_progress_for_todos(item["todos"])
 
-            if progress == 0:
-                # There is no valid progress value for the current date, so fill the value with the last one
-                if len(result) >= 1:
-                    curr_item["progress"] = result[-1]["progress"]
-                    curr_item["progress_in_percents"] = result[-1]["progress_in_percents"]
-                else:
-                    curr_item["progress"] = 0
-                    curr_item["progress_in_percents"] = 0
-            else:
-                curr_item["has_progress"] = True
-                curr_item["progress"] = progress
-                curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+            prev_item = result[-1] if len(result) >= 1 else None
+            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal)
 
             result.append(curr_item)
 
@@ -149,3 +139,32 @@ class LongTermTodoOverview:
                 progress = todo.progress
 
         return progress
+
+    @staticmethod
+    def __fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal):
+        if progress == 0:
+            curr_item["relative_progress"] = 0
+            curr_item["relative_progress_in_percents"] = 0
+
+            if prev_item is None:
+                curr_item["progress"] = 0
+                curr_item["progress_in_percents"] = 0
+
+                return
+
+            curr_item["progress"] = prev_item["progress"]
+            curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
+
+            return
+
+        curr_item["has_progress"] = True
+        curr_item["progress"] = progress
+        curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+
+        relative_progress = progress
+        if prev_item is not None:
+            relative_progress -= prev_item["progress"]
+
+        curr_item["relative_progress"] = relative_progress
+        curr_item["relative_progress_in_percents"] = \
+            Utils.calculate_progress_in_percents(relative_progress, progress_goal)

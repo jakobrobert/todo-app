@@ -65,14 +65,14 @@ class LongTermTodoOverview:
             progress = self.__get_max_progress_for_todos(item["todos"])
 
             # TODO CLEANUP extract function, then can also use early returns instead of else
-            # TODO add relative_progress_in_percents
+            prev_item = result[-1] if len(result) >= 1 else None
+            #fill_item_for_progress_overview(curr_item, prev_item)
             if progress == 0:
                 curr_item["relative_progress"] = 0
                 curr_item["relative_progress_in_percents"] = 0
-                if len(result) >= 1:
-                    # TODO CLEANUP extract var prev_item
-                    curr_item["progress"] = result[-1]["progress"]
-                    curr_item["progress_in_percents"] = result[-1]["progress_in_percents"]
+                if prev_item is not None:
+                    curr_item["progress"] = prev_item["progress"]
+                    curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
                 else:
                     curr_item["progress"] = 0
                     curr_item["progress_in_percents"] = 0
@@ -80,8 +80,8 @@ class LongTermTodoOverview:
                 curr_item["has_progress"] = True
                 curr_item["progress"] = progress
                 curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
-                if len(result) >= 1:
-                    relative_progress = progress - result[-1]["progress"]
+                if prev_item is not None:
+                    relative_progress = progress - prev_item["progress"]
                     curr_item["relative_progress"] = relative_progress
                     # TODO CLEANUP line too long, maybe will be fixed by "extract function"?
                     curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(relative_progress, progress_goal)

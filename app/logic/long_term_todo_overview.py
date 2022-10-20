@@ -161,14 +161,10 @@ class LongTermTodoOverview:
         curr_item["progress"] = progress
         curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 
-        # TODO CLEANUP duplicated code. just set relative_progress to callback, then run the same code
-        if prev_item is None:
-            curr_item["relative_progress"] = progress
-            curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+        relative_progress = progress
+        if prev_item is not None:
+            relative_progress -= prev_item["progress"]
 
-            return
-
-        relative_progress = progress - prev_item["progress"]
         curr_item["relative_progress"] = relative_progress
         curr_item["relative_progress_in_percents"] = \
             Utils.calculate_progress_in_percents(relative_progress, progress_goal)

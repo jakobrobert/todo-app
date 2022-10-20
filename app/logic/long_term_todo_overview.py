@@ -68,6 +68,7 @@ class LongTermTodoOverview:
             # TODO add relative_progress_in_percents
             if progress == 0:
                 curr_item["relative_progress"] = 0
+                curr_item["relative_progress_in_percents"] = 0
                 if len(result) >= 1:
                     # TODO CLEANUP extract var prev_item
                     curr_item["progress"] = result[-1]["progress"]
@@ -80,9 +81,13 @@ class LongTermTodoOverview:
                 curr_item["progress"] = progress
                 curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
                 if len(result) >= 1:
-                    curr_item["relative_progress"] = progress - result[-1]["progress"]
+                    relative_progress = progress - result[-1]["progress"]
+                    curr_item["relative_progress"] = relative_progress
+                    # TODO CLEANUP line too long, maybe will be fixed by "extract function"?
+                    curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(relative_progress, progress_goal)
                 else:
                     curr_item["relative_progress"] = progress
+                    curr_item["relative_progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 
             result.append(curr_item)
 

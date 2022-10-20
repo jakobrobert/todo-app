@@ -64,9 +64,12 @@ class LongTermTodoOverview:
 
             progress = self.__get_max_progress_for_todos(item["todos"])
 
+            # TODO CLEANUP extract function, then can also use early returns instead of else
+            # TODO add relative_progress_in_percents
             if progress == 0:
-                # There is no valid progress value for the current date, so fill the value with the last one
+                curr_item["relative_progress"] = 0
                 if len(result) >= 1:
+                    # TODO CLEANUP extract var prev_item
                     curr_item["progress"] = result[-1]["progress"]
                     curr_item["progress_in_percents"] = result[-1]["progress_in_percents"]
                 else:
@@ -76,6 +79,10 @@ class LongTermTodoOverview:
                 curr_item["has_progress"] = True
                 curr_item["progress"] = progress
                 curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+                if len(result) >= 1:
+                    curr_item["relative_progress"] = progress - result[-1]["progress"]
+                else:
+                    curr_item["relative_progress"] = progress
 
             result.append(curr_item)
 

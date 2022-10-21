@@ -71,20 +71,14 @@ class LongTermTodoOverview:
 
         return result
 
-    def get_average_daily_progress_all_days(self):
+    def get_average_daily_progress_all_days(self, progress):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
 
-        # TODO probably not correct. progress is increasing with each day. should add the daily progress
-        # TODO or different: take the resulting progress and divide by num days
-        progress_sum = 0
-        todos_by_date = self.__map_todos_to_dates(all_dates)
-        for item in todos_by_date:
-            progress = self.__get_max_progress_for_todos(item["todos"])
-            progress_sum += progress
+        all_days_count = len(all_dates)
 
-        return progress_sum / len(todos_by_date)
+        return progress / all_days_count
 
     def get_average_daily_progress_active_days(self, progress):
         all_dates = self.__collect_dates_of_todos()

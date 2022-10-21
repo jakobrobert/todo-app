@@ -21,10 +21,10 @@
         <h4>Progress Goal: {{ long_term_todo.progress_goal }}</h4>
         <h4>Progress in %: {{ long_term_todo.progress_in_percents }}</h4>
         <!-- TODO implement calculation for these params -->
-        <h4>Average Daily Progress (all days): {{ average_daily_progress }}</h4>
-        <h4>Average Daily Progress in % (all days): {{ average_daily_progress_in_percents }}</h4>
-        <h4>Average Daily Progress (only active days): {{ average_active_daily_progress }}</h4>
-        <h4>Average Daily Progress in % (only active days): {{ average_active_daily_progress_in_percents }}</h4>
+        <h4>Average Daily Progress (all days): {{ average_daily_progress_all_days }}</h4>
+        <h4>Average Daily Progress in % (all days): {{ average_daily_progress_all_days_in_percents }}</h4>
+        <h4>Average Daily Progress (only active days): {{ average_daily_progress_active_days }}</h4>
+        <h4>Average Daily Progress in % (only active days): {{ average_daily_progress_active_days_in_percents }}</h4>
         <br>
         <label for="as_percents">As percents: </label>
         <!-- Also including the url in the condition. Passing 'not as_percents' does not work, always passes False. -->

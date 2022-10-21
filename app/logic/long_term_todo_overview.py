@@ -71,6 +71,19 @@ class LongTermTodoOverview:
 
         return result
 
+    def get_average_daily_progress_all_days(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        progress_sum = 0
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        for item in todos_by_date:
+            progress = self.__get_max_progress_for_todos(item["todos"])
+            progress_sum += progress
+
+        return progress_sum / len(todos_by_date)
+
     def __collect_dates_of_todos(self):
         all_dates = []
 

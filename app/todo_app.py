@@ -248,6 +248,8 @@ def get_long_term_todo_progress_overview(id):
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
 
+    # TODO CLEANUP need to pass lot of attributes of long term todo,
+    #  makes sense to pass long term todo as whole object to LongTermTodoOverview
     long_term_todo_overview = LongTermTodoOverview(todos)
     labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(progress_goal, as_percents)
     max_value = 100 if as_percents else progress_goal
@@ -255,13 +257,19 @@ def get_long_term_todo_progress_overview(id):
     average_daily_progress_all_days = long_term_todo_overview.get_average_daily_progress_all_days()
     average_daily_progress_all_days_in_percents = \
         Utils.calculate_progress_in_percents(average_daily_progress_all_days, progress_goal)
+    average_daily_progress_active_days = \
+        long_term_todo_overview.get_average_daily_progress_active_days(long_term_todo.progress)
+    average_daily_progress_active_days_in_percents = \
+        Utils.calculate_progress_in_percents(average_daily_progress_active_days, progress_goal)
 
     return render_template(
         "long_term_todo_progress_overview.html",
         long_term_todo=long_term_todo, as_percents=as_percents, todos=todos,
         labels=labels, values=values, max_value=max_value, table_data=table_data,
         average_daily_progress_all_days=average_daily_progress_all_days,
-        average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents)
+        average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
+        average_daily_progress_active_days=average_daily_progress_active_days,
+        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents)
 
 
 def __get_sort_by(setting_key):

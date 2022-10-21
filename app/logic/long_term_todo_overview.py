@@ -76,6 +76,8 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
+        # TODO probably not correct. progress is increasing with each day. should add the daily progress
+        # TODO or different: take the resulting progress and divide by num days
         progress_sum = 0
         todos_by_date = self.__map_todos_to_dates(all_dates)
         for item in todos_by_date:
@@ -83,6 +85,23 @@ class LongTermTodoOverview:
             progress_sum += progress
 
         return progress_sum / len(todos_by_date)
+
+    def get_average_daily_progress_active_days(self, progress):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        active_days_count = 0
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        # TODO CLEANUP can use standard functions to count all with condition
+        for item in todos_by_date:
+            todos = item["todos"]
+            for todo in todos:
+                if todo.completed:
+                    active_days_count += 1
+                    break
+
+        return progress / active_days_count
 
     def __collect_dates_of_todos(self):
         all_dates = []

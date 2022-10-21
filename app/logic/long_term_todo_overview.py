@@ -76,7 +76,9 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
-        all_days_count = len(all_dates)
+        # TODO CLEANUP can probably do more efficient
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        all_days_count = len(todos_by_date)
 
         return progress / all_days_count
 

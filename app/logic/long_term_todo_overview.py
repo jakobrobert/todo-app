@@ -143,8 +143,8 @@ class LongTermTodoOverview:
     @staticmethod
     def __fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal):
         if progress == 0:
-            curr_item["relative_progress"] = 0
-            curr_item["relative_progress_in_percents"] = 0
+            curr_item["daily_progress"] = 0
+            curr_item["daily_progress_in_percents"] = 0
 
             if prev_item is None:
                 curr_item["progress"] = 0
@@ -165,6 +165,6 @@ class LongTermTodoOverview:
         if prev_item is not None:
             relative_progress -= prev_item["progress"]
 
-        curr_item["relative_progress"] = relative_progress
-        curr_item["relative_progress_in_percents"] = \
+        curr_item["daily_progress"] = relative_progress
+        curr_item["daily_progress_in_percents"] = \
             Utils.calculate_progress_in_percents(relative_progress, progress_goal)

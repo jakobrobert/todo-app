@@ -244,7 +244,6 @@ def get_long_term_todo_progress_overview(id):
     if as_percents_arg == 'True':
         as_percents = True
 
-
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal

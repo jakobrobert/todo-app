@@ -76,11 +76,12 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
-        # TODO CLEANUP can probably do more efficient
+        # TODO OPTIMIZE can probably do more efficient
         todos_by_date = self.__map_todos_to_dates(all_dates)
         all_days_count = len(todos_by_date)
+        average_daily_progress = progress / all_days_count
 
-        return progress / all_days_count
+        return Utils.round_decimal(average_daily_progress)
 
     def get_average_daily_progress_active_days(self, progress):
         all_dates = self.__collect_dates_of_todos()
@@ -97,7 +98,9 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        return progress / active_days_count
+        average_daily_progress = progress / active_days_count
+
+        return Utils.round_decimal(average_daily_progress)
 
     def __collect_dates_of_todos(self):
         all_dates = []

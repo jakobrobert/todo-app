@@ -250,8 +250,6 @@ def get_long_term_todo_progress_overview(id):
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
-    # TODO round the average values, such as done for percents calculation
-
     # TODO CLEANUP need to pass lot of attributes of long term todo
     #  makes sense to pass long term todo as whole object to LongTermTodoOverview
     long_term_todo_overview = LongTermTodoOverview(todos)

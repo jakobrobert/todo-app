@@ -82,9 +82,7 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
-        # TODO OPTIMIZE can probably do more efficient
-        todos_by_date = self.__map_todos_to_dates(all_dates)
-        all_days_count = len(todos_by_date)
+        all_days_count = LongTermTodoOverview.__count_days(all_dates)
         average_daily_progress = self.progress / all_days_count
 
         return Utils.round_decimal(average_daily_progress)
@@ -96,7 +94,6 @@ class LongTermTodoOverview:
 
         active_days_count = 0
         todos_by_date = self.__map_todos_to_dates(all_dates)
-        # TODO CLEANUP can use standard functions to count all with condition
         for item in todos_by_date:
             todos = item["todos"]
             for todo in todos:
@@ -150,6 +147,15 @@ class LongTermTodoOverview:
             curr_date += one_day
 
         return result
+
+    @staticmethod
+    def __count_days(dates):
+        start_date = min(dates)
+        end_date = max(dates)
+        time_span = end_date - start_date
+        days = time_span.days + 1  # + 1 to count inclusively
+
+        return days
 
     @staticmethod
     def __get_total_duration_in_minutes_for_todos(todos):

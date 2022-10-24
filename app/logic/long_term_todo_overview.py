@@ -5,10 +5,14 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    # TODO remove "todos"
-    def __init__(self, todos, long_term_todo):
+    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error:
+    # File ".../todo-app/dev/app/models/long_term_todo.py", line 1, in <module>
+    #     from todo_app import db
+    # ImportError: cannot import- name 'db'
+    def __init__(self, todos, progress_goal, progress):
         self.todos = todos
-        self.long_term_todo = long_term_todo
+        self.progress_goal = progress_goal
+        self.progress = progress
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -29,11 +33,11 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_labels_and_values_for_progress_chart(self, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []
 
-        data_items = self.get_data_for_progress_overview(progress_goal)
+        data_items = self.get_data_for_progress_overview()
         if not data_items:
             return labels, values
 
@@ -47,7 +51,7 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_data_for_progress_overview(self, progress_goal):
+    def get_data_for_progress_overview(self):
         result = []
 
         if not self.todos:
@@ -67,13 +71,13 @@ class LongTermTodoOverview:
             progress = self.__get_max_progress_for_todos(item["todos"])
 
             prev_item = result[-1] if len(result) >= 1 else None
-            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal)
+            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, self.progress_goal)
 
             result.append(curr_item)
 
         return result
 
-    def get_average_daily_progress_all_days(self, progress):
+    def get_average_daily_progress_all_days(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
@@ -81,11 +85,11 @@ class LongTermTodoOverview:
         # TODO OPTIMIZE can probably do more efficient
         todos_by_date = self.__map_todos_to_dates(all_dates)
         all_days_count = len(todos_by_date)
-        average_daily_progress = progress / all_days_count
+        average_daily_progress = self.progress / all_days_count
 
         return Utils.round_decimal(average_daily_progress)
 
-    def get_average_daily_progress_active_days(self, progress):
+    def get_average_daily_progress_active_days(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
@@ -100,7 +104,7 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        average_daily_progress = progress / active_days_count
+        average_daily_progress = self.progress / active_days_count
 
         return Utils.round_decimal(average_daily_progress)
 

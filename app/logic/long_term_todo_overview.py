@@ -5,8 +5,14 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    def __init__(self, todos):
+    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error:
+    # File ".../todo-app/dev/app/models/long_term_todo.py", line 1, in <module>
+    #     from todo_app import db
+    # ImportError: cannot import- name 'db'
+    def __init__(self, todos, progress_goal, progress):
         self.todos = todos
+        self.progress_goal = progress_goal
+        self.progress = progress
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -27,11 +33,11 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_labels_and_values_for_progress_chart(self, progress_goal, as_percents):
+    def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []
 
-        data_items = self.get_data_for_progress_overview(progress_goal)
+        data_items = self.get_data_for_progress_overview()
         if not data_items:
             return labels, values
 
@@ -45,7 +51,7 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_data_for_progress_overview(self, progress_goal):
+    def get_data_for_progress_overview(self):
         result = []
 
         if not self.todos:
@@ -65,11 +71,39 @@ class LongTermTodoOverview:
             progress = self.__get_max_progress_for_todos(item["todos"])
 
             prev_item = result[-1] if len(result) >= 1 else None
-            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal)
+            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, self.progress_goal)
 
             result.append(curr_item)
 
         return result
+
+    def get_average_daily_progress_all_days(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        all_days_count = LongTermTodoOverview.__count_days(all_dates)
+        average_daily_progress = self.progress / all_days_count
+
+        return Utils.round_decimal(average_daily_progress)
+
+    def get_average_daily_progress_active_days(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        active_days_count = 0
+        todos_by_date = self.__map_todos_to_dates(all_dates)
+        for item in todos_by_date:
+            todos = item["todos"]
+            for todo in todos:
+                if todo.completed:
+                    active_days_count += 1
+                    break
+
+        average_daily_progress = self.progress / active_days_count
+
+        return Utils.round_decimal(average_daily_progress)
 
     def __collect_dates_of_todos(self):
         all_dates = []
@@ -115,6 +149,15 @@ class LongTermTodoOverview:
         return result
 
     @staticmethod
+    def __count_days(dates):
+        start_date = min(dates)
+        end_date = max(dates)
+        time_span = end_date - start_date
+        days = time_span.days + 1  # + 1 to count inclusively
+
+        return days
+
+    @staticmethod
     def __get_total_duration_in_minutes_for_todos(todos):
         if not todos:
             return 0
@@ -143,8 +186,8 @@ class LongTermTodoOverview:
     @staticmethod
     def __fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal):
         if progress == 0:
-            curr_item["relative_progress"] = 0
-            curr_item["relative_progress_in_percents"] = 0
+            curr_item["daily_progress"] = 0
+            curr_item["daily_progress_in_percents"] = 0
 
             if prev_item is None:
                 curr_item["progress"] = 0
@@ -165,6 +208,6 @@ class LongTermTodoOverview:
         if prev_item is not None:
             relative_progress -= prev_item["progress"]
 
-        curr_item["relative_progress"] = relative_progress
-        curr_item["relative_progress_in_percents"] = \
+        curr_item["daily_progress"] = relative_progress
+        curr_item["daily_progress_in_percents"] = \
             Utils.calculate_progress_in_percents(relative_progress, progress_goal)

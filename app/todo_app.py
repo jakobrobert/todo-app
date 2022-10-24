@@ -249,9 +249,7 @@ def get_long_term_todo_progress_overview(id):
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
-    # TODO CLEANUP need to pass lot of attributes of long term todo
-    #  makes sense to pass long term todo as whole object to LongTermTodoOverview
-    long_term_todo_overview = LongTermTodoOverview(todos)
+    long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo)
     labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(progress_goal, as_percents)
     max_value = 100 if as_percents else progress_goal
     table_data = long_term_todo_overview.get_data_for_progress_overview(progress_goal)

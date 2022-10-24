@@ -5,8 +5,10 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    def __init__(self, todos):
+    # TODO remove "todos"
+    def __init__(self, todos, long_term_todo):
         self.todos = todos
+        self.long_term_todo = long_term_todo
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

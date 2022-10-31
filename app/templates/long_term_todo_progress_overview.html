@@ -40,7 +40,6 @@
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Has Progress</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress<br>in %</th>
                         <th scope="col">Daily<br>Progress</th>
@@ -51,7 +50,6 @@
                     {% for item in table_data %}
                         <tr {% if item["has_progress"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
-                            <td> {{ item["has_progress"] }} </td>
                             <td> {{ item["progress"] }}</td>
                             <td> {{ item["progress_in_percents"] }} </td>
                             <td> {{ item["daily_progress"] }} </td>

@@ -66,7 +66,7 @@ class LongTermTodoOverview:
             curr_item = {}
 
             curr_item["date"] = item["date"]
-            curr_item["has_progress"] = False
+            curr_item["is_active_day"] = False
 
             progress = self.__get_max_progress_for_todos(item["todos"])
 
@@ -200,7 +200,7 @@ class LongTermTodoOverview:
 
             return
 
-        curr_item["has_progress"] = True
+        curr_item["is_active_day"] = True # TODO fill this attribute outside this method, just check completed
         curr_item["progress"] = progress
         curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 

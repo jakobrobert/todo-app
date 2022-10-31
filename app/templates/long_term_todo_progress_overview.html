@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     {% for item in table_data %}
-                        <tr {% if item["has_progress"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
+                        <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
                             <td> {{ item["progress"] }}</td>
                             <td> {{ item["progress_in_percents"] }} </td>

@@ -72,9 +72,8 @@ class LongTermTodoOverview:
                 if todo.completed:
                     curr_duration_item["is_active_day"] = True
 
-            # TODO round value
-            curr_duration_item["duration_in_minutes"] = \
-                LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(todos)
+            duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(todos)
+            curr_duration_item["duration_in_minutes"] = Utils.round_decimal(duration_in_minutes)
 
             duration_items.append(curr_duration_item)
 

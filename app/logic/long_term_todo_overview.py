@@ -5,10 +5,8 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error:
-    # File ".../todo-app/dev/app/models/long_term_todo.py", line 1, in <module>
-    #     from todo_app import db
-    # ImportError: cannot import- name 'db'
+    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
+    # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress):
         self.todos = todos
         self.progress_goal = progress_goal
@@ -72,7 +70,7 @@ class LongTermTodoOverview:
                 if todo.completed:
                     curr_progress_item["is_active_day"] = True
 
-            progress = self.__get_max_progress_for_todos(date_and_todos_item["todos"])
+            progress = self.__get_last_progress_of_todos(date_and_todos_item["todos"])
 
             prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
             LongTermTodoOverview.__fill_item_for_progress_overview(
@@ -176,17 +174,14 @@ class LongTermTodoOverview:
 
         return total_duration_in_seconds / 60
 
-    # TODO can change to get_last_progress, then just use value of last todo.
     @staticmethod
-    def __get_max_progress_for_todos(todos):
+    def __get_last_progress_of_todos(todos):
         if not todos:
             return 0
 
-        progress = 0
-
-        for todo in todos:
-            if todo.progress is not None and todo.progress > progress:
-                progress = todo.progress
+        progress = todos[-1].progress
+        if progress is None:
+            return 0
 
         return progress
 

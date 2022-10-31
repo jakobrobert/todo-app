@@ -20,7 +20,7 @@
         <h4>Progress Goal: {{ long_term_todo.progress_goal or 'n/a' }}</h4>
         <h4>Progress in %: {{ long_term_todo.progress_in_percents or 'n/a' }}</h4>
         <h4>
-            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_chart', id=long_term_todo.id) }}">
+            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_overview', id=long_term_todo.id) }}">
                 Show duration chart
             </a>
         </h4>

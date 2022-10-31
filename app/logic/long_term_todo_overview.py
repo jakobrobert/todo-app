@@ -12,6 +12,7 @@ class LongTermTodoOverview:
         self.progress_goal = progress_goal
         self.progress = progress
 
+    # TODO CLEANUP similar to get_labels_and_values_for_progress_chart, re-use new method to reduce duplication
     def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []
@@ -23,7 +24,7 @@ class LongTermTodoOverview:
         if not all_dates:
             return labels, values
 
-        todos_by_date = self.__get_date_and_todos_mapping(all_dates)
+        todos_by_date = self.__get_date_and_todos_mapping(all_dates) # TODO rename
         for item in todos_by_date:
             labels.append(item["date"])
             duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(item["todos"])
@@ -49,6 +50,36 @@ class LongTermTodoOverview:
 
         return labels, values
 
+    def get_duration_overview_items(self):
+        duration_items = []
+
+        if not self.todos:
+            return duration_items
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return duration_items
+
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
+        for date_and_todos_item in date_and_todos_mapping:
+            curr_duration_item = {
+                "date": date_and_todos_item["date"],
+                "is_active_day": False
+            }
+
+            todos = date_and_todos_item["todos"]
+            for todo in todos:
+                if todo.completed:
+                    curr_duration_item["is_active_day"] = True
+
+            # TODO round value
+            curr_duration_item["duration_in_minutes"] = \
+                LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(todos)
+
+            duration_items.append(curr_duration_item)
+
+        return duration_items
+
     def get_progress_overview_items(self):
         progress_items = []
 
@@ -66,6 +97,7 @@ class LongTermTodoOverview:
                 "is_active_day": False
             }
 
+            # TODO CLEANUP etxract todos----
             for todo in date_and_todos_item["todos"]:
                 if todo.completed:
                     curr_progress_item["is_active_day"] = True

@@ -27,14 +27,14 @@
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Duration</th>
+                        <th scope="col">Duration (min)</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in table_data %}
                         <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
-                            <td> {{ item["duration"] }}</td>
+                            <td> {{ item["duration_in_minutes"] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

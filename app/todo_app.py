@@ -224,17 +224,18 @@ def sort_long_term_todos():
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-chart", methods=["GET"])
-def get_long_term_todo_duration_chart(id):
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-overview", methods=["GET"])
+def get_long_term_todo_duration_overview(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
     long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo.progress, long_term_todo.progress_goal)
     labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart()
 
-    return render_template("long_term_todo_duration_chart.html",
-                           title=long_term_todo.title, total_duration=long_term_todo.duration,
-                           labels=labels, values=values)
+    return render_template(
+        "long_term_todo_duration_overview.html",
+        title=long_term_todo.title, total_duration=long_term_todo.duration, labels=labels, values=values
+    )
 
 
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-overview", methods=["GET"])
@@ -268,7 +269,8 @@ def get_long_term_todo_progress_overview(id):
         average_daily_progress_all_days=average_daily_progress_all_days,
         average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
         average_daily_progress_active_days=average_daily_progress_active_days,
-        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents)
+        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents
+    )
 
 
 def __get_sort_by(setting_key):

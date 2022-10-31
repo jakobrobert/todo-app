@@ -61,12 +61,16 @@ class LongTermTodoOverview:
         if not all_dates:
             return result
 
-        todos_by_date = self.__map_todos_to_dates(all_dates)
+        todos_by_date = self.__map_todos_to_dates(all_dates) # TODO rename variables, confusing
         for item in todos_by_date:
             curr_item = {}
 
             curr_item["date"] = item["date"]
+
             curr_item["is_active_day"] = False
+            for todo in item["todos"]:
+                if todo.completed:
+                    curr_item["is_active_day"] = True
 
             progress = self.__get_max_progress_for_todos(item["todos"])
 
@@ -170,6 +174,7 @@ class LongTermTodoOverview:
 
         return total_duration_in_seconds / 60
 
+    # TODO can change to get_last_progress, then just use value of last todo.
     @staticmethod
     def __get_max_progress_for_todos(todos):
         if not todos:
@@ -200,7 +205,6 @@ class LongTermTodoOverview:
 
             return
 
-        curr_item["is_active_day"] = True # TODO fill this attribute outside this method, just check completed
         curr_item["progress"] = progress
         curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 

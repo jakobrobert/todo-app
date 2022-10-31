@@ -229,7 +229,7 @@ def get_long_term_todo_duration_chart(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
 
-    long_term_todo_overview = LongTermTodoOverview(todos)
+    long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo.progress, long_term_todo.progress_goal)
     labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart()
 
     return render_template("long_term_todo_duration_chart.html",

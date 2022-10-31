@@ -12,23 +12,17 @@ class LongTermTodoOverview:
         self.progress_goal = progress_goal
         self.progress = progress
 
-    # TODO CLEANUP similar to get_labels_and_values_for_progress_chart, re-use new method to reduce duplication
     def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []
 
-        if not self.todos:
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
             return labels, values
 
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return labels, values
-
-        todos_by_date = self.__get_date_and_todos_mapping(all_dates) # TODO rename
-        for item in todos_by_date:
+        for item in duration_items:
             labels.append(item["date"])
-            duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(item["todos"])
-            values.append(duration_in_minutes)
+            values.append(item["duration_in_minutes"])
 
         return labels, values
 
@@ -36,11 +30,11 @@ class LongTermTodoOverview:
         labels = []
         values = []
 
-        data_items = self.get_progress_overview_items()
-        if not data_items:
+        progress_items = self.get_progress_overview_items()
+        if not progress_items:
             return labels, values
 
-        for item in data_items:
+        for item in progress_items:
             labels.append(item["date"])
 
             if as_percents:

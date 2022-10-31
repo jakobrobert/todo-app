@@ -5,10 +5,8 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error:
-    # File ".../todo-app/dev/app/models/long_term_todo.py", line 1, in <module>
-    #     from todo_app import db
-    # ImportError: cannot import- name 'db'
+    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
+    # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress):
         self.todos = todos
         self.progress_goal = progress_goal
@@ -25,7 +23,7 @@ class LongTermTodoOverview:
         if not all_dates:
             return labels, values
 
-        todos_by_date = self.__map_todos_to_dates(all_dates)
+        todos_by_date = self.__get_date_and_todos_mapping(all_dates)
         for item in todos_by_date:
             labels.append(item["date"])
             duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(item["todos"])
@@ -37,7 +35,7 @@ class LongTermTodoOverview:
         labels = []
         values = []
 
-        data_items = self.get_data_for_progress_overview()
+        data_items = self.get_progress_overview_items()
         if not data_items:
             return labels, values
 
@@ -51,31 +49,37 @@ class LongTermTodoOverview:
 
         return labels, values
 
-    def get_data_for_progress_overview(self):
-        result = []
+    def get_progress_overview_items(self):
+        progress_items = []
 
         if not self.todos:
-            return result
+            return progress_items
 
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
-            return result
+            return progress_items
 
-        todos_by_date = self.__map_todos_to_dates(all_dates)
-        for item in todos_by_date:
-            curr_item = {}
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
+        for date_and_todos_item in date_and_todos_mapping:
+            curr_progress_item = {
+                "date": date_and_todos_item["date"],
+                "is_active_day": False
+            }
 
-            curr_item["date"] = item["date"]
-            curr_item["has_progress"] = False
+            for todo in date_and_todos_item["todos"]:
+                if todo.completed:
+                    curr_progress_item["is_active_day"] = True
 
-            progress = self.__get_max_progress_for_todos(item["todos"])
+            progress = self.__get_last_progress_of_todos(date_and_todos_item["todos"])
 
-            prev_item = result[-1] if len(result) >= 1 else None
-            LongTermTodoOverview.__fill_item_for_progress_overview(curr_item, prev_item, progress, self.progress_goal)
+            prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
+            LongTermTodoOverview.__fill_item_for_progress_overview(
+                curr_progress_item, prev_progress_item, progress, self.progress_goal
+            )
 
-            result.append(curr_item)
+            progress_items.append(curr_progress_item)
 
-        return result
+        return progress_items
 
     def get_average_daily_progress_all_days(self):
         all_dates = self.__collect_dates_of_todos()
@@ -93,9 +97,9 @@ class LongTermTodoOverview:
             return 0
 
         active_days_count = 0
-        todos_by_date = self.__map_todos_to_dates(all_dates)
-        for item in todos_by_date:
-            todos = item["todos"]
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
+        for date_and_todos_item in date_and_todos_mapping:
+            todos = date_and_todos_item["todos"]
             for todo in todos:
                 if todo.completed:
                     active_days_count += 1
@@ -130,7 +134,7 @@ class LongTermTodoOverview:
 
         return todos_for_date
 
-    def __map_todos_to_dates(self, all_dates):
+    def __get_date_and_todos_mapping(self, all_dates):
         result = []
 
         one_day = datetime.timedelta(days=1)
@@ -171,15 +175,13 @@ class LongTermTodoOverview:
         return total_duration_in_seconds / 60
 
     @staticmethod
-    def __get_max_progress_for_todos(todos):
+    def __get_last_progress_of_todos(todos):
         if not todos:
             return 0
 
-        progress = 0
-
-        for todo in todos:
-            if todo.progress is not None and todo.progress > progress:
-                progress = todo.progress
+        progress = todos[-1].progress
+        if progress is None:
+            return 0
 
         return progress
 
@@ -200,7 +202,6 @@ class LongTermTodoOverview:
 
             return
 
-        curr_item["has_progress"] = True
         curr_item["progress"] = progress
         curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
 

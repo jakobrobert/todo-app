@@ -275,6 +275,29 @@ def get_long_term_todo_progress_overview(id):
     )
 
 
+@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-overview/select-time-span", methods=["GET"])
+def select_time_span_for_progress_overview(id):
+    print(f"id: {id}")
+
+    # TODO as_percents is always None even if to progress-overview, as_percents=True has been passed.
+    # Ignore for now, should be fixed when moving as_percents also into the form.
+    as_percents_arg = request.args.get("as_percents")
+    print(f"as_percents_arg: {as_percents_arg}")
+    as_percents = False
+    if as_percents_arg == 'True':
+        as_percents = True
+
+    print(f"as_percents: {as_percents}")
+
+    # Need to use request.args instead of request.form even though this param comes from a form.
+    # Probably because the method is GET instead of POST.
+    time_span = request.args.get("time_span")
+    print(f"time_span: {time_span}")
+
+    # TODO redirect to get_long_term_todo_progress_overview, pass time_span
+    return redirect(url_for("get_long_term_todo_progress_overview", id=id))
+
+
 def __get_sort_by(setting_key):
     setting = Setting.get(key=setting_key)
     if setting is None or setting.value is None:

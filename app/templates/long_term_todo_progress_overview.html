@@ -37,14 +37,15 @@
 
         <!-- TODO passing as_percents this way does not work. But ignore for now, will move this into form anyway -->
         <form action="{{ url_for('select_time_span_for_progress_overview', id=long_term_todo.id, as_percents=as_percents) }}" method="GET">
-            <label for="time_span">Time Span:</label>
-            <select class="form-control" id="time_span" name="time_span">
-                <option value="last_14d">Last 14 Days</option>
-                <option value="last_30d">Last 30 Days</option>
-                <option value="last_60d">Last 60 Days</option>
-                <option value="last_90d">Last 90 Days</option>
-                <option value="last_180d">Last 180 Days</option>
-                <option value="all_days">All Days</option>
+            <label for="time_span_last_x_days">Time Span:</label>
+            <!-- TODO by default, should select the element for the current value, so need to pass it to this template, such as as_percents -->
+            <select class="form-control" id="time_span_last_x_days" name="time_span_last_x_days">
+                <option value="0">All Days</option>
+                <option value="14">Last 14 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="60">Last 60 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="180">Last 180 Days</option>
             </select>
             <button class="btn btn-primary" type="submit">Submit</button>
         </form>

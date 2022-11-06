@@ -7,10 +7,11 @@ from utils import Utils
 class LongTermTodoOverview:
     # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
     # when trying to import long_term_todo in this file
-    def __init__(self, todos, progress_goal, progress):
+    def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
+        self.time_span_last_x_days = time_span_last_x_days
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -83,14 +84,16 @@ class LongTermTodoOverview:
         if not all_dates:
             return progress_items
 
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
+        filtered_dates = self.__filter_dates(all_dates)
+
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
             curr_progress_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
             }
 
-            # TODO CLEANUP etxract todos----
+            # TODO CLEANUP extract todos
             for todo in date_and_todos_item["todos"]:
                 if todo.completed:
                     curr_progress_item["is_active_day"] = True
@@ -106,6 +109,7 @@ class LongTermTodoOverview:
 
         return progress_items
 
+    # TODO filter by time span also for the average calculations
     def get_average_daily_progress_all_days(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
@@ -145,6 +149,29 @@ class LongTermTodoOverview:
             all_dates.append(curr_date)
 
         return all_dates
+
+    def __filter_dates(self, dates):
+        if not dates:
+            return dates
+
+        if not self.time_span_last_x_days:
+            # time span is None or 0, so retain all dates
+            return dates
+
+        filtered_dates = []
+
+        end_date = dates[-1]
+        print(f"end_date: {end_date}")
+        time_span = datetime.timedelta(days=self.time_span_last_x_days)  # TODO CLEANUP move this into constructor?
+        start_date = dates[-1] - time_span
+        print(f"start_date: {start_date}")
+
+        # TODO OPTIMIZE can assume that dates are ordered, so just need to find the first date that fits, then take all dates from there
+        for date in dates:
+            if date >= start_date:
+                filtered_dates.append(date)
+
+        return filtered_dates
 
     def __find_todos_for_date(self, date):
         todos_for_date = []

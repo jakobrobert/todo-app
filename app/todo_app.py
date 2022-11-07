@@ -243,20 +243,14 @@ def get_long_term_todo_duration_overview(id):
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-overview", methods=["GET"])
 def get_long_term_todo_progress_overview(id):
     as_percents_arg = request.args.get("as_percents")
-    # TODO CLEANUP remove debug code (print), review all changes
-    print(f"as_percents_arg: {as_percents_arg}")
     as_percents = False
     if as_percents_arg == "on":
         as_percents = True
-    print(f"as_percents: {as_percents}")
 
     time_span_last_x_days_arg = request.args.get("time_span_last_x_days")
-    print(f"time_span_last_x_days_arg: {time_span_last_x_days_arg}")
     time_span_last_x_days = None
     if time_span_last_x_days_arg is not None:
         time_span_last_x_days = int(time_span_last_x_days_arg)
-
-    print(f"time_span_last_x_days: {time_span_last_x_days}")
 
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)

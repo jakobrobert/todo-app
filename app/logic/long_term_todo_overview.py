@@ -122,16 +122,13 @@ class LongTermTodoOverview:
         if not date_and_todos_mapping:
             return 0
 
+        all_days_count = LongTermTodoOverview.__count_days(filtered_dates)
+
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
-        print(f"start_progress: {start_progress}")
         progress_delta = self.progress - start_progress
-        print(f"progress_delta: {progress_delta}")
 
-        all_days_count = LongTermTodoOverview.__count_days(filtered_dates)
-        print(f"all_days_count: {all_days_count}")
         average_daily_progress = progress_delta / all_days_count
-        print(f"average_daily_progress: {average_daily_progress}")
 
         return Utils.round_decimal(average_daily_progress)
 
@@ -145,12 +142,6 @@ class LongTermTodoOverview:
         if not date_and_todos_mapping:
             return 0
 
-        todos_of_first_date = date_and_todos_mapping[0]["todos"]
-        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
-        print(f"start_progress: {start_progress}")
-        progress_delta = self.progress - start_progress
-        print(f"progress_delta: {progress_delta}")
-
         active_days_count = 0
         for date_and_todos_item in date_and_todos_mapping:
             todos = date_and_todos_item["todos"]
@@ -159,9 +150,11 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        print(f"active_days_count: {active_days_count}")
+        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        progress_delta = self.progress - start_progress
+
         average_daily_progress = progress_delta / active_days_count
-        print(f"average_daily_progress: {average_daily_progress}")
 
         return Utils.round_decimal(average_daily_progress)
 
@@ -188,9 +181,7 @@ class LongTermTodoOverview:
         filtered_dates = []
 
         end_date = dates[-1]
-        print(f"end_date: {end_date}")
-        start_date = dates[-1] - self.time_span_last_x_days
-        print(f"start_date: {start_date}")
+        start_date = end_date - self.time_span_last_x_days
 
         for date in dates:
             if date >= start_date:

@@ -11,7 +11,10 @@ class LongTermTodoOverview:
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
-        self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
+        if time_span_last_x_days is None:
+            self.time_span_last_x_days = None
+        else:
+            self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

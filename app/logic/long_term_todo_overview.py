@@ -93,12 +93,12 @@ class LongTermTodoOverview:
                 "is_active_day": False
             }
 
-            # TODO CLEANUP extract todos
-            for todo in date_and_todos_item["todos"]:
+            todos = date_and_todos_item["todos"]
+            for todo in todos:
                 if todo.completed:
                     curr_progress_item["is_active_day"] = True
 
-            progress = self.__get_last_progress_of_todos(date_and_todos_item["todos"])
+            progress = self.__get_last_progress_of_todos(todos)
 
             prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
             LongTermTodoOverview.__fill_item_for_progress_overview(

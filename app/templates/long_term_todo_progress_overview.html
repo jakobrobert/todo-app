@@ -25,20 +25,22 @@
         <br>
 
         <form action="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id) }}" method="GET">
-            <!-- TODO group into divs -->
-            <label for="as_percents">As percents: </label>
-            <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
-                {% if as_percents %} checked {% endif %}>
-            <br>
-            <label for="time_span_last_x_days">Time Span:</label>
-            <select class="form-control" id="time_span_last_x_days" name="time_span_last_x_days">
-                <option value="0" {% if time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>
-                <option value="14" {% if time_span_last_x_days == 14 %} selected {% endif %}>Last 14 Days</option>
-                <option value="30" {% if time_span_last_x_days == 30 %} selected {% endif %}>Last 30 Days</option>
-                <option value="60" {% if time_span_last_x_days == 60 %} selected {% endif %}>Last 60 Days</option>
-                <option value="90" {% if time_span_last_x_days == 90 %} selected {% endif %}>Last 90 Days</option>
-                <option value="180" {% if time_span_last_x_days == 180 %} selected {% endif %}>Last 180 Days</option>
-            </select>
+            <div class="form-check">
+                <label class="form-check-label" for="as_percents">As percents: </label>
+                <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
+                    {% if as_percents %} checked {% endif %}>
+            </div>
+            <div>
+                <label class="select-label" for="time_span_last_x_days">Time Span:</label>
+                <select class="form-select" id="time_span_last_x_days" name="time_span_last_x_days">
+                    <option value="0" {% if time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>
+                    <option value="14" {% if time_span_last_x_days == 14 %} selected {% endif %}>Last 14 Days</option>
+                    <option value="30" {% if time_span_last_x_days == 30 %} selected {% endif %}>Last 30 Days</option>
+                    <option value="60" {% if time_span_last_x_days == 60 %} selected {% endif %}>Last 60 Days</option>
+                    <option value="90" {% if time_span_last_x_days == 90 %} selected {% endif %}>Last 90 Days</option>
+                    <option value="180" {% if time_span_last_x_days == 180 %} selected {% endif %}>Last 180 Days</option>
+                </select>
+            </div>
             <button class="btn btn-primary" type="submit">Submit</button>
         </form>
         <br>

@@ -137,9 +137,18 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
-        # TODO filter similar to method above, progress delta calculated in same way
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        print(f"start_progress: {start_progress}")
+        progress_delta = self.progress - start_progress
+        print(f"progress_delta: {progress_delta}")
+
         active_days_count = 0
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
         for date_and_todos_item in date_and_todos_mapping:
             todos = date_and_todos_item["todos"]
             for todo in todos:
@@ -147,7 +156,9 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        average_daily_progress = self.progress / active_days_count
+        print(f"active_days_count: {active_days_count}")
+        average_daily_progress = progress_delta / active_days_count
+        print(f"average_daily_progress: {average_daily_progress}")
 
         return Utils.round_decimal(average_daily_progress)
 

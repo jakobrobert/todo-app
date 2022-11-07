@@ -246,7 +246,7 @@ def get_long_term_todo_progress_overview(id):
     # TODO CLEANUP remove debug code (print), review all changes
     print(f"as_percents_arg: {as_percents_arg}")
     as_percents = False
-    if as_percents_arg == 'True':
+    if as_percents_arg == "on":
         as_percents = True
     print(f"as_percents: {as_percents}")
 

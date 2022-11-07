@@ -17,26 +17,19 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
+
         <h4>Progress Goal: {{ long_term_todo.progress_goal }}</h4>
         <h4>Progress: {{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</h4>
         <h4>Average Daily Progress (all days): {{ average_daily_progress_all_days }} ({{ average_daily_progress_all_days_in_percents }} %)</h4>
         <h4>Average Daily Progress (active days): {{ average_daily_progress_active_days }} ({{ average_daily_progress_active_days_in_percents }} %)</h4>
         <br>
-        <!-- TODO Move this also in the other form, this is hacky anyway to change the url in the onclick event. As well, then can pass both params by the form, no need to pass as_percents additionally to the url -->
-        <label for="as_percents">As percents: </label>
-        <!-- Also including the url in the if-else block. Passing 'not as_percents' does not work, always passes False. -->
-        <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
-           {% if as_percents %}
-               onclick="window.location.href='{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=False) }}'"
-               checked
-           {% else %}
-                onclick="window.location.href='{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=True) }}'"
-           {% endif %}
-        >
-        <br>
 
-        <!-- TODO passing as_percents this way does not work. But ignore for now, will move this into form anyway -->
-        <form action="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=as_percents) }}" method="GET">
+        <form action="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id) }}" method="GET">
+            <!-- TODO group into divs -->
+            <label for="as_percents">As percents: </label>
+            <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
+                {% if as_percents %} checked {% endif %}>
+            <br>
             <label for="time_span_last_x_days">Time Span:</label>
             <select class="form-control" id="time_span_last_x_days" name="time_span_last_x_days">
                 <option value="0" {% if time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>

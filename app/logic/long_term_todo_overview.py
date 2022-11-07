@@ -11,7 +11,7 @@ class LongTermTodoOverview:
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
-        self.time_span_last_x_days = time_span_last_x_days
+        self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -186,11 +186,9 @@ class LongTermTodoOverview:
 
         end_date = dates[-1]
         print(f"end_date: {end_date}")
-        time_span = datetime.timedelta(days=self.time_span_last_x_days)  # TODO CLEANUP move this into constructor?
-        start_date = dates[-1] - time_span
+        start_date = dates[-1] - self.time_span_last_x_days
         print(f"start_date: {start_date}")
 
-        # TODO OPTIMIZE can assume that dates are ordered, so just need to find the first date that fits, then take all dates from there
         for date in dates:
             if date >= start_date:
                 filtered_dates.append(date)

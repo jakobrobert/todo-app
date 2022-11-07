@@ -244,15 +244,20 @@ def get_long_term_todo_duration_overview(id):
 def get_long_term_todo_progress_overview(id):
     as_percents_arg = request.args.get("as_percents")
     as_percents = False
-    if as_percents_arg == 'True':
+    if as_percents_arg == "on":
         as_percents = True
+
+    time_span_last_x_days_arg = request.args.get("time_span_last_x_days")
+    time_span_last_x_days = None
+    if time_span_last_x_days_arg is not None:
+        time_span_last_x_days = int(time_span_last_x_days_arg)
 
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
-    long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress)
+    long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress, time_span_last_x_days)
     labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
     max_value = 100 if as_percents else long_term_todo.progress_goal
     table_data = long_term_todo_overview.get_progress_overview_items()
@@ -266,7 +271,8 @@ def get_long_term_todo_progress_overview(id):
 
     return render_template(
         "long_term_todo_progress_overview.html",
-        long_term_todo=long_term_todo, as_percents=as_percents, todos=todos,
+        long_term_todo=long_term_todo, todos=todos,
+        as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
         labels=labels, values=values, max_value=max_value, table_data=table_data,
         average_daily_progress_all_days=average_daily_progress_all_days,
         average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,

@@ -7,10 +7,14 @@ from utils import Utils
 class LongTermTodoOverview:
     # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
     # when trying to import long_term_todo in this file
-    def __init__(self, todos, progress_goal, progress):
+    def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
+        if time_span_last_x_days is None:
+            self.time_span_last_x_days = None
+        else:
+            self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -83,19 +87,21 @@ class LongTermTodoOverview:
         if not all_dates:
             return progress_items
 
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
+        filtered_dates = self.__filter_dates(all_dates)
+
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
             curr_progress_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
             }
 
-            # TODO CLEANUP etxract todos----
-            for todo in date_and_todos_item["todos"]:
+            todos = date_and_todos_item["todos"]
+            for todo in todos:
                 if todo.completed:
                     curr_progress_item["is_active_day"] = True
 
-            progress = self.__get_last_progress_of_todos(date_and_todos_item["todos"])
+            progress = self.__get_last_progress_of_todos(todos)
 
             prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
             LongTermTodoOverview.__fill_item_for_progress_overview(
@@ -111,8 +117,18 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
-        all_days_count = LongTermTodoOverview.__count_days(all_dates)
-        average_daily_progress = self.progress / all_days_count
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        all_days_count = LongTermTodoOverview.__count_days(filtered_dates)
+
+        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        progress_delta = self.progress - start_progress
+
+        average_daily_progress = progress_delta / all_days_count
 
         return Utils.round_decimal(average_daily_progress)
 
@@ -121,8 +137,12 @@ class LongTermTodoOverview:
         if not all_dates:
             return 0
 
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
         active_days_count = 0
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
         for date_and_todos_item in date_and_todos_mapping:
             todos = date_and_todos_item["todos"]
             for todo in todos:
@@ -130,7 +150,11 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        average_daily_progress = self.progress / active_days_count
+        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        progress_delta = self.progress - start_progress
+
+        average_daily_progress = progress_delta / active_days_count
 
         return Utils.round_decimal(average_daily_progress)
 
@@ -145,6 +169,25 @@ class LongTermTodoOverview:
             all_dates.append(curr_date)
 
         return all_dates
+
+    def __filter_dates(self, dates):
+        if not dates:
+            return dates
+
+        if not self.time_span_last_x_days:
+            # time span is None or 0, so retain all dates
+            return dates
+
+        filtered_dates = []
+
+        end_date = dates[-1]
+        start_date = end_date - self.time_span_last_x_days
+
+        for date in dates:
+            if date >= start_date:
+                filtered_dates.append(date)
+
+        return filtered_dates
 
     def __find_todos_for_date(self, date):
         todos_for_date = []

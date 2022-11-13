@@ -268,6 +268,8 @@ def get_long_term_todo_progress_overview(id):
         long_term_todo_overview.get_average_daily_progress_active_days()
     average_daily_progress_active_days_in_percents = \
         Utils.calculate_progress_in_percents(average_daily_progress_active_days, progress_goal)
+    estimated_days_until_completion = long_term_todo_overview.calculate_estimated_days_until_completion()
+    estimated_date_of_completion = long_term_todo_overview.calculate_estimated_date_of_completion()
 
     return render_template(
         "long_term_todo_progress_overview.html",
@@ -277,7 +279,9 @@ def get_long_term_todo_progress_overview(id):
         average_daily_progress_all_days=average_daily_progress_all_days,
         average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
         average_daily_progress_active_days=average_daily_progress_active_days,
-        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents
+        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents,
+        estimated_days_until_completion=estimated_days_until_completion,
+        estimated_date_of_completion=estimated_date_of_completion
     )
 
 

@@ -158,6 +158,13 @@ class LongTermTodoOverview:
 
         return Utils.round_decimal(average_daily_progress)
 
+    def calculate_estimated_days_until_completion(self):
+        return 10
+
+    def calculate_estimated_date_of_completion(self):
+        days_until_completion = self.calculate_estimated_days_until_completion()
+        return datetime.date.today() + datetime.timedelta(days=days_until_completion)
+
     def __collect_dates_of_todos(self):
         all_dates = []
 

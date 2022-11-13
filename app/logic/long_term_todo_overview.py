@@ -156,15 +156,9 @@ class LongTermTodoOverview:
 
     def calculate_estimated_days_until_completion(self):
         remaining_progress = self.progress_goal - self.progress
-        # TODO CLEANUP remove prints
-        print(f"remaining_progress: {remaining_progress}")
         average_daily_progress = self.get_average_daily_progress_all_days()
-        print(f"average_daily_progress: {average_daily_progress}")
-        # TODO CLEANUP inline
-        remaining_days = remaining_progress / average_daily_progress
-        print(f"remaining_days: {remaining_days}")
 
-        return remaining_days
+        return remaining_progress / average_daily_progress
 
     def calculate_estimated_date_of_completion(self):
         days_until_completion = self.calculate_estimated_days_until_completion()

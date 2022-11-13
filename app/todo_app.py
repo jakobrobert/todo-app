@@ -41,9 +41,8 @@ def get_todo_lists():
     setting_key = "sort_todo_lists_by"
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
-    # TODO remove the time part
-    today = datetime.datetime.today()
-    tomorrow = datetime.datetime.today() + datetime.timedelta(days=1)
+    today = datetime.datetime.now().date()
+    tomorrow = today + datetime.timedelta(days=1)
 
     return render_template(
         "todo_lists.html",

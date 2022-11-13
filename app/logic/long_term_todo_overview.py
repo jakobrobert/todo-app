@@ -128,9 +128,7 @@ class LongTermTodoOverview:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
-        average_daily_progress = progress_delta / all_days_count
-
-        return Utils.round_decimal(average_daily_progress)
+        return progress_delta / all_days_count
 
     def get_average_daily_progress_active_days(self):
         all_dates = self.__collect_dates_of_todos()
@@ -154,19 +152,15 @@ class LongTermTodoOverview:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
-        average_daily_progress = progress_delta / active_days_count
-
-        return Utils.round_decimal(average_daily_progress)
+        return progress_delta / active_days_count
 
     def calculate_estimated_days_until_completion(self):
         remaining_progress = self.progress_goal - self.progress
         # TODO CLEANUP remove prints
         print(f"remaining_progress: {remaining_progress}")
-
-        # TODO better should not use rounded value here, so move rounding out of get_average_daily_progress_all_days()
-        #   -> as well, this is different concern, purpose is the formatting which should not be coupled to the calculation
         average_daily_progress = self.get_average_daily_progress_all_days()
         print(f"average_daily_progress: {average_daily_progress}")
+        # TODO CLEANUP inline
         remaining_days = remaining_progress / average_daily_progress
         print(f"remaining_days: {remaining_days}")
 

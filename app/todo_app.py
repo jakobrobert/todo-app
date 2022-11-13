@@ -41,14 +41,17 @@ def get_todo_lists():
     setting_key = "sort_todo_lists_by"
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
-    # TODO also include weekday
-    today = datetime.datetime.now().date()
-    tomorrow = today + datetime.timedelta(days=1)
+
+    date_format_string = "%a %Y-%m-%d"
+    today_date = datetime.datetime.now().date()
+    today_string = today_date.strftime(date_format_string)
+    tomorrow_date = today_date + datetime.timedelta(days=1)
+    tomorrow_string = tomorrow_date.strftime(date_format_string)
 
     return render_template(
         "todo_lists.html",
         todo_lists=todo_lists, sort_by=sort_by, ascending_or_descending=ascending_or_descending,
-        today=today, tomorrow=tomorrow
+        today=today_string, tomorrow=tomorrow_string
     )
 
 

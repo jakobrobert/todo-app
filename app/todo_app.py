@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from flask import render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -40,14 +42,31 @@ def get_todo_lists():
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
 
-    return render_template("todo_lists.html", todo_lists=todo_lists,
-                           sort_by=sort_by, ascending_or_descending=ascending_or_descending)
+    date_format_string = "%a %Y-%m-%d"
+    today_date = datetime.datetime.now().date()
+    today_string = today_date.strftime(date_format_string)
+    tomorrow_date = today_date + datetime.timedelta(days=1)
+    tomorrow_string = tomorrow_date.strftime(date_format_string)
+
+    return render_template(
+        "todo_lists.html",
+        todo_lists=todo_lists, sort_by=sort_by, ascending_or_descending=ascending_or_descending,
+        today=today_string, tomorrow=tomorrow_string
+    )
 
 
 @app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
 def add_todo_list():
     title = request.form.get("title")
     TodoList.add(title)
+    return redirect(url_for("get_todo_lists"))
+
+
+@app.route(URL_PREFIX + "/todo_lists/add-daily-todo-list", methods=["POST"])
+def add_daily_todo_list():
+    day = request.form.get("day")
+    TodoList.add(title=day)
+
     return redirect(url_for("get_todo_lists"))
 
 

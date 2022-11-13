@@ -41,6 +41,7 @@ def get_todo_lists():
     setting_key = "sort_todo_lists_by"
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
+    # TODO also include weekday
     today = datetime.datetime.now().date()
     tomorrow = today + datetime.timedelta(days=1)
 
@@ -60,7 +61,9 @@ def add_todo_list():
 
 @app.route(URL_PREFIX + "/todo_lists/add-daily-todo-list", methods=["POST"])
 def add_daily_todo_list():
-    # TODO implement
+    day = request.form.get("day")
+    TodoList.add(title=day)
+
     return redirect(url_for("get_todo_lists"))
 
 

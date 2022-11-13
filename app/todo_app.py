@@ -51,6 +51,12 @@ def add_todo_list():
     return redirect(url_for("get_todo_lists"))
 
 
+@app.route(URL_PREFIX + "/todo_lists/add-daily-todo-list", methods=["POST"])
+def add_daily_todo_list():
+    # TODO implement
+    return redirect(url_for("get_todo_lists"))
+
+
 @app.route(URL_PREFIX + "/todo_lists/<int:id>/edit-title", methods=["POST"])
 def edit_todo_list_title(id):
     title = request.form.get("title")

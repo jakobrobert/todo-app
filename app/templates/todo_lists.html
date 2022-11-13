@@ -15,6 +15,19 @@
     <div style="margin-top: 50px;" class="container">
         <h1>Todo Lists</h1>
         <br>
+        <h3>Add Daily Todo List</h3>
+        <form action="{{ url_for('add_daily_todo_list') }}" method="post">
+            <div class="form-group">
+                <label for="day">Day</label>
+                <select class="form-control" id="day" name="day">
+                    <option value="{{ today }}">Today: {{ today }}</option>
+                    <option value="{{ tomorrow }}">Tomorrow: {{ tomorrow }}</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+        <br>
+        <h3>Add Todo List with Custom Title</h3>
         <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -23,6 +36,7 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+        <h3>Sort Todo Lists</h3>
         <form action="{{ url_for('sort_todo_lists') }}" method="post">
             <div class="form-group">
                 <label for="sort_by">Sort by</label>

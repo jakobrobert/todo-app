@@ -128,9 +128,7 @@ class LongTermTodoOverview:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
-        average_daily_progress = progress_delta / all_days_count
-
-        return Utils.round_decimal(average_daily_progress)
+        return progress_delta / all_days_count
 
     def get_average_daily_progress_active_days(self):
         all_dates = self.__collect_dates_of_todos()
@@ -154,9 +152,17 @@ class LongTermTodoOverview:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
-        average_daily_progress = progress_delta / active_days_count
+        return progress_delta / active_days_count
 
-        return Utils.round_decimal(average_daily_progress)
+    def calculate_estimated_days_until_completion(self):
+        remaining_progress = self.progress_goal - self.progress
+        average_daily_progress = self.get_average_daily_progress_all_days()
+
+        return remaining_progress / average_daily_progress
+
+    def calculate_estimated_date_of_completion(self):
+        days_until_completion = self.calculate_estimated_days_until_completion()
+        return datetime.date.today() + datetime.timedelta(days=days_until_completion)
 
     def __collect_dates_of_todos(self):
         all_dates = []

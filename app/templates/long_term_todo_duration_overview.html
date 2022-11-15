@@ -17,7 +17,13 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }} [Long Term Todo]</h1>
         <br>
-        <h4>Total Duration: {{ total_duration }}</h4>
+
+        <table class="table-responsive">
+            <tr>
+                <td>Total Duration<td>
+                <td>{{ total_duration }}</td>
+            </tr>
+        </table>
         <br>
 
         {% include "long_term_todo_duration_chart.html" %}

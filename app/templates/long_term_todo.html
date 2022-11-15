@@ -34,13 +34,13 @@
 
         <h4>
             <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_overview', id=long_term_todo.id) }}">
-                Show duration chart
+                Show duration overview
             </a>
         </h4>
         {% if long_term_todo.progress_goal %}
         <h4>
             <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=False) }}">
-                Show progress chart
+                Show progress overview
             </a>
         </h4>
         {% endif %}

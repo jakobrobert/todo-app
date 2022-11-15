@@ -18,22 +18,42 @@
         <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
 
-        <h4>Progress Goal: {{ long_term_todo.progress_goal }}</h4>
-        <h4>Progress: {{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</h4>
-        <h4>Average Daily Progress (all days): {{ average_daily_progress_all_days }} ({{ average_daily_progress_all_days_in_percents }} %)</h4>
-        <h4>Average Daily Progress (active days): {{ average_daily_progress_active_days }} ({{ average_daily_progress_active_days_in_percents }} %)</h4>
-        <h4>Estimated Days until Completion: {{ estimated_days_until_completion }}</h4>
-        <h4>Estimated Date of Completion: {{ estimated_date_of_completion }}</h4>
+        <table class="table-responsive">
+            <tr>
+                <td>Progress Goal</td>
+                <td>{{ long_term_todo.progress_goal }}</td>
+            </tr>
+            <tr>
+                <td>Progress</td>
+                <td>{{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Average Daily Progress (all days)</td>
+                <td>{{ average_daily_progress_all_days }} ({{ average_daily_progress_all_days_in_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Average Daily Progress (active days)</td>
+                <td>{{ average_daily_progress_active_days }} ({{ average_daily_progress_active_days_in_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Estimated Days until Completion</td>
+                <td>{{ estimated_days_until_completion }}</td>
+            </tr>
+            <tr>
+                <td>Estimated Date of Completion</td>
+                <td>{{ estimated_date_of_completion }}</td>
+            </tr>
+        </table>
         <br>
 
         <form action="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id) }}" method="GET">
             <div class="form-check">
-                <label class="form-check-label" for="as_percents">As percents: </label>
+                <label class="form-check-label" for="as_percents">As percents</label>
                 <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
                     {% if as_percents %} checked {% endif %}>
             </div>
             <div>
-                <label class="select-label" for="time_span_last_x_days">Time Span:</label>
+                <label class="select-label" for="time_span_last_x_days">Time Span</label>
                 <select class="form-select" id="time_span_last_x_days" name="time_span_last_x_days">
                     <option value="0" {% if time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>
                     <option value="14" {% if time_span_last_x_days == 14 %} selected {% endif %}>Last 14 Days</option>

@@ -30,6 +30,36 @@ class LongTermTodoOverview:
 
         return labels, values
 
+    def get_average_daily_duration_all_days(self):
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return 0
+
+        total_duration = 0
+        for item in duration_items:
+            total_duration += item["duration_in_minutes"]
+
+        all_days_count = self.__get_all_days_count()
+        if all_days_count == 0:
+            return 0
+
+        return total_duration / all_days_count
+
+    def get_average_daily_duration_active_days(self):
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return 0
+
+        total_duration = 0
+        for item in duration_items:
+            total_duration += item["duration_in_minutes"]
+
+        active_days_count = self.__get_active_days_count()
+        if active_days_count == 0:
+            return 0
+
+        return total_duration / active_days_count
+
     def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []
@@ -140,14 +170,7 @@ class LongTermTodoOverview:
         if not date_and_todos_mapping:
             return 0
 
-        active_days_count = 0
-        for date_and_todos_item in date_and_todos_mapping:
-            todos = date_and_todos_item["todos"]
-            for todo in todos:
-                if todo.completed:
-                    active_days_count += 1
-                    break
-
+        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
@@ -225,6 +248,43 @@ class LongTermTodoOverview:
             curr_date += one_day
 
         return result
+
+    def __get_all_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        return LongTermTodoOverview.__count_days(filtered_dates)
+
+    def __get_active_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+
+        return LongTermTodoOverview.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+
+    @staticmethod
+    def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):
+        if not date_and_todos_mapping:
+            return 0
+
+        active_days_count = 0
+
+        for date_and_todos_item in date_and_todos_mapping:
+            for todo in date_and_todos_item["todos"]:
+                if todo.completed:
+                    active_days_count += 1
+                    break
+
+        return active_days_count
 
     @staticmethod
     def __count_days(dates):

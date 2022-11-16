@@ -39,12 +39,9 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        print(f"total_duration: {total_duration}")
-
         all_days_count = self.__get_all_days_count()
-        print(f"all_days_count: {all_days_count}")
-
-        print(f"average_daily_duration_all_days {total_duration / all_days_count}")
+        if all_days_count == 0:
+            return 0
 
         return total_duration / all_days_count
 
@@ -57,14 +54,9 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        print(f"total_duration: {total_duration}")
-
         active_days_count = self.__get_active_days_count()
-
         if active_days_count == 0:
             return 0
-
-        print(f"average_daily_duration_active_days {total_duration / active_days_count}")
 
         return total_duration / active_days_count
 
@@ -292,8 +284,6 @@ class LongTermTodoOverview:
                     active_days_count += 1
                     break
 
-        # TODO CLEANUP remove prints everywhere
-        print(f"active_days_count: {active_days_count}")
         return active_days_count
 
     @staticmethod

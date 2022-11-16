@@ -251,11 +251,17 @@ def get_long_term_todo_duration_overview(id):
     long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo.progress, long_term_todo.progress_goal)
     labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart()
     table_data = long_term_todo_overview.get_duration_overview_items()
+    average_daily_duration_all_days = \
+        Utils.round_decimal(long_term_todo_overview.get_average_daily_duration_all_days())
+    average_daily_duration_active_days = \
+        Utils.round_decimal(long_term_todo_overview.get_average_daily_duration_active_days())
 
     return render_template(
         "long_term_todo_duration_overview.html",
         title=long_term_todo.title, total_duration=long_term_todo.duration,
-        labels=labels, values=values, table_data=table_data
+        labels=labels, values=values, table_data=table_data,
+        average_daily_duration_all_days=average_daily_duration_all_days,
+        average_daily_duration_active_days=average_daily_duration_active_days
     )
 
 

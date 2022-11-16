@@ -30,6 +30,14 @@ class LongTermTodoOverview:
 
         return labels, values
 
+    def get_average_daily_duration_all_days(self):
+        # TODO implement
+        return 42
+
+    def get_average_daily_duration_active_days(self):
+        # TODO implement
+        return 69
+
     def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []

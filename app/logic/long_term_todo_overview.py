@@ -59,8 +59,39 @@ class LongTermTodoOverview:
         return total_duration / all_days_count
 
     def get_average_daily_duration_active_days(self):
-        # TODO implement
-        return 69
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return 0
+
+        total_duration = 0
+        for item in duration_items:
+            total_duration += item["duration_in_minutes"]
+
+        print(f"total_duration: {total_duration}")
+
+        # TODO CLEANUP can extract __get_active_days_count
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        active_days_count = 0
+        for date_and_todos_item in date_and_todos_mapping:
+            todos = date_and_todos_item["todos"]
+            for todo in todos:
+                if todo.completed:
+                    active_days_count += 1
+                    break
+
+        print(f"active_days_count: {active_days_count}")
+
+        print(f"average_daily_duration_active_days {total_duration / active_days_count}")
+
+        return total_duration / active_days_count
 
     def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []

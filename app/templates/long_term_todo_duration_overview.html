@@ -20,15 +20,23 @@
 
         <table class="table-responsive">
             <tr>
-                <td>Total Duration<td>
+                <td>Total Duration</td>
                 <td>{{ total_duration }}</td>
             </tr>
             <tr>
-                <td>Average Daily Duration (all days)<td>
+                <td>All Days</td>
+                <td>{{ all_days_count }}</td>
+            </tr>
+            <tr>
+                <td>Active Days</td>
+                <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Average Daily Duration (all days)</td>
                 <td>{{ average_daily_duration_all_days }}</td>
             </tr>
-             <tr>
-                <td>Average Daily Duration (active days)<td>
+            <tr>
+                <td>Average Daily Duration (active days)</td>
                 <td>{{ average_daily_duration_active_days }}</td>
             </tr>
         </table>

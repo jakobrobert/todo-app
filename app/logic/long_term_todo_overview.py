@@ -39,7 +39,7 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        all_days_count = self.__get_all_days_count()
+        all_days_count = self.get_all_days_count()
         if all_days_count == 0:
             return 0
 
@@ -54,7 +54,7 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        active_days_count = self.__get_active_days_count()
+        active_days_count = self.get_active_days_count()
         if active_days_count == 0:
             return 0
 

@@ -251,6 +251,9 @@ def get_long_term_todo_duration_overview(id):
     long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo.progress, long_term_todo.progress_goal)
     labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart()
     table_data = long_term_todo_overview.get_duration_overview_items()
+    all_days_count = long_term_todo_overview.get_all_days_count()
+    active_days_count = long_term_todo_overview.get_active_days_count()
+    active_days_percents = Utils.calculate_progress_in_percents(active_days_count, all_days_count)
     average_daily_duration_all_days = \
         Utils.round_decimal(long_term_todo_overview.get_average_daily_duration_all_days())
     average_daily_duration_active_days = \
@@ -260,6 +263,7 @@ def get_long_term_todo_duration_overview(id):
         "long_term_todo_duration_overview.html",
         title=long_term_todo.title, total_duration=long_term_todo.duration,
         labels=labels, values=values, table_data=table_data,
+        all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
         average_daily_duration_all_days=average_daily_duration_all_days,
         average_daily_duration_active_days=average_daily_duration_active_days
     )

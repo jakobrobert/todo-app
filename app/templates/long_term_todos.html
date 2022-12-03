@@ -15,6 +15,8 @@
     <div style="margin-top: 50px;" class="container">
         <h1>Long Term Todos</h1>
         <br>
+
+        <h3>Add Long Term Todo</h3>
         <form action="{{ url_for('add_long_term_todo') }}" method="post">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -27,10 +29,11 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+
+        <h3>Sort Long Term Todos</h3>
         <form action="{{ url_for('sort_long_term_todos') }}" method="post">
             <div class="form-group">
-                <label for="sort_by">Sort by</label>
-                <select class="form-control" id="sort_by" name="sort_by">
+                <select class="form-control" name="sort_by">
                     <option value="title"
                             {% if sort_by == "title" %} selected {% endif %}>
                         Title
@@ -67,6 +70,7 @@
             </div>
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
+
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

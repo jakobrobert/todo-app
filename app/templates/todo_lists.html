@@ -15,6 +15,7 @@
     <div style="margin-top: 50px;" class="container">
         <h1>Todo Lists</h1>
         <br>
+
         <h3>Add Daily Todo List</h3>
         <form action="{{ url_for('add_daily_todo_list') }}" method="post">
             <div class="form-group">
@@ -26,6 +27,7 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+
         <h3>Add Todo List with Custom Title</h3>
         <form action="{{ url_for('add_todo_list') }}" method="post">
             <div class="form-group">
@@ -34,6 +36,7 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+
         <h3>Sort Todo Lists</h3>
         <form action="{{ url_for('sort_todo_lists') }}" method="post">
             <div class="form-group">
@@ -70,6 +73,7 @@
             </div>
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
+
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

@@ -39,7 +39,7 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        all_days_count = self.__get_all_days_count()
+        all_days_count = self.get_all_days_count()
         if all_days_count == 0:
             return 0
 
@@ -54,7 +54,7 @@ class LongTermTodoOverview:
         for item in duration_items:
             total_duration += item["duration_in_minutes"]
 
-        active_days_count = self.__get_active_days_count()
+        active_days_count = self.get_active_days_count()
         if active_days_count == 0:
             return 0
 
@@ -141,6 +141,28 @@ class LongTermTodoOverview:
             progress_items.append(curr_progress_item)
 
         return progress_items
+
+    def get_all_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        return LongTermTodoOverview.__count_days(filtered_dates)
+
+    def get_active_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+
+        return LongTermTodoOverview.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
 
     def get_average_daily_progress_all_days(self):
         all_dates = self.__collect_dates_of_todos()
@@ -248,28 +270,6 @@ class LongTermTodoOverview:
             curr_date += one_day
 
         return result
-
-    def __get_all_days_count(self):
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return 0
-
-        filtered_dates = self.__filter_dates(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
-            return 0
-
-        return LongTermTodoOverview.__count_days(filtered_dates)
-
-    def __get_active_days_count(self):
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return 0
-
-        filtered_dates = self.__filter_dates(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-
-        return LongTermTodoOverview.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
 
     @staticmethod
     def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):

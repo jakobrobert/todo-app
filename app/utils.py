@@ -1,4 +1,5 @@
 class Utils:
+    # TODO Rename, is more general, nothing to do with progress
     @staticmethod
     def calculate_progress_in_percents(progress, progress_goal):
         # This check is needed, otherwise TypeError can occur

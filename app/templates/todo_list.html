@@ -15,6 +15,7 @@
     <div style="margin-top: 50px;" class="container">
         <h1>{{ title }} [Todo List]</h1>
         <br>
+
         <h3>Add new Todo</h3>
         <form action="{{ url_for('add_todo', todo_list_id=todo_list_id) }}" method="post">
             <div class="form-group">
@@ -27,6 +28,7 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+
         <h3>Add instance of Long Term Todo</h3>
         <form action="{{ url_for('add_todo_by_long_term_todo', todo_list_id=todo_list_id) }}" method="post">
             <div class="form-group">
@@ -43,6 +45,7 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <br>
+
         <form action="{{ url_for('sort_todos', todo_list_id=todo_list_id) }}" method="post">
             <div class="form-group">
                 <label for="sort_by">Sort by</label>
@@ -87,6 +90,15 @@
             </div>
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
+        <br>
+
+        <h4>
+            <!-- TODO add url, add todo_list_id -->
+            <a class="btn btn-secondary" href="{{ url_for('get_todo_list_timeline', todo_list_id=470) }}">
+                Show timeline
+            </a>
+        </h4>
+
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

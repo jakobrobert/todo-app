@@ -148,6 +148,8 @@ def get_todo_list_timeline(todo_list_id):
 
     bar_positions = []
 
+    PIXELS_PER_UNIT = 30
+
     # TODO create list of start x, end x, start y & end y for each todo.
     # TODO for now, hardcode so one hour = 10 pixels and also height of one todo = 10 pixels
     # TODO if todo has no end_timestamp, then use default height of 10 pixels.
@@ -161,10 +163,10 @@ def get_todo_list_timeline(todo_list_id):
         #  - for now, just use hardcoded scale so one hour -> 10 pixels
 
         bar_position = {}
-        bar_position["start_x"] = i * 10
-        bar_position["end_x"] = (i + 1) * 10
-        bar_position["start_y"] = i * 10
-        bar_position["end_y"] = (i + 1) * 10
+        bar_position["start_x"] = i * PIXELS_PER_UNIT
+        bar_position["width"] = PIXELS_PER_UNIT
+        bar_position["start_y"] = i * PIXELS_PER_UNIT
+        bar_position["height"] = PIXELS_PER_UNIT
 
         bar_positions.append(bar_position)
 

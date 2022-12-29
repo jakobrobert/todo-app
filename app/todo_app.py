@@ -118,13 +118,11 @@ def add_todo_by_long_term_todo(todo_list_id):
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/get-timeline", methods=["GET"])
 def get_todo_list_timeline(todo_list_id):
-    todo_list = TodoList.get(todo_list_id) # TODO CLEANUP is this even needed?
-
+    todo_list = TodoList.get(todo_list_id)
+    title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id)
 
-    print(f"len(todos): {len(todos)}")
-    # TODO add new template todo_list_timeline.html
-    return redirect(url_for("get_todo_list", id=todo_list_id))
+    return render_template("todo_list_timeline.html", title=title, todos=todos)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])

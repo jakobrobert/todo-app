@@ -17,14 +17,14 @@
         <br>
 
         <!-- TODO CLEANUP remove debug code -->
-        <p># bar_positions: {{ bar_positions | length }}</p>
-        <p>bar_positions: {{ bar_positions }}</p>
+        <p># bar_items: {{ bar_items | length }}</p>
+        <p>bar_items: {{ bar_items }}</p>
 
         <svg width="400" height="400" role="img">
-            {% for item in bar_positions %}
+            {% for item in bar_items %}
             <g>
                 <rect x="{{ item.start_x }}" width="{{ item.width }}" y="{{ item.start_y }}" height="{{ item.height }}"></rect>
-                <text x="{{ item.start_x }}" y="{{ item.start_y }}">TODO</text>
+                <text x="{{ item.start_x }}" y="{{ item.start_y }}">{{ item.title }}</text>
             </g>
             {% endfor %}
         </svg>

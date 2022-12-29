@@ -146,10 +146,29 @@ def get_todo_list_timeline(todo_list_id):
     time_delta_hours = time_delta_seconds / 3600
     print(f"time_delta_hours: {time_delta_hours}")
 
+    bar_positions = []
+
     # TODO create list of start x, end x, start y & end y for each todo.
     # TODO for now, hardcode so one hour = 10 pixels and also height of one todo = 10 pixels
+    # TODO if todo has no end_timestamp, then use default height of 10 pixels.
+    for i, todo in enumerate(todos):
+        # TODO use real data.
+        #  - if both timestamp_started & timestamp_completed are None, then ignore item
+        #  - convert timestamp_started & timestamp_completed to time_delta_hours, relative to the min_timestamp.
+        #  - if timestamp_started is None, then use timestamp_completed for start_x and use width of one hour
+        #       -> is usual case. means no time tracking has been done.
+        #  - if timestamp_completed is None, then use width of one hour
+        #  - for now, just use hardcoded scale so one hour -> 10 pixels
 
-    return render_template("todo_list_timeline.html", title=title, todos=todos)
+        bar_position = {}
+        bar_position["start_x"] = i * 10
+        bar_position["end_x"] = (i + 1) * 10
+        bar_position["start_y"] = i * 10
+        bar_position["end_y"] = (i + 1) * 10
+
+        bar_positions.append(bar_position)
+
+    return render_template("todo_list_timeline.html", title=title, bar_positions=bar_positions)
 
 
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])

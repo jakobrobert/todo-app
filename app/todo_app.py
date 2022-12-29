@@ -122,6 +122,33 @@ def get_todo_list_timeline(todo_list_id):
     title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id)
 
+    # TODO min_timestamp
+    min_timestamp = datetime.datetime.max
+    for todo in todos:
+        if todo.timestamp_started is not None and todo.timestamp_started < min_timestamp:
+            min_timestamp = todo.timestamp_started
+        if todo.timestamp_completed is not None and todo.timestamp_completed < min_timestamp:
+            min_timestamp = todo.timestamp_completed
+
+    print(f"min_timestamp: {min_timestamp}")
+
+    max_timestamp = datetime.datetime.min
+    for todo in todos:
+        if todo.timestamp_started is not None and todo.timestamp_started > max_timestamp:
+            max_timestamp = todo.timestamp_started
+        if todo.timestamp_completed is not None and todo.timestamp_completed > max_timestamp:
+            max_timestamp = todo.timestamp_completed
+
+    print(f"max_timestamp: {max_timestamp}")
+
+    time_delta = max_timestamp - min_timestamp
+    time_delta_seconds = time_delta.total_seconds()
+    time_delta_hours = time_delta_seconds / 3600
+    print(f"time_delta_hours: {time_delta_hours}")
+
+    # TODO create list of start x, end x, start y & end y for each todo.
+    # TODO for now, hardcode so one hour = 10 pixels and also height of one todo = 10 pixels
+
     return render_template("todo_list_timeline.html", title=title, todos=todos)
 
 

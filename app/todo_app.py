@@ -129,9 +129,6 @@ def get_todo_list_timeline(todo_list_id):
         if todo.timestamp_completed is not None and todo.timestamp_completed < min_timestamp:
             min_timestamp = todo.timestamp_completed
 
-    # TODO remove all debug code
-    print(f"min_timestamp: {min_timestamp}")
-
     max_timestamp = datetime.datetime.min
     for todo in todos:
         if todo.timestamp_started is not None and todo.timestamp_started > max_timestamp:
@@ -139,61 +136,45 @@ def get_todo_list_timeline(todo_list_id):
         if todo.timestamp_completed is not None and todo.timestamp_completed > max_timestamp:
             max_timestamp = todo.timestamp_completed
 
-    print(f"max_timestamp: {max_timestamp}")
-
-    time_delta = max_timestamp - min_timestamp
-    time_delta_seconds = time_delta.total_seconds()
-    time_delta_hours = time_delta_seconds / 3600
-    print(f"time_delta_hours: {time_delta_hours}")
-
     bar_items = []
 
     pixels_per_hour = 10
     fallback_width = 2
 
-    # TODO CLEANUP refactor: no need for index. can remember current x & current y, then increase by the width / height
-    #   -> but need to be careful of todos which are skipped, then still would need to increase
     for i, todo in enumerate(todos):
         if todo.timestamp_started is None and todo.timestamp_completed is None:
             continue
 
-        bar_item = {}
-        bar_item["title"] = todo.title
-
-        # TODO as fallback, use smaller width, because now, a todo with no duration looks larger than e.g. a todo with 30 min
+        bar_item = {"title": todo.title}
 
         if todo.timestamp_started is None:
             # No time tracking was done
             # -> For x position, use timestamp_completed & for width, use fallback
-            todo_time_delta = todo.timestamp_completed - min_timestamp
-            todo_time_delta_seconds = todo_time_delta.total_seconds()
-            todo_time_delta_hours = todo_time_delta_seconds / 3600
-            print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
-            bar_item["x"] = todo_time_delta_hours * pixels_per_hour
+            time_delta = todo.timestamp_completed - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
             bar_item["width"] = fallback_width
         elif todo.timestamp_completed is None:
             # Time tracking has been started, but is not finished
             # -> For x position, use timestamp_started & for width, use fallback
-            todo_time_delta = todo.timestamp_started - min_timestamp
-            todo_time_delta_seconds = todo_time_delta.total_seconds()
-            todo_time_delta_hours = todo_time_delta_seconds / 3600
-            print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
-            bar_item["x"] = todo_time_delta_hours * pixels_per_hour
+            time_delta = todo.timestamp_started - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
             bar_item["width"] = fallback_width
         else:
             # Time tracking has been finished
             # -> For x position, use timestamp_started & for width, use the duration
-            todo_time_delta = todo.timestamp_started - min_timestamp
-            todo_time_delta_seconds = todo_time_delta.total_seconds()
-            todo_time_delta_hours = todo_time_delta_seconds / 3600
-            print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
-            bar_item["x"] = todo_time_delta_hours * pixels_per_hour
+            time_delta = todo.timestamp_started - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
 
-            todo_duration_time_delta = todo.timestamp_completed - todo.timestamp_started
-            todo_duration_time_delta_seconds = todo_duration_time_delta.total_seconds()
-            todo_duration_time_delta_hours = todo_duration_time_delta_seconds / 3600
-            print(f"todo.title: {todo.title}, todo_duration_time_delta_hours: {todo_duration_time_delta_hours}")
-            bar_item["width"] = todo_duration_time_delta_hours * pixels_per_hour
+            duration_time_delta = todo.timestamp_completed - todo.timestamp_started
+            duration_time_delta_seconds = duration_time_delta.total_seconds()
+            duration_time_delta_hours = duration_time_delta_seconds / 3600
+            bar_item["width"] = duration_time_delta_hours * pixels_per_hour
 
         bar_item["y"] = i * 25
         bar_item["height"] = 25

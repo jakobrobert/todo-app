@@ -169,7 +169,7 @@ def get_todo_list_timeline(todo_list_id):
             bar_item["width"] = pixels_per_hour
 
             # TODO move common code out
-            bar_item["y"] = i * 25
+            bar_item["y"] = (i + 1) * 25  # Use offset for y position so label is visible
             bar_item["height"] = 25
             bar_items.append(bar_item)
         else:

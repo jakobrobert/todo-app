@@ -171,11 +171,6 @@ def get_todo_list_timeline(todo_list_id):
             print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
             bar_item["x"] = todo_time_delta_hours * pixels_per_hour
             bar_item["width"] = fallback_width
-
-            # TODO move common code out
-            bar_item["y"] = (i + 1) * 25  # Use offset for y position so label is visible
-            bar_item["height"] = 25
-            bar_items.append(bar_item)
         elif todo.timestamp_completed is None:
             # Time tracking has been started, but is not finished
             # -> For x position, use timestamp_started & for width, use fallback
@@ -185,11 +180,6 @@ def get_todo_list_timeline(todo_list_id):
             print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
             bar_item["x"] = todo_time_delta_hours * pixels_per_hour
             bar_item["width"] = fallback_width
-
-            # TODO move common code out
-            bar_item["y"] = (i + 1) * 25  # Use offset for y position so label is visible
-            bar_item["height"] = 25
-            bar_items.append(bar_item)
         else:
             # Time tracking has been finished
             # -> For x position, use timestamp_started & for width, use the duration
@@ -205,10 +195,9 @@ def get_todo_list_timeline(todo_list_id):
             print(f"todo.title: {todo.title}, todo_duration_time_delta_hours: {todo_duration_time_delta_hours}")
             bar_item["width"] = todo_duration_time_delta_hours * pixels_per_hour
 
-            # TODO move common code out
-            bar_item["y"] = (i + 1) * 25  # Use offset for y position so label is visible
-            bar_item["height"] = 25
-            bar_items.append(bar_item)
+        bar_item["y"] = (i + 1) * 25  # Use offset for y position so label is visible
+        bar_item["height"] = 25
+        bar_items.append(bar_item)
 
     return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
 

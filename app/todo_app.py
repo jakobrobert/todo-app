@@ -116,6 +116,73 @@ def add_todo_by_long_term_todo(todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
+@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/get-timeline", methods=["GET"])
+def get_todo_list_timeline(todo_list_id):
+    todo_list = TodoList.get(todo_list_id)
+    title = todo_list.title
+    todos = Todo.get_all_of_todo_list(todo_list_id)
+
+    min_timestamp = datetime.datetime.max
+    for todo in todos:
+        if todo.timestamp_started is not None and todo.timestamp_started < min_timestamp:
+            min_timestamp = todo.timestamp_started
+        if todo.timestamp_completed is not None and todo.timestamp_completed < min_timestamp:
+            min_timestamp = todo.timestamp_completed
+
+    max_timestamp = datetime.datetime.min
+    for todo in todos:
+        if todo.timestamp_started is not None and todo.timestamp_started > max_timestamp:
+            max_timestamp = todo.timestamp_started
+        if todo.timestamp_completed is not None and todo.timestamp_completed > max_timestamp:
+            max_timestamp = todo.timestamp_completed
+
+    bar_items = []
+
+    pixels_per_hour = 10
+    fallback_width = 2
+
+    for i, todo in enumerate(todos):
+        if todo.timestamp_started is None and todo.timestamp_completed is None:
+            continue
+
+        bar_item = {"title": todo.title}
+
+        if todo.timestamp_started is None:
+            # No time tracking was done
+            # -> For x position, use timestamp_completed & for width, use fallback
+            time_delta = todo.timestamp_completed - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
+            bar_item["width"] = fallback_width
+        elif todo.timestamp_completed is None:
+            # Time tracking has been started, but is not finished
+            # -> For x position, use timestamp_started & for width, use fallback
+            time_delta = todo.timestamp_started - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
+            bar_item["width"] = fallback_width
+        else:
+            # Time tracking has been finished
+            # -> For x position, use timestamp_started & for width, use the duration
+            time_delta = todo.timestamp_started - min_timestamp
+            time_delta_seconds = time_delta.total_seconds()
+            time_delta_hours = time_delta_seconds / 3600
+            bar_item["x"] = time_delta_hours * pixels_per_hour
+
+            duration_time_delta = todo.timestamp_completed - todo.timestamp_started
+            duration_time_delta_seconds = duration_time_delta.total_seconds()
+            duration_time_delta_hours = duration_time_delta_seconds / 3600
+            bar_item["width"] = duration_time_delta_hours * pixels_per_hour
+
+        bar_item["y"] = i * 25
+        bar_item["height"] = 25
+        bar_items.append(bar_item)
+
+    return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
+
+
 @app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
 def edit_todo_title(todo_id, todo_list_id):
     title = request.form.get("title")

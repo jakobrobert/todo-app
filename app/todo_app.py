@@ -162,9 +162,9 @@ def get_todo_list_timeline(todo_list_id):
         # TODO CLEANUP refactor: no need for index. can remember current x & current y, then increase by the width / height
         bar_item = {}
         bar_item["title"] = todo.title
-        bar_item["start_x"] = i * pixels_per_unit
+        bar_item["x"] = i * pixels_per_unit
         bar_item["width"] = pixels_per_unit
-        bar_item["start_y"] = i * pixels_per_unit
+        bar_item["y"] = i * pixels_per_unit
         bar_item["height"] = pixels_per_unit
 
         bar_items.append(bar_item)

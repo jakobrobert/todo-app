@@ -23,7 +23,7 @@
         <svg width="400" height="400" role="img">
             {% for item in bar_items %}
             <g>
-                <rect x="{{ item.x }}" width="{{ item.width }}" y="{{ item.y }}" height="{{ item.height }}"></rect>
+                <rect x="{{ item.x }}" width="{{ item.width }}" y="{{ item.y }}" height="{{ item.height }}" style="fill:silver"></rect>
                 <text x="{{ item.x }}" y="{{ item.y }}" dominant-baseline="text-before-edge">{{ item.title }}</text>
             </g>
             {% endfor %}

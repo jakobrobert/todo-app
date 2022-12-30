@@ -148,26 +148,34 @@ def get_todo_list_timeline(todo_list_id):
 
     bar_items = []
 
-    pixels_per_unit = 25
+    pixels_per_hour = 10
 
+    # TODO CLEANUP refactor: no need for index. can remember current x & current y, then increase by the width / height
+    #   -> but need to be careful of todos which are skipped, then still would need to increase
     for i, todo in enumerate(todos):
-        # TODO use real data.
-        #  - if both timestamp_started & timestamp_completed are None, then ignore item
-        #  - convert timestamp_started & timestamp_completed to time_delta_hours, relative to the min_timestamp.
-        #  - if timestamp_started is None, then use timestamp_completed for start_x and use width of one hour
-        #       -> is usual case. means no time tracking has been done.
-        #  - if timestamp_completed is None, then use width of one hour
-        #  - for now, just use hardcoded scale so one hour -> 10 pixels
+        if todo.timestamp_started is None and todo.timestamp_completed is None:
+            continue
 
-        # TODO CLEANUP refactor: no need for index. can remember current x & current y, then increase by the width / height
         bar_item = {}
         bar_item["title"] = todo.title
-        bar_item["x"] = i * pixels_per_unit
-        bar_item["width"] = pixels_per_unit
-        bar_item["y"] = i * pixels_per_unit
-        bar_item["height"] = pixels_per_unit
 
-        bar_items.append(bar_item)
+        if todo.timestamp_started is None:
+            # No time tracking was done, so just use timestamp_completed for x position and one unit for the width
+            todo_time_delta = todo.timestamp_completed - min_timestamp
+            todo_time_delta_seconds = todo_time_delta.total_seconds()
+            todo_time_delta_hours = todo_time_delta_seconds / 3600
+            print(f"todo.title: {todo.title}, todo_time_delta_hours: {todo_time_delta_hours}")
+            bar_item["x"] = todo_time_delta_hours * pixels_per_hour
+            bar_item["width"] = pixels_per_hour
+
+            # TODO move common code out
+            bar_item["y"] = i * 25
+            bar_item["height"] = 25
+            bar_items.append(bar_item)
+        else:
+            # TODO if timestamp_completed is None, then use timestamp_started & width of one hour
+            # TODO if both timestamp_started & timestamp_completed are defined, calculate duration and use this for the width
+            continue
 
     return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
 

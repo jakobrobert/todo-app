@@ -78,6 +78,11 @@ class Todo(db.Model):
     @staticmethod
     def get_all_of_todo_list(todo_list_id):
         query = Todo.query.filter_by(todo_list_id=todo_list_id)
+        return query.all()
+
+    @staticmethod
+    def get_all_of_todo_list_sorted_using_setting(todo_list_id):
+        query = Todo.query.filter_by(todo_list_id=todo_list_id)
         order_by_clause = Todo.__create_order_by_clause()
         if order_by_clause is not None:
             query = query.order_by(order_by_clause)
@@ -85,6 +90,11 @@ class Todo(db.Model):
 
     @staticmethod
     def get_all_of_long_term_todo(long_term_todo_id):
+        query = Todo.query.filter_by(long_term_todo_id=long_term_todo_id)
+        return query.all()
+
+    @staticmethod
+    def get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id):
         query = Todo.query.filter_by(long_term_todo_id=long_term_todo_id)
         order_by_clause = Todo.__create_order_by_clause()
         if order_by_clause is not None:

@@ -123,6 +123,7 @@ def get_todo_list_timeline(todo_list_id):
     todos = Todo.get_all_of_todo_list(todo_list_id)
 
     # TODO sort todos here.
+    todos.sort(key=__get_timestamp_of_todo_for_timeline)
 
     min_timestamp = datetime.datetime.max
     for todo in todos:
@@ -420,3 +421,15 @@ def __handle_sort_request(setting_key):
     else:
         value = f"{sort_by}_{ascending_or_descending}"
     Setting.set(key, value)
+
+
+def __get_timestamp_of_todo_for_timeline(todo):
+    if todo.timestamp_started is None and todo.timestamp_completed is None:
+        # TODO this is reached and leads to TypeError
+        print(f"ERROR todo has no timestamp!")
+        return None
+
+    if todo.timestamp_completed is None:
+        return todo.timestamp_started
+
+    return todo.timestamp_completed

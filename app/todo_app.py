@@ -143,12 +143,9 @@ def get_todo_list_timeline(todo_list_id):
 
     pixels_per_hour = 10
     fallback_width = 2
+    curr_y = 0
 
-    for i, todo in enumerate(todos):
-        # TODO can remove this check when already filtering before
-        if todo.timestamp_started is None and todo.timestamp_completed is None:
-            continue
-
+    for todo in todos:
         bar_item = {"title": todo.title}
 
         if todo.timestamp_started is None:
@@ -180,9 +177,10 @@ def get_todo_list_timeline(todo_list_id):
             duration_time_delta_hours = duration_time_delta_seconds / 3600
             bar_item["width"] = duration_time_delta_hours * pixels_per_hour
 
-        bar_item["y"] = i * 25
+        bar_item["y"] = curr_y
         bar_item["height"] = 25
         bar_items.append(bar_item)
+        curr_y += 25
 
     return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
 

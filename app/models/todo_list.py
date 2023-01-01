@@ -21,6 +21,10 @@ class TodoList(db.Model):
 
     @staticmethod
     def get_all():
+        return TodoList.query.all()
+
+    @staticmethod
+    def get_all_sorted_using_setting():
         query = TodoList.query
         order_by_clause = TodoList.__create_order_by_clause()
         if order_by_clause is not None:
@@ -35,7 +39,7 @@ class TodoList(db.Model):
 
     @staticmethod
     def delete(id):
-        todos = Todo.get_all_of_todo_list(todo_list_id=id)
+        todos = Todo.get_all_of_todo_list_sorted_using_setting(todo_list_id=id)
         for todo in todos:
             db.session.delete(todo)
         todo_list = TodoList.get(id)

@@ -36,7 +36,7 @@ def index():
 
 @app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
 def get_todo_lists():
-    todo_lists = TodoList.get_all()
+    todo_lists = TodoList.get_all_sorted_using_setting()
 
     setting_key = "sort_todo_lists_by"
     sort_by = __get_sort_by(setting_key)
@@ -88,7 +88,7 @@ def delete_todo_list(id):
 def get_todo_list(id):
     todo_list = TodoList.get(id)
     title = todo_list.title
-    todos = Todo.get_all_of_todo_list(todo_list_id=id)
+    todos = Todo.get_all_of_todo_list_sorted_using_setting(todo_list_id=id)
     long_term_todos = LongTermTodo.get_all()
 
     setting_key = "sort_todos_by"
@@ -122,6 +122,9 @@ def get_todo_list_timeline(todo_list_id):
     title = todo_list.title
     todos = Todo.get_all_of_todo_list(todo_list_id)
 
+    todos = list(filter(lambda todo: todo.timestamp_completed is not None or todo.timestamp_started is not None, todos))
+    todos.sort(key=__get_timestamp_of_todo_for_timeline)
+
     min_timestamp = datetime.datetime.max
     for todo in todos:
         if todo.timestamp_started is not None and todo.timestamp_started < min_timestamp:
@@ -140,11 +143,9 @@ def get_todo_list_timeline(todo_list_id):
 
     pixels_per_hour = 10
     fallback_width = 2
+    curr_y = 0
 
-    for i, todo in enumerate(todos):
-        if todo.timestamp_started is None and todo.timestamp_completed is None:
-            continue
-
+    for todo in todos:
         bar_item = {"title": todo.title}
 
         if todo.timestamp_started is None:
@@ -176,9 +177,10 @@ def get_todo_list_timeline(todo_list_id):
             duration_time_delta_hours = duration_time_delta_seconds / 3600
             bar_item["width"] = duration_time_delta_hours * pixels_per_hour
 
-        bar_item["y"] = i * 25
+        bar_item["y"] = curr_y
         bar_item["height"] = 25
         bar_items.append(bar_item)
+        curr_y += 25
 
     return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
 
@@ -248,7 +250,7 @@ def get_long_term_todos():
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
-    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
     return render_template("long_term_todo.html", long_term_todo=long_term_todo, todos=todos)
 
 
@@ -273,7 +275,7 @@ def edit_long_term_todo_progress_goal(id):
     progress_goal = request.form.get("progress_goal")
     long_term_todo = LongTermTodo.get(id)
     long_term_todo.set_progress_goal(progress_goal)
-    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
     for todo in todos:
         todo.set_progress_goal(progress_goal)
     return redirect(url_for("get_long_term_todos"))
@@ -313,7 +315,7 @@ def sort_long_term_todos():
 @app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-overview", methods=["GET"])
 def get_long_term_todo_duration_overview(id):
     long_term_todo = LongTermTodo.get(id)
-    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
 
     long_term_todo_overview = LongTermTodoOverview(todos, long_term_todo.progress, long_term_todo.progress_goal)
     labels, values = long_term_todo_overview.get_labels_and_values_for_duration_chart()
@@ -349,7 +351,7 @@ def get_long_term_todo_progress_overview(id):
         time_span_last_x_days = int(time_span_last_x_days_arg)
 
     long_term_todo = LongTermTodo.get(id)
-    todos = Todo.get_all_of_long_term_todo(long_term_todo_id=id)
+    todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
@@ -418,3 +420,13 @@ def __handle_sort_request(setting_key):
     else:
         value = f"{sort_by}_{ascending_or_descending}"
     Setting.set(key, value)
+
+
+def __get_timestamp_of_todo_for_timeline(todo):
+    if todo.timestamp_started is None and todo.timestamp_completed is None:
+        return None
+
+    if todo.timestamp_completed is None:
+        return todo.timestamp_started
+
+    return todo.timestamp_completed

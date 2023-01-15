@@ -174,7 +174,6 @@ class LongTermTodoOverview:
         if not date_and_todos_mapping:
             return 0
 
-        # TODO CLEANUP can re-use get_all_days_count?
         all_days_count = LongTermTodoOverview.__count_days(filtered_dates)
 
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
@@ -194,7 +193,6 @@ class LongTermTodoOverview:
         if not date_and_todos_mapping:
             return 0
 
-        # TODO CLEANUP can re-use get_active_days_count?
         active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)

@@ -16,9 +16,8 @@ class LongTermTodo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     progress_goal = db.Column(db.Integer)
 
-    # TODO CLEANUP rename to total_duration so is more clear
     @property
-    def duration(self):
+    def total_duration(self):
         # TODO CLEANUP no need to sort todos here
         todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)
         total_duration = datetime.timedelta(seconds=0)
@@ -29,7 +28,7 @@ class LongTermTodo(db.Model):
 
     @property
     def total_duration_as_formatted_string(self):
-        total_duration = self.duration
+        total_duration = self.total_duration
         seconds_of_last_day = total_duration.seconds
         hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
         minutes, seconds = divmod(remaining_seconds, 60)

@@ -28,7 +28,7 @@ class LongTermTodo(db.Model):
         return total_duration
 
     @property
-    def duration_as_formatted_string(self):
+    def total_duration_as_formatted_string(self):
         total_duration = self.duration
         seconds_of_last_day = total_duration.seconds
         hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)

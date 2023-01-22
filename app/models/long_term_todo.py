@@ -30,18 +30,12 @@ class LongTermTodo(db.Model):
     @property
     def duration_as_formatted_string(self):
         total_duration = self.duration
-
-        # TODO CLEANUP remove logging
         seconds_of_last_day = total_duration.seconds
-        print(f"total_seconds: {seconds_of_last_day}")
         hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
-        print(f"hours: {hours_of_last_day}, remaining_seconds: {remaining_seconds}")
         minutes, seconds = divmod(remaining_seconds, 60)
-        print(f"minutes: {minutes}, seconds: {seconds}")
         total_hours = total_duration.days * 24 + hours_of_last_day
-        print(f"total_hours: {total_hours}")
-
         formatted_string = f"{total_hours:02}:{minutes:02}:{seconds:02}"
+
         return formatted_string
 
     @property

@@ -16,14 +16,31 @@ class LongTermTodo(db.Model):
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     progress_goal = db.Column(db.Integer)
 
+    # TODO CLEANUP rename to total_duration so is more clear
     @property
     def duration(self):
+        # TODO CLEANUP no need to sort todos here
         todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)
         total_duration = datetime.timedelta(seconds=0)
         for todo in todos:
             if todo.duration is not None:
                 total_duration += todo.duration
         return total_duration
+
+    @property
+    def duration_as_formatted_string(self):
+        total_duration = self.duration
+        total_seconds = total_duration.seconds
+        print(f"total_seconds: {total_seconds}")
+        hours, remaining_seconds = divmod(total_seconds, 3600)
+        print(f"hours: {hours}, remaining_seconds: {remaining_seconds}")
+        minutes, seconds = divmod(remaining_seconds, 60)
+        print(f"minutes: {minutes}, seconds: {seconds}")
+
+        total_hours = total_duration.days * 24 + hours
+        print(f"total_hours: {total_hours}")
+
+        return f"{total_duration}"
 
     @property
     def progress(self):

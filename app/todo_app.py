@@ -330,7 +330,7 @@ def get_long_term_todo_duration_overview(id):
 
     return render_template(
         "long_term_todo_duration_overview.html",
-        title=long_term_todo.title, total_duration=long_term_todo.duration,
+        long_term_todo=long_term_todo,
         labels=labels, values=values, table_data=table_data,
         all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
         average_daily_duration_all_days=average_daily_duration_all_days,

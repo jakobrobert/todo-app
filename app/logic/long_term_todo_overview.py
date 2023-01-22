@@ -297,6 +297,7 @@ class LongTermTodoOverview:
 
         return days
 
+    # TODO check usages for #104: In duration overview page, show duration as formatted string
     @staticmethod
     def __get_total_duration_in_minutes_for_todos(todos):
         if not todos:

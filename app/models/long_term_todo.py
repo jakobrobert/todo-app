@@ -26,11 +26,6 @@ class LongTermTodo(db.Model):
                 total_duration += todo.duration
         return total_duration
 
-    # TODO CLEANUP remove this method, see in duration_overview template
-    @property
-    def total_duration_as_formatted_string(self):
-        return self.convert_timedelta_to_string(self.total_duration)
-
     @property
     def progress(self):
         todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)

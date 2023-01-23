@@ -26,16 +26,10 @@ class LongTermTodo(db.Model):
                 total_duration += todo.duration
         return total_duration
 
+    # TODO CLEANUP remove this method, see in duration_overview template
     @property
     def total_duration_as_formatted_string(self):
-        total_duration = self.total_duration
-        seconds_of_last_day = total_duration.seconds
-        hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
-        minutes, seconds = divmod(remaining_seconds, 60)
-        total_hours = total_duration.days * 24 + hours_of_last_day
-        formatted_string = f"{total_hours:02}:{minutes:02}:{seconds:02}"
-
-        return formatted_string
+        return self.convert_timedelta_to_string(self.total_duration)
 
     @property
     def progress(self):
@@ -68,6 +62,16 @@ class LongTermTodo(db.Model):
         self.progress_goal = progress_goal
         db.session.commit()
 
+    # REMARK Could be static, but not changing it because then problems to access it in template
+    def convert_timedelta_to_string(self, timedelta):
+        seconds_of_last_day = timedelta.seconds
+        hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
+        minutes, seconds = divmod(remaining_seconds, 60)
+        total_hours = timedelta.days * 24 + hours_of_last_day
+        formatted_string = f"{total_hours:02}:{minutes:02}:{seconds:02}"
+
+        return formatted_string
+
     @staticmethod
     def get(id):
         return LongTermTodo.query.filter_by(id=id).first()
@@ -92,6 +96,7 @@ class LongTermTodo(db.Model):
         db.session.delete(long_term_todo)
         db.session.commit()
 
+    # TODO CLEANUP move above static methods for consistency
     def add_todo(self, high_priority, todo_list_id):
         todo = Todo(title=self.title, long_term_todo_id=self.id, progress_goal=self.progress_goal,
                     high_priority=high_priority, todo_list_id=todo_list_id)

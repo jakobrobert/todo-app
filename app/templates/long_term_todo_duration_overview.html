@@ -56,7 +56,7 @@
                     {% for item in table_data %}
                         <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
-                            <td> {{ item["duration_in_minutes"] }}</td>
+                            <td> {{ item["duration"] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

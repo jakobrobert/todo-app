@@ -26,7 +26,7 @@ class LongTermTodoOverview:
 
         for item in duration_items:
             labels.append(item["date"])
-            values.append(item["duration_in_minutes"])
+            values.append(item["duration"])
 
         return labels, values
 
@@ -37,7 +37,7 @@ class LongTermTodoOverview:
 
         total_duration = 0
         for item in duration_items:
-            total_duration += item["duration_in_minutes"]
+            total_duration += item["duration"]
 
         all_days_count = self.get_all_days_count()
         if all_days_count == 0:
@@ -52,7 +52,7 @@ class LongTermTodoOverview:
 
         total_duration = 0
         for item in duration_items:
-            total_duration += item["duration_in_minutes"]
+            total_duration += item["duration"]
 
         active_days_count = self.get_active_days_count()
         if active_days_count == 0:
@@ -100,8 +100,7 @@ class LongTermTodoOverview:
                 if todo.completed:
                     curr_duration_item["is_active_day"] = True
 
-            duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(todos)
-            curr_duration_item["duration_in_minutes"] = Utils.round_decimal(duration_in_minutes)
+            curr_duration_item["duration"] = LongTermTodoOverview.__get_total_duration_for_todos(todos)
 
             duration_items.append(curr_duration_item)
 
@@ -299,17 +298,17 @@ class LongTermTodoOverview:
 
     # TODO check usages for #104: In duration overview page, show duration as formatted string
     @staticmethod
-    def __get_total_duration_in_minutes_for_todos(todos):
+    def __get_total_duration_for_todos(todos):
         if not todos:
             return 0
 
-        total_duration_in_seconds = 0
+        total_duration = 0
 
         for todo in todos:
             if todo.duration is not None:
-                total_duration_in_seconds += todo.duration.total_seconds()
+                total_duration += todo.duration
 
-        return total_duration_in_seconds / 60
+        return total_duration
 
     @staticmethod
     def __get_last_progress_of_todos(todos):

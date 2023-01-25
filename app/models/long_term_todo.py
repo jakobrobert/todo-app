@@ -27,17 +27,6 @@ class LongTermTodo(db.Model):
         return total_duration
 
     @property
-    def total_duration_as_formatted_string(self):
-        total_duration = self.total_duration
-        seconds_of_last_day = total_duration.seconds
-        hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
-        minutes, seconds = divmod(remaining_seconds, 60)
-        total_hours = total_duration.days * 24 + hours_of_last_day
-        formatted_string = f"{total_hours:02}:{minutes:02}:{seconds:02}"
-
-        return formatted_string
-
-    @property
     def progress(self):
         todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)
         max_progress = None

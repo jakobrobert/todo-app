@@ -57,15 +57,9 @@ class LongTermTodo(db.Model):
         self.progress_goal = progress_goal
         db.session.commit()
 
-    # REMARK Could be static, but not changing it because then problems to access it in template
+    # REMARK Non-static Wrapper method here so can access it in template, with static methods it seems to be a bit tricky
     def convert_timedelta_to_string(self, timedelta):
-        seconds_of_last_day = timedelta.seconds
-        hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
-        minutes, seconds = divmod(remaining_seconds, 60)
-        total_hours = timedelta.days * 24 + hours_of_last_day
-        formatted_string = f"{total_hours:02}:{minutes:02}:{seconds:02}"
-
-        return formatted_string
+        return Utils.convert_timedelta_to_string(timedelta)
 
     @staticmethod
     def get(id):

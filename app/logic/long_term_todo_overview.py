@@ -33,30 +33,30 @@ class LongTermTodoOverview:
     def get_average_daily_duration_all_days(self):
         duration_items = self.get_duration_overview_items()
         if not duration_items:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration = 0
+        total_duration = datetime.timedelta(seconds=0)
         for item in duration_items:
             total_duration += item["duration"]
 
         all_days_count = self.get_all_days_count()
         if all_days_count == 0:
-            return 0
+            return total_duration
 
         return total_duration / all_days_count
 
     def get_average_daily_duration_active_days(self):
         duration_items = self.get_duration_overview_items()
         if not duration_items:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration = 0
+        total_duration = datetime.timedelta(seconds=0)
         for item in duration_items:
             total_duration += item["duration"]
 
         active_days_count = self.get_active_days_count()
         if active_days_count == 0:
-            return 0
+            return datetime.timedelta(seconds=0)
 
         return total_duration / active_days_count
 
@@ -90,6 +90,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
         for date_and_todos_item in date_and_todos_mapping:
+            # TODO CLEANUP extract loop body into method
             curr_duration_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
@@ -120,6 +121,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
+            # TODO CLEANUP extract loop body into method
             curr_progress_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
@@ -296,14 +298,12 @@ class LongTermTodoOverview:
 
         return days
 
-    # TODO check usages for #104: In duration overview page, show duration as formatted string
     @staticmethod
     def __get_total_duration_for_todos(todos):
         if not todos:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration = 0
-
+        total_duration = datetime.timedelta(seconds=0)
         for todo in todos:
             if todo.duration is not None:
                 total_duration += todo.duration

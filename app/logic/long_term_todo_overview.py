@@ -25,7 +25,7 @@ class LongTermTodoOverview:
             return labels, values
 
         for item in duration_items:
-            date = labels.append(item["date"])
+            date = item["date"]
             labels.append(date)
             duration = item["duration"]
             # Cannot use timedelta directly in chart, so pass as seconds.

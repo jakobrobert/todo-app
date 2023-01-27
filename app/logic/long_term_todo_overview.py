@@ -5,7 +5,7 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
+    # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
         self.todos = todos
@@ -25,8 +25,13 @@ class LongTermTodoOverview:
             return labels, values
 
         for item in duration_items:
-            labels.append(item["date"])
-            values.append(item["duration"])
+            date = labels.append(item["date"])
+            labels.append(date)
+            duration = item["duration"]
+            # Cannot use timedelta directly in chart, so pass as seconds.
+            # TODO check again, maybe this is no problem, cause for broken chart were likely None labels
+            duration_as_seconds = duration.total_seconds()
+            values.append(duration_as_seconds)
 
         return labels, values
 

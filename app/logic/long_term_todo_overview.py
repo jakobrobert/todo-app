@@ -29,7 +29,6 @@ class LongTermTodoOverview:
             labels.append(date)
             duration = item["duration"]
             # Cannot use timedelta directly in chart, so pass as seconds.
-            # TODO check again, maybe this is no problem, cause for broken chart were likely None labels
             duration_as_seconds = duration.total_seconds()
             values.append(duration_as_seconds)
 

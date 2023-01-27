@@ -33,6 +33,16 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
                 point: {
                     radius: 2.0
                 }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function(value, index, values) {
+                            // TODO Replace by proper label, convert seconds to formatted date string
+                            return "Foo " + value;
+                        }
+                    }
+                }
             }
         }
     });

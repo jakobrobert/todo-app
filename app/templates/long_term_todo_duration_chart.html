@@ -38,14 +38,16 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
                 y: {
                     ticks: {
                         callback: function(value, index, values) {
-                            // TODO hours are one too large, probably because of GMT+1
                             const date = new Date(0);
                             date.setSeconds(value);
 
+                            // Need to adjust. E.g. for GMT+1, hours would be 1 too large
+                            const timezoneOffsetSeconds = date.getTimezoneOffset() * 60;
+                            date.setSeconds(timezoneOffsetSeconds);
+
                             const timeString = date.toTimeString();
-                            console.log(timeString)
                             const timeStringParts = timeString.split(" ");
-                            console.log(timeStringParts);
+
                             return timeStringParts[0];
                         }
                     }

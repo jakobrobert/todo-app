@@ -38,8 +38,12 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
                 y: {
                     ticks: {
                         callback: function(value, index, values) {
-                            // TODO Replace by proper label, convert seconds to formatted date string
-                            return "Foo " + value;
+                            const date = new Date(0);
+                            date.setSeconds(value);
+                            console.log(date);
+                            console.log(date.toString());
+                            // TODO not correct yet, too verbose, should only include hours etc., not the date itself
+                            return date.toString();
                         }
                     }
                 }

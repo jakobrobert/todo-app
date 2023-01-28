@@ -37,9 +37,33 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             scales: {
                 y: {
                     ticks: {
+                        // Returns the label on the y axis
                         callback: function(value, index, values) {
                             const date = new Date(0);
                             date.setSeconds(value);
+
+                            // Need to adjust. E.g. for GMT+1, hours would be 1 too large
+                            const timezoneOffsetSeconds = date.getTimezoneOffset() * 60;
+                            date.setSeconds(timezoneOffsetSeconds);
+
+                            const timeString = date.toTimeString();
+                            const timeStringParts = timeString.split(" ");
+
+                            return timeStringParts[0];
+                        }
+                    }
+                }
+            },
+            // TODO also adjust tooltip, see here Label Callback: https://www.chartjs.org/docs/latest/configuration/tooltip.html
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        // Returns the tooltip label which is shown when hovering over a data point
+                        label: function(context) {
+                            const seconds = context.parsed.y;
+
+                            const date = new Date(0);
+                            date.setSeconds(seconds);
 
                             // Need to adjust. E.g. for GMT+1, hours would be 1 too large
                             const timezoneOffsetSeconds = date.getTimezoneOffset() * 60;

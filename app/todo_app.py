@@ -323,10 +323,12 @@ def get_long_term_todo_duration_overview(id):
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
     active_days_percents = Utils.calculate_progress_in_percents(active_days_count, all_days_count)
-    average_daily_duration_all_days = \
-        Utils.round_decimal(long_term_todo_overview.get_average_daily_duration_all_days())
-    average_daily_duration_active_days = \
-        Utils.round_decimal(long_term_todo_overview.get_average_daily_duration_active_days())
+    average_daily_duration_all_days = Utils.convert_timedelta_to_string(
+        long_term_todo_overview.get_average_daily_duration_all_days()
+    )
+    average_daily_duration_active_days = Utils.convert_timedelta_to_string(
+        long_term_todo_overview.get_average_daily_duration_active_days()
+    )
 
     return render_template(
         "long_term_todo_duration_overview.html",

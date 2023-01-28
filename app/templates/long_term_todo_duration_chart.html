@@ -2,12 +2,26 @@
 
 <!--
 Inline script is hacky, but did not manage to do it in the recommended way.
-If trying: url_for('static', filename='js/l----------------ong_term_todo_duration_chart.js')
+If trying: url_for('static', filename='js/long_term_todo_duration_chart.js')
 Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
 -->
 <script>
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
+
+    function convertDurationFromSecondsToFormattedString(seconds) {
+        const date = new Date(0);
+        date.setSeconds(seconds);
+
+        // Need to adjust. E.g. for GMT+1, hours would be 1 too large
+        const timezoneOffsetSeconds = date.getTimezoneOffset() * 60;
+        date.setSeconds(timezoneOffsetSeconds);
+
+        const timeString = date.toTimeString();
+        const timeStringParts = timeString.split(" ");
+
+        return timeStringParts[0];
+    }
 
     const chart = new Chart(ctx, {
         type: "line",
@@ -17,7 +31,7 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             datasets:
             [
                 {
-                    label: "Duration (minutes)",
+                    label: "Duration",
                     data: {{ values | safe }},
                     fill: false,
                     borderColor: "gray",
@@ -32,6 +46,26 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             elements: {
                 point: {
                     radius: 2.0
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        // Returns the label on the y axis
+                        callback: function(value, index, values) {
+                            return convertDurationFromSecondsToFormattedString(value);
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        // Returns the tooltip label which is shown when hovering over a data point
+                        label: function(context) {
+                            return convertDurationFromSecondsToFormattedString(context.parsed.y);
+                        }
+                    }
                 }
             }
         }

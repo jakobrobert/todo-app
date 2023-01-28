@@ -21,7 +21,7 @@
         <table class="table-responsive">
             <tr>
                 <td>Total Duration</td>
-                <td>{{ long_term_todo.total_duration_as_formatted_string }}</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
             </tr>
             <tr>
                 <td>All Days</td>
@@ -49,14 +49,14 @@
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Duration (min)</th>
+                        <th scope="col">Duration</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in table_data %}
                         <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
-                            <td> {{ item["duration_in_minutes"] }}</td>
+                            <td> {{ item["duration"] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

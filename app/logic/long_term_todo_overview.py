@@ -5,7 +5,7 @@ from utils import Utils
 
 
 class LongTermTodoOverview:
-    # Need to pass values separately instead of passing long_term_todo as a whole, then raises Import error
+    # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
         self.todos = todos
@@ -25,38 +25,42 @@ class LongTermTodoOverview:
             return labels, values
 
         for item in duration_items:
-            labels.append(item["date"])
-            values.append(item["duration_in_minutes"])
+            date = item["date"]
+            labels.append(date)
+            duration = item["duration"]
+            # Cannot use timedelta directly in chart, so pass as seconds.
+            duration_as_seconds = duration.total_seconds()
+            values.append(duration_as_seconds)
 
         return labels, values
 
     def get_average_daily_duration_all_days(self):
         duration_items = self.get_duration_overview_items()
         if not duration_items:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration = 0
+        total_duration = datetime.timedelta(seconds=0)
         for item in duration_items:
-            total_duration += item["duration_in_minutes"]
+            total_duration += item["duration"]
 
         all_days_count = self.get_all_days_count()
         if all_days_count == 0:
-            return 0
+            return total_duration
 
         return total_duration / all_days_count
 
     def get_average_daily_duration_active_days(self):
         duration_items = self.get_duration_overview_items()
         if not duration_items:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration = 0
+        total_duration = datetime.timedelta(seconds=0)
         for item in duration_items:
-            total_duration += item["duration_in_minutes"]
+            total_duration += item["duration"]
 
         active_days_count = self.get_active_days_count()
         if active_days_count == 0:
-            return 0
+            return datetime.timedelta(seconds=0)
 
         return total_duration / active_days_count
 
@@ -90,6 +94,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
         for date_and_todos_item in date_and_todos_mapping:
+            # TODO CLEANUP extract loop body into method
             curr_duration_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
@@ -100,8 +105,7 @@ class LongTermTodoOverview:
                 if todo.completed:
                     curr_duration_item["is_active_day"] = True
 
-            duration_in_minutes = LongTermTodoOverview.__get_total_duration_in_minutes_for_todos(todos)
-            curr_duration_item["duration_in_minutes"] = Utils.round_decimal(duration_in_minutes)
+            curr_duration_item["duration"] = LongTermTodoOverview.__get_total_duration_for_todos(todos)
 
             duration_items.append(curr_duration_item)
 
@@ -121,6 +125,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
+            # TODO CLEANUP extract loop body into method
             curr_progress_item = {
                 "date": date_and_todos_item["date"],
                 "is_active_day": False
@@ -297,19 +302,17 @@ class LongTermTodoOverview:
 
         return days
 
-    # TODO check usages for #104: In duration overview page, show duration as formatted string
     @staticmethod
-    def __get_total_duration_in_minutes_for_todos(todos):
+    def __get_total_duration_for_todos(todos):
         if not todos:
-            return 0
+            return datetime.timedelta(seconds=0)
 
-        total_duration_in_seconds = 0
-
+        total_duration = datetime.timedelta(seconds=0)
         for todo in todos:
             if todo.duration is not None:
-                total_duration_in_seconds += todo.duration.total_seconds()
+                total_duration += todo.duration
 
-        return total_duration_in_seconds / 60
+        return total_duration
 
     @staticmethod
     def __get_last_progress_of_todos(todos):

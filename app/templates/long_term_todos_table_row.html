@@ -17,7 +17,7 @@
         {{ long_term_todo.timestamp_completed or 'n/a' }}
     </td>
     <td>
-        {{ long_term_todo.duration or 'n/a' }}
+        {{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}
     </td>
     <td>
         {{ long_term_todo.progress or 'n/a' }}

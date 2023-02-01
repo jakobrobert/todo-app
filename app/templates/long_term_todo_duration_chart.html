@@ -13,12 +13,10 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
         const hours = Math.floor(durationInSeconds / 3600);
         const remainingSecondsWithoutHours = durationInSeconds % 3600;
         const minutes = Math.floor(remainingSecondsWithoutHours / 60);
-        const seconds = durationInSeconds % 60;
 
         const formattedHours = hours.toString().padStart(2, "0");
         const formattedMinutes = minutes.toString().padStart(2, "0");
-        const formattedSeconds = seconds.toString().padStart(2, "0");
-        const formattedFullString = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        const formattedFullString = `${formattedHours}:${formattedMinutes}`;
 
         return formattedFullString;
     }

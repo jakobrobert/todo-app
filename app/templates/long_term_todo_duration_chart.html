@@ -9,18 +9,18 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
 
-    function convertDurationFromSecondsToFormattedString(seconds) {
-        const date = new Date(0);
-        date.setSeconds(seconds);
+    function convertDurationFromSecondsToFormattedString(durationInSeconds) {
+        const hours = Math.floor(durationInSeconds / 3600);
+        const remainingSecondsWithoutHours = durationInSeconds % 3600;
+        const minutes = Math.floor(remainingSecondsWithoutHours / 60);
+        const seconds = durationInSeconds % 60;
 
-        // Need to adjust. E.g. for GMT+1, hours would be 1 too large
-        const timezoneOffsetSeconds = date.getTimezoneOffset() * 60;
-        date.setSeconds(timezoneOffsetSeconds);
+        const formattedHours = hours.toString().padStart(2, "0");
+        const formattedMinutes = minutes.toString().padStart(2, "0");
+        const formattedSeconds = seconds.toString().padStart(2, "0");
+        const formattedFullString = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 
-        const timeString = date.toTimeString();
-        const timeStringParts = timeString.split(" ");
-
-        return timeStringParts[0];
+        return formattedFullString;
     }
 
     const chart = new Chart(ctx, {

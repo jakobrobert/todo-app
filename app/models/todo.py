@@ -12,6 +12,7 @@ class Todo(db.Model):
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
     high_priority = db.Column(db.Boolean, default=False)
+    comment = db.Column(db.String(1024))
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
@@ -53,6 +54,10 @@ class Todo(db.Model):
 
     def toggle_priority(self):
         self.high_priority = not self.high_priority
+        db.session.commit()
+
+    def set_comment(self, comment):
+        self.comment = comment
         db.session.commit()
 
     def set_progress(self, progress):

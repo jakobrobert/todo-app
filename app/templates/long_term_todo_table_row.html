@@ -12,6 +12,11 @@
             <textarea class="form-control" name="title" readonly>{{ todo.title }}</textarea>
         </form>
     </td>
+    <td style="min-width: 175px">
+        <form>
+            <textarea class="form-control" name="title" readonly>{{ todo.comment or "" }}</textarea>
+        </form>
+    </td>
     <td>
         {{ todo.timestamp_created }}
     </td>

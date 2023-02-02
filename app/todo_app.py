@@ -211,8 +211,7 @@ def toggle_todo_priority(todo_id, todo_list_id):
 def edit_todo_comment(todo_id, todo_list_id):
     comment = request.form.get("comment")
     todo = Todo.get(todo_id)
-    # TODO implement
-    #todo.set_comment(comment)
+    todo.set_comment(comment)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 

@@ -12,7 +12,7 @@ class Todo(db.Model):
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
     high_priority = db.Column(db.Boolean, default=False)
-    comment = db.Column(db.String(255))
+    comment = db.Column(db.String(1024))
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_started = db.Column(db.TIMESTAMP(timezone=True))
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))

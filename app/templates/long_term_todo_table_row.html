@@ -27,7 +27,7 @@
         {{ todo.timestamp_completed or 'n/a' }}
     </td>
     <td>
-        {{ todo.duration or 'n/a' }}
+        {{ todo.convert_timedelta_to_string(todo.duration) }}
     </td>
     <td>
         {{ todo.progress or 'n/a' }}

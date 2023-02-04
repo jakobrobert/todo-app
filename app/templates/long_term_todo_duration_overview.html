@@ -56,7 +56,7 @@
                     {% for item in table_data %}
                         <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
-                            <td> {{ item["duration"] }}</td>
+                            <td> {{ long_term_todo.convert_timedelta_to_string(item["duration"]) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

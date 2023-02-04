@@ -368,14 +368,12 @@ def get_long_term_todo_progress_overview(id):
     long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress, time_span_last_x_days)
     labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
 
-    min_progress = long_term_todo_overview.get_min_progress()
-    if as_percents:
-        min_value = Utils.calculate_progress_in_percents(min_progress, long_term_todo.progress_goal)
-    else:
-        min_value = min_progress
-
     max_value = 100 if as_percents else long_term_todo.progress_goal
-    table_data = long_term_todo_overview.get_progress_overview_items()
+    progress_overview_items = long_term_todo_overview.get_progress_overview_items()
+
+    item_with_min_progress = min(progress_overview_items, key=lambda item: item["progress"])
+    min_value = item_with_min_progress["progress_as_percents"] if as_percents else item_with_min_progress["progress"]
+
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
     # TODO CLEANUP name is misleading, rename, here has nothing to do with progress
@@ -398,7 +396,7 @@ def get_long_term_todo_progress_overview(id):
         "long_term_todo_progress_overview.html",
         long_term_todo=long_term_todo, todos=todos,
         as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
-        labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=table_data,
+        labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=progress_overview_items,
         all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
         average_daily_progress_all_days=average_daily_progress_all_days,
         average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,

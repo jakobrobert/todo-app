@@ -64,12 +64,6 @@ class LongTermTodoOverview:
 
         return total_duration / active_days_count
 
-    def get_min_progress(self):
-        # TODO FIX: should filter by time range
-        todo_with_min_progress = min(self.todos, key=lambda todo: todo.progress)
-        min_progress = todo_with_min_progress.progress
-        return min_progress
-
     def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []

@@ -15,7 +15,9 @@ class Utils:
 
     @staticmethod
     def convert_timedelta_to_string(timedelta):
-        # TODO handle None
+        if timedelta is None:
+            return "n/a"
+
         seconds_of_last_day = timedelta.seconds
         hours_of_last_day, remaining_seconds = divmod(seconds_of_last_day, 3600)
         minutes = remaining_seconds // 60

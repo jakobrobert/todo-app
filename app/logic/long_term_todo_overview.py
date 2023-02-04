@@ -64,6 +64,10 @@ class LongTermTodoOverview:
 
         return total_duration / active_days_count
 
+    def get_min_progress(self):
+        # TODO implement
+        return 100
+
     def get_labels_and_values_for_progress_chart(self, as_percents):
         labels = []
         values = []

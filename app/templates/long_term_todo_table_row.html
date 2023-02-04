@@ -27,6 +27,7 @@
         {{ todo.timestamp_completed or 'n/a' }}
     </td>
     <td>
+        <!-- TODO use todo for consistency -->
         {{ long_term_todo.convert_timedelta_to_string(todo.duration) }}
     </td>
     <td>

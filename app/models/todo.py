@@ -76,6 +76,10 @@ class Todo(db.Model):
         self.timestamp_started = None
         db.session.commit()
 
+    # REMARK Non-static Wrapper method here so can access it in template, with static methods it seems to be a bit tricky
+    def convert_timedelta_to_string(self, timedelta):
+        return Utils.convert_timedelta_to_string(timedelta)
+
     @staticmethod
     def get(id):
         return Todo.query.filter_by(id=id).first()

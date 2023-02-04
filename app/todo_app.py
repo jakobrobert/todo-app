@@ -376,7 +376,6 @@ def get_long_term_todo_progress_overview(id):
 
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
-    # TODO CLEANUP name is misleading, rename, here has nothing to do with progress
     active_days_percents = Utils.calculate_progress_in_percents(active_days_count, all_days_count)
 
     average_daily_progress_all_days =\

@@ -1,5 +1,6 @@
 class Utils:
-    # TODO Rename, is more general, nothing to do with progress
+    # TODO CLEANUP name is misleading, is generally used, nothing to do with progress,
+    #  see e.g. usage in todo_app.py -> get_long_term_todo_progress_overview
     @staticmethod
     def calculate_progress_in_percents(progress, progress_goal):
         # This check is needed, otherwise TypeError can occur

@@ -126,7 +126,7 @@
                         </td>
                     </tr>
                     {% for todo in todos if todo.is_running %}
-                        {% include "todo_list_table_row.html" %}
+                        {% include "todo_list/todo_list_table_row.html" %}
                     {% endfor %}
                     <!-- High Priority Todos -->
                     <tr>
@@ -135,7 +135,7 @@
                         </td>
                     </tr>
                     {% for todo in todos if todo.high_priority and not todo.is_running and not todo.completed %}
-                        {% include "todo_list_table_row.html" %}
+                        {% include "todo_list/todo_list_table_row.html" %}
                     {% endfor %}
                     <!-- Low Priority Todos -->
                     <tr>
@@ -144,7 +144,7 @@
                         </td>
                     </tr>
                     {% for todo in todos if not todo.high_priority and not todo.is_running and not todo.completed %}
-                        {% include "todo_list_table_row.html" %}
+                        {% include "todo_list/todo_list_table_row.html" %}
                     {% endfor %}
                     <!-- Completed Todos -->
                     <tr>
@@ -153,7 +153,7 @@
                         </td>
                     </tr>
                     {% for todo in todos if todo.completed %}
-                        {% include "todo_list_table_row.html" %}
+                        {% include "todo_list/todo_list_table_row.html" %}
                     {% endfor %}
                 </tbody>
             </table>

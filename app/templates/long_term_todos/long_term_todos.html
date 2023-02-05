@@ -94,7 +94,7 @@
                         </td>
                     </tr>
                 {% for long_term_todo in long_term_todos if not long_term_todo.completed %}
-                    {% include "long_term_todos_table_row.html" %}
+                    {% include "long_term_todos/long_term_todos_table_row.html" %}
                 {% endfor %}
                     <tr>
                         <td colspan="10" style="text-align: center;">
@@ -102,7 +102,7 @@
                         </td>
                     </tr>
                 {% for long_term_todo in long_term_todos if long_term_todo.completed %}
-                    {% include "long_term_todos_table_row.html" %}
+                    {% include "long_term_todos/long_term_todos_table_row.html" %}
                 {% endfor %}
                 </tbody>
             </table>

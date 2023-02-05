@@ -68,7 +68,7 @@
                         </td>
                     </tr>
                 {% for todo in todos if not todo.completed and not todo.high_priority %}
-                    {% include "long_term_todo_table_row.html" %}
+                    {% include "long_term_todo/long_term_todo_table_row.html" %}
                 {% endfor %}
                     <tr>
                         <td colspan="11" style="text-align: center;">
@@ -76,7 +76,7 @@
                         </td>
                     </tr>
                 {% for todo in todos if todo.completed %}
-                    {% include "long_term_todo_table_row.html" %}
+                    {% include "long_term_todo/long_term_todo_table_row.html" %}
                 {% endfor %}
                 </tbody>
             </table>

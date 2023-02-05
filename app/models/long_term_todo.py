@@ -87,8 +87,10 @@ class LongTermTodo(db.Model):
 
     # TODO CLEANUP move above static methods for consistency
     def add_todo(self, high_priority, todo_list_id):
-        todo = Todo(title=self.title, long_term_todo_id=self.id, progress_goal=self.progress_goal,
-                    high_priority=high_priority, todo_list_id=todo_list_id)
+        todo = Todo(
+            title=self.title, progress=self.progress, progress_goal=self.progress_goal,
+            high_priority=high_priority, long_term_todo_id=self.id, todo_list_id=todo_list_id
+        )
         db.session.add(todo)
         db.session.commit()
 

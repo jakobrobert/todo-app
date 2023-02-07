@@ -330,7 +330,7 @@ def get_long_term_todo_duration_overview(id):
     table_data = long_term_todo_overview.get_duration_overview_items()
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
-    active_days_percents = Utils.calculate_progress_in_percents(active_days_count, all_days_count)
+    active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
     average_daily_duration_all_days = Utils.convert_timedelta_to_string(
         long_term_todo_overview.get_average_daily_duration_all_days()
     )
@@ -376,16 +376,16 @@ def get_long_term_todo_progress_overview(id):
 
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
-    active_days_percents = Utils.calculate_progress_in_percents(active_days_count, all_days_count)
+    active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
 
     average_daily_progress_all_days =\
         Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_all_days())
-    average_daily_progress_all_days_in_percents =\
-        Utils.calculate_progress_in_percents(average_daily_progress_all_days, progress_goal)
+    average_daily_progress_all_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
     average_daily_progress_active_days =\
         Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_active_days())
-    average_daily_progress_active_days_in_percents =\
-        Utils.calculate_progress_in_percents(average_daily_progress_active_days, progress_goal)
+    average_daily_progress_active_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
 
     estimated_days_until_completion =\
         Utils.round_decimal(long_term_todo_overview.calculate_estimated_days_until_completion())

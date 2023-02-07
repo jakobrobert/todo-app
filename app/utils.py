@@ -1,13 +1,11 @@
 class Utils:
-    # TODO CLEANUP name is misleading, is generally used, nothing to do with progress,
-    #  see e.g. usage in todo_app.py -> get_long_term_todo_progress_overview
     @staticmethod
-    def calculate_progress_in_percents(progress, progress_goal):
+    def convert_to_percents(value, max_value):
         # This check is needed, otherwise TypeError can occur
-        if progress is None or progress_goal is None:
+        if value is None or max_value is None:
             return
 
-        progress_in_percents = 100.0 * progress / progress_goal
+        progress_in_percents = 100.0 * value / max_value
         return Utils.round_decimal(progress_in_percents)
 
     @staticmethod

@@ -113,24 +113,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
-            # TODO CLEANUP extract loop body into method
-            curr_progress_item = {
-                "date": date_and_todos_item["date"],
-                "is_active_day": False
-            }
-
-            todos = date_and_todos_item["todos"]
-            for todo in todos:
-                if todo.completed:
-                    curr_progress_item["is_active_day"] = True
-
-            progress = self.__get_last_progress_of_todos(todos)
-
-            prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
-            LongTermTodoOverview.__fill_item_for_progress_overview(
-                curr_progress_item, prev_progress_item, progress, self.progress_goal
-            )
-
+            curr_progress_item = self.__create_item_for_progress_overview(date_and_todos_item, progress_items)
             progress_items.append(curr_progress_item)
 
         return progress_items
@@ -266,6 +249,51 @@ class LongTermTodoOverview:
 
         return result
 
+    def __create_item_for_progress_overview(self, date_and_todos_item, progress_items):
+        curr_progress_item = {
+            "date": date_and_todos_item["date"],
+            "is_active_day": False
+        }
+
+        todos = date_and_todos_item["todos"]
+
+        for todo in todos:
+            if todo.completed:
+                curr_progress_item["is_active_day"] = True
+
+        progress = self.__get_last_progress_of_todos(todos)
+        prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
+        self.__fill_item_for_progress_overview(
+            curr_progress_item, prev_progress_item, progress)
+
+        return curr_progress_item
+
+    def __fill_item_for_progress_overview(self, curr_item, prev_item, progress):
+        if progress == 0:
+            curr_item["daily_progress"] = 0
+            curr_item["daily_progress_in_percents"] = 0
+
+            if prev_item is None:
+                curr_item["progress"] = 0
+                curr_item["progress_in_percents"] = 0
+
+                return
+
+            curr_item["progress"] = prev_item["progress"]
+            curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
+
+            return
+
+        curr_item["progress"] = progress
+        curr_item["progress_in_percents"] = Utils.convert_to_percents(progress, self.progress_goal)
+
+        relative_progress = progress
+        if prev_item is not None:
+            relative_progress -= prev_item["progress"]
+
+        curr_item["daily_progress"] = relative_progress
+        curr_item["daily_progress_in_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
+
     @staticmethod
     def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):
         if not date_and_todos_mapping:
@@ -329,31 +357,3 @@ class LongTermTodoOverview:
         curr_duration_item["duration"] = LongTermTodoOverview.__get_total_duration_for_todos(todos)
 
         return curr_duration_item
-
-    @staticmethod
-    def __fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal):
-        if progress == 0:
-            curr_item["daily_progress"] = 0
-            curr_item["daily_progress_in_percents"] = 0
-
-            if prev_item is None:
-                curr_item["progress"] = 0
-                curr_item["progress_in_percents"] = 0
-
-                return
-
-            curr_item["progress"] = prev_item["progress"]
-            curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
-
-            return
-
-        curr_item["progress"] = progress
-        curr_item["progress_in_percents"] = Utils.convert_to_percents(progress, progress_goal)
-
-        relative_progress = progress
-        if prev_item is not None:
-            relative_progress -= prev_item["progress"]
-
-        curr_item["daily_progress"] = relative_progress
-        curr_item["daily_progress_in_percents"] = \
-            Utils.convert_to_percents(relative_progress, progress_goal)

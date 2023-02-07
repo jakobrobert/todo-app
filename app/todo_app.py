@@ -49,7 +49,7 @@ def get_todo_lists():
     tomorrow_string = tomorrow_date.strftime(date_format_string)
 
     return render_template(
-        "todo_lists.html",
+        "todo_lists/todo_lists.html",
         todo_lists=todo_lists, sort_by=sort_by, ascending_or_descending=ascending_or_descending,
         today=today_string, tomorrow=tomorrow_string
     )
@@ -95,7 +95,7 @@ def get_todo_list(id):
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
 
-    return render_template("todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos,
+    return render_template("todo_list/todo_list.html", todo_list_id=id, title=title, todos=todos, long_term_todos=long_term_todos,
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
@@ -251,7 +251,7 @@ def get_long_term_todos():
     sort_by = __get_sort_by(setting_key)
     ascending_or_descending = __get_ascending_or_descending(setting_key)
 
-    return render_template("long_term_todos.html", long_term_todos=long_term_todos,
+    return render_template("long_term_todos/long_term_todos.html", long_term_todos=long_term_todos,
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
@@ -259,7 +259,7 @@ def get_long_term_todos():
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
-    return render_template("long_term_todo.html", long_term_todo=long_term_todo, todos=todos)
+    return render_template("long_term_todo/long_term_todo.html", long_term_todo=long_term_todo, todos=todos)
 
 
 @app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
@@ -339,7 +339,7 @@ def get_long_term_todo_duration_overview(id):
     )
 
     return render_template(
-        "long_term_todo_duration_overview.html",
+        "long_term_todo_overview/duration_overview/duration_overview.html",
         long_term_todo=long_term_todo,
         labels=labels, values=values, table_data=table_data,
         all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
@@ -392,7 +392,7 @@ def get_long_term_todo_progress_overview(id):
     estimated_date_of_completion = long_term_todo_overview.calculate_estimated_date_of_completion()
 
     return render_template(
-        "long_term_todo_progress_overview.html",
+        "long_term_todo_overview/progress_overview/progress_overview.html",
         long_term_todo=long_term_todo, todos=todos,
         as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
         labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=progress_overview_items,

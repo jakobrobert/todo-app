@@ -343,7 +343,7 @@ class LongTermTodoOverview:
             return
 
         curr_item["progress"] = progress
-        curr_item["progress_in_percents"] = Utils.calculate_progress_in_percents(progress, progress_goal)
+        curr_item["progress_in_percents"] = Utils.convert_to_percents(progress, progress_goal)
 
         relative_progress = progress
         if prev_item is not None:
@@ -351,4 +351,4 @@ class LongTermTodoOverview:
 
         curr_item["daily_progress"] = relative_progress
         curr_item["daily_progress_in_percents"] = \
-            Utils.calculate_progress_in_percents(relative_progress, progress_goal)
+            Utils.convert_to_percents(relative_progress, progress_goal)

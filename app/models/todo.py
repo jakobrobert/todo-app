@@ -38,7 +38,7 @@ class Todo(db.Model):
 
     @property
     def progress_in_percents(self):
-        return Utils.calculate_progress_in_percents(self.progress, self.progress_goal)
+        return Utils.convert_to_percents(self.progress, self.progress_goal)
 
     def set_title(self, title):
         self.title = title

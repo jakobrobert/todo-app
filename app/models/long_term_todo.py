@@ -40,6 +40,14 @@ class LongTermTodo(db.Model):
     def progress_in_percents(self):
         return Utils.convert_to_percents(self.progress, self.progress_goal)
 
+    def add_todo(self, high_priority, todo_list_id):
+        todo = Todo(
+            title=self.title, progress=self.progress, progress_goal=self.progress_goal,
+            high_priority=high_priority, long_term_todo_id=self.id, todo_list_id=todo_list_id
+        )
+        db.session.add(todo)
+        db.session.commit()
+
     def toggle_completed(self):
         self.completed = not self.completed
         if self.completed:
@@ -82,15 +90,6 @@ class LongTermTodo(db.Model):
     def delete(id):
         long_term_todo = LongTermTodo.get(id)
         db.session.delete(long_term_todo)
-        db.session.commit()
-
-    # TODO CLEANUP move above static methods for consistency
-    def add_todo(self, high_priority, todo_list_id):
-        todo = Todo(
-            title=self.title, progress=self.progress, progress_goal=self.progress_goal,
-            high_priority=high_priority, long_term_todo_id=self.id, todo_list_id=todo_list_id
-        )
-        db.session.add(todo)
         db.session.commit()
 
     @staticmethod

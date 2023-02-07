@@ -94,19 +94,7 @@ class LongTermTodoOverview:
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
         for date_and_todos_item in date_and_todos_mapping:
-            # TODO CLEANUP extract loop body into method
-            curr_duration_item = {
-                "date": date_and_todos_item["date"],
-                "is_active_day": False
-            }
-
-            todos = date_and_todos_item["todos"]
-            for todo in todos:
-                if todo.completed:
-                    curr_duration_item["is_active_day"] = True
-
-            curr_duration_item["duration"] = LongTermTodoOverview.__get_total_duration_for_todos(todos)
-
+            curr_duration_item = self.__create_item_for_duration_overview(date_and_todos_item)
             duration_items.append(curr_duration_item)
 
         return duration_items
@@ -324,6 +312,23 @@ class LongTermTodoOverview:
             return 0
 
         return progress
+
+    @staticmethod
+    def __create_item_for_duration_overview(date_and_todos_item):
+        curr_duration_item = {
+            "date": date_and_todos_item["date"],
+            "is_active_day": False
+        }
+
+        todos = date_and_todos_item["todos"]
+
+        for todo in todos:
+            if todo.completed:
+                curr_duration_item["is_active_day"] = True
+
+        curr_duration_item["duration"] = LongTermTodoOverview.__get_total_duration_for_todos(todos)
+
+        return curr_duration_item
 
     @staticmethod
     def __fill_item_for_progress_overview(curr_item, prev_item, progress, progress_goal):

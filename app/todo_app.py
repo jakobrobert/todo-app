@@ -339,7 +339,7 @@ def get_long_term_todo_duration_overview(id):
     )
 
     return render_template(
-        "long_term_todo_duration_overview/long_term_todo_duration_overview.html",
+        "long_term_todo_overview/duration_overview/duration_overview.html",
         long_term_todo=long_term_todo,
         labels=labels, values=values, table_data=table_data,
         all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
@@ -392,7 +392,7 @@ def get_long_term_todo_progress_overview(id):
     estimated_date_of_completion = long_term_todo_overview.calculate_estimated_date_of_completion()
 
     return render_template(
-        "long_term_todo_progress_overview/long_term_todo_progress_overview.html",
+        "long_term_todo_overview/progress_overview/progress_overview.html",
         long_term_todo=long_term_todo, todos=todos,
         as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
         labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=progress_overview_items,

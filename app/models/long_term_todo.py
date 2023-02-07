@@ -18,8 +18,7 @@ class LongTermTodo(db.Model):
 
     @property
     def total_duration(self):
-        # TODO CLEANUP no need to sort todos here
-        todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)
+        todos = Todo.get_all_of_long_term_todo(self.id)
         total_duration = datetime.timedelta(seconds=0)
         for todo in todos:
             if todo.duration is not None:
@@ -28,7 +27,7 @@ class LongTermTodo(db.Model):
 
     @property
     def progress(self):
-        todos = Todo.get_all_of_long_term_todo_sorted_using_setting(self.id)
+        todos = Todo.get_all_of_long_term_todo(self.id)
         max_progress = None
         for todo in todos:
             if todo.progress is None:

@@ -1,10 +1,15 @@
-# WARNING This is put into root directory rather than sub-directory, because then there was the following errors:
-# with from app.todo_app import app
-# TODO
+# WARNING This is put into root directory rather than sub-directory, because import errors
+# Following errors for 3 different attempts:
+# 1.    from app.todo_app import app
+#       ModuleNotFoundError: No module named 'app'
+# 2.    from todo_app import app
+#       ModuleNotFoundError: No module named 'todo_app'
+# 3.    from ..app.todo_app import app
+#       ImportError: attempted relative import with no known parent package
 
 import unittest
 
-from app.todo_app import app
+from todo_app import app
 
 
 class TestSmoke(unittest.TestCase):

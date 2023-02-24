@@ -15,7 +15,7 @@ from core.utils import Utils
 from core.logic.long_term_todo_overview import LongTermTodoOverview
 
 config = configparser.ConfigParser()
-config.read("../server.ini")
+config.read("server.ini")
 # TODO do properly, workaround so tests can run
 try:
     URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]

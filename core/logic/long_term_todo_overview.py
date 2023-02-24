@@ -1,7 +1,6 @@
 import datetime
 
-# Pycharm shows error for this import and expects "app.utils", but this fails on the dev server.
-from utils import Utils
+from core.utils import Utils
 
 
 class LongTermTodoOverview:

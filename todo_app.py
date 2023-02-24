@@ -8,16 +8,21 @@ from flask_sqlalchemy import SQLAlchemy
 
 import configparser
 
-# TODO for tests, need the app. this also works with run_development.sh now, needed to move todo_app.py into root directory
+# TODO for tests, need the core. this also works with run_development.sh now, needed to move todo_app.py into root directory
 # -> Adjust the other imports
 # -> Probably should as well adjust uwsgi. to not change directory
-from app.utils import Utils
-from app.logic.long_term_todo_overview import LongTermTodoOverview
+from core.utils import Utils
+from core.logic.long_term_todo_overview import LongTermTodoOverview
 
 config = configparser.ConfigParser()
 config.read("../server.ini")
-URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
-DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
+# TODO do properly, workaround so tests can run
+try:
+    URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
+    DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
+except KeyError:
+    URL_PREFIX = ""
+    DATABASE_URI = ""
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI

@@ -3,7 +3,7 @@ import unittest
 from app.todo_app import app
 
 
-class SmokeTests(unittest.TestCase):
+class TestSmoke(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True

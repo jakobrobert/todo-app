@@ -30,10 +30,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-from models.todo import Todo
-from models.todo_list import TodoList
-from models.long_term_todo import LongTermTodo
-from models.setting import Setting
+from core.models.todo import Todo
+from core.models.todo_list import TodoList
+from core.models.long_term_todo import LongTermTodo
+from core.models.setting import Setting
 
 db.create_all()
 db.session.commit()

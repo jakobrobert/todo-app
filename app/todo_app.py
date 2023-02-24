@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import configparser
 
+# TODO for tests, need the app. prefix, but this does not then work with uwsgi
 from utils import Utils
 from logic.long_term_todo_overview import LongTermTodoOverview
 

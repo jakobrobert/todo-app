@@ -1,3 +1,7 @@
+# WARNING This is put into root directory rather than sub-directory, because then there was the following errors:
+# with from app.todo_app import app
+# TODO
+
 import unittest
 
 from app.todo_app import app

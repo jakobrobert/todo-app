@@ -8,9 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 import configparser
 
-# TODO for tests, need the core. this also works with run_development.sh now, needed to move todo_app.py into root directory
-# -> Adjust the other imports
-# -> Probably should as well adjust uwsgi. to not change directory
 from core.utils import Utils
 from core.logic.long_term_todo_overview import LongTermTodoOverview
 

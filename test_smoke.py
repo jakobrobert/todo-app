@@ -1,11 +1,4 @@
-# WARNING This is put into root directory rather than sub-directory, because else raises import errors
-# Following errors for 3 different attempts:
-# 1.    from core.todo_app import core
-#       ModuleNotFoundError: No module named 'core'
-# 2.    from todo_app import core
-#       ModuleNotFoundError: No module named 'todo_app'
-# 3.    from ..core.todo_app import core
-#       ImportError: attempted relative import with no known parent package
+# WARNING This is put into root directory instead of sub-directory, because else issues with imports
 
 import unittest
 
@@ -24,4 +17,4 @@ class TestSmoke(unittest.TestCase):
 
     def test_index(self):
         response = self.app.get("/", follow_redirects=True)
-        # TODO assert success
+        self.assertEqual(response.status_code, 200)

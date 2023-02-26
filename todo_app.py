@@ -11,7 +11,7 @@ import configparser
 from core.utils import Utils
 from core.logic.long_term_todo_overview import LongTermTodoOverview
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="core/templates")
 
 config = configparser.ConfigParser()
 config.read("server.ini")

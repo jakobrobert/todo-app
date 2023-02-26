@@ -11,18 +11,13 @@ import configparser
 from core.utils import Utils
 from core.logic.long_term_todo_overview import LongTermTodoOverview
 
+app = Flask(__name__)
+
 config = configparser.ConfigParser()
 config.read("server.ini")
-# TODO do properly, workaround so tests can run
-try:
-    URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
-    DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
-except KeyError:
-    URL_PREFIX = ""
-    DATABASE_URI = ""
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
+app.config["SQLALCHEMY_DATABASE_URI"] = config["DEFAULT"]["DATABASE_URI"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)

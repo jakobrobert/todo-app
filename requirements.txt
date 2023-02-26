@@ -3,3 +3,4 @@ flask-sqlalchemy
 mysqlclient
 uwsgi
 SQLAlchemy
+pytest

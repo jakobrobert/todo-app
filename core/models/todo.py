@@ -1,5 +1,5 @@
 from todo_app import db
-from utils import Utils
+from core.utils import Utils
 
 from .setting import Setting
 

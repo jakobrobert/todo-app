@@ -1,3 +1,5 @@
+# WARNING This file is in root directory on purpose, else will lead to issues with imports
+
 import datetime
 
 from flask import Flask
@@ -6,24 +8,24 @@ from flask_sqlalchemy import SQLAlchemy
 
 import configparser
 
-from utils import Utils
-from logic.long_term_todo_overview import LongTermTodoOverview
+from core.utils import Utils
+from core.logic.long_term_todo_overview import LongTermTodoOverview
+
+app = Flask(__name__, template_folder="core/templates")
 
 config = configparser.ConfigParser()
-config.read("../server.ini")
-URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
-DATABASE_URI = config["DEFAULT"]["DATABASE_URI"]
+config.read("server.ini")
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+URL_PREFIX = config["DEFAULT"]["URL_PREFIX"]
+app.config["SQLALCHEMY_DATABASE_URI"] = config["DEFAULT"]["DATABASE_URI"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-from models.todo import Todo
-from models.todo_list import TodoList
-from models.long_term_todo import LongTermTodo
-from models.setting import Setting
+from core.models.todo import Todo
+from core.models.todo_list import TodoList
+from core.models.long_term_todo import LongTermTodo
+from core.models.setting import Setting
 
 db.create_all()
 db.session.commit()

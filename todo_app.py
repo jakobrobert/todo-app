@@ -11,7 +11,6 @@ import configparser
 from core.utils import Utils
 from core.logic.long_term_todo_overview import LongTermTodoOverview
 
-# TODO test: provide incorrect path, will test then fail?
 app = Flask(__name__, template_folder="core/templates")
 
 config = configparser.ConfigParser()

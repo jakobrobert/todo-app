@@ -258,7 +258,7 @@ def get_long_term_todos():
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>", methods=["GET"])
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)

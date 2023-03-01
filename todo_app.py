@@ -31,6 +31,7 @@ db.create_all()
 db.session.commit()
 
 
+# WARNING the trailing slash is important because if the URL is entered in the browser, the slash is added automatically
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
     return render_template("index.html")

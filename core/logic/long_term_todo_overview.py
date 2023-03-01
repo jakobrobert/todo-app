@@ -75,7 +75,7 @@ class LongTermTodoOverview:
             labels.append(item["date"])
 
             if as_percents:
-                values.append(item["progress_in_percents"])
+                values.append(item["progress_as_percents"])
             else:
                 values.append(item["progress"])
 
@@ -270,28 +270,28 @@ class LongTermTodoOverview:
     def __fill_item_for_progress_overview(self, curr_item, prev_item, progress):
         if progress == 0:
             curr_item["daily_progress"] = 0
-            curr_item["daily_progress_in_percents"] = 0
+            curr_item["daily_progress_as_percents"] = 0
 
             if prev_item is None:
                 curr_item["progress"] = 0
-                curr_item["progress_in_percents"] = 0
+                curr_item["progress_as_percents"] = 0
 
                 return
 
             curr_item["progress"] = prev_item["progress"]
-            curr_item["progress_in_percents"] = prev_item["progress_in_percents"]
+            curr_item["progress_as_percents"] = prev_item["progress_as_percents"]
 
             return
 
         curr_item["progress"] = progress
-        curr_item["progress_in_percents"] = Utils.convert_to_percents(progress, self.progress_goal)
+        curr_item["progress_as_percents"] = Utils.convert_to_percents(progress, self.progress_goal)
 
         relative_progress = progress
         if prev_item is not None:
             relative_progress -= prev_item["progress"]
 
         curr_item["daily_progress"] = relative_progress
-        curr_item["daily_progress_in_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
+        curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
 
     @staticmethod
     def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):

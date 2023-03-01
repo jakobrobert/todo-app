@@ -31,12 +31,13 @@ db.create_all()
 db.session.commit()
 
 
+# WARNING the trailing slash is important because if the URL is entered in the browser, the slash is added automatically
 @app.route(URL_PREFIX + "/", methods=["GET"])
 def index():
     return render_template("index.html")
 
 
-@app.route(URL_PREFIX + "/todo_lists", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists", methods=["GET"])
 def get_todo_lists():
     todo_lists = TodoList.get_all_sorted_using_setting()
 
@@ -57,14 +58,14 @@ def get_todo_lists():
     )
 
 
-@app.route(URL_PREFIX + "/todo_lists/add", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/add", methods=["POST"])
 def add_todo_list():
     title = request.form.get("title")
     TodoList.add(title)
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo_lists/add-daily-todo-list", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/add-daily-todo-list", methods=["POST"])
 def add_daily_todo_list():
     day = request.form.get("day")
     TodoList.add(title=day)
@@ -72,7 +73,7 @@ def add_daily_todo_list():
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:id>/edit-title", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:id>/edit-title", methods=["POST"])
 def edit_todo_list_title(id):
     title = request.form.get("title")
     todo_list = TodoList.get(id)
@@ -80,13 +81,13 @@ def edit_todo_list_title(id):
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:id>/delete", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:id>/delete", methods=["GET"])
 def delete_todo_list(id):
     TodoList.delete(id)
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:id>", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:id>", methods=["GET"])
 def get_todo_list(id):
     todo_list = TodoList.get(id)
     title = todo_list.title
@@ -101,7 +102,7 @@ def get_todo_list(id):
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/add", methods=["POST"])
 def add_todo(todo_list_id):
     title = request.form.get("title")
     high_priority = request.form.get("high_priority") == "on"
@@ -109,7 +110,7 @@ def add_todo(todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/add-by-long-term-todo", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/add-by-long-term-todo", methods=["POST"])
 def add_todo_by_long_term_todo(todo_list_id):
     long_term_todo_id = request.form.get("long_term_todo_id")
     high_priority = request.form.get("high_priority") == "on"
@@ -118,7 +119,7 @@ def add_todo_by_long_term_todo(todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/timeline", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/timeline", methods=["GET"])
 def get_todo_list_timeline(todo_list_id):
     todo_list = TodoList.get(todo_list_id)
     title = todo_list.title
@@ -187,7 +188,7 @@ def get_todo_list_timeline(todo_list_id):
     return render_template("todo_list_timeline.html", title=title, bar_items=bar_items)
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/edit-title", methods=["POST"])
 def edit_todo_title(todo_id, todo_list_id):
     title = request.form.get("title")
     todo = Todo.get(todo_id)
@@ -195,21 +196,21 @@ def edit_todo_title(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle-completed", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/toggle-completed", methods=["GET"])
 def toggle_todo_completed(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
     todo.toggle_completed()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/toggle_priority", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/toggle-priority", methods=["GET"])
 def toggle_todo_priority(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
     todo.toggle_priority()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit-comment", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/edit-comment", methods=["POST"])
 def edit_todo_comment(todo_id, todo_list_id):
     comment = request.form.get("comment")
     todo = Todo.get(todo_id)
@@ -217,7 +218,7 @@ def edit_todo_comment(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/edit_progress", methods=["POST"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/edit-progress", methods=["POST"])
 def edit_todo_progress(todo_id, todo_list_id):
     progress = request.form.get("progress")
     todo = Todo.get(todo_id)
@@ -225,27 +226,27 @@ def edit_todo_progress(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/start", methods=["GET"])
 def start_todo(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
     todo.start()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/stop", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/stop", methods=["GET"])
 def stop_todo(todo_id, todo_list_id):
     todo = Todo.get(todo_id)
     todo.stop()
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo_lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
 def delete_todo(todo_id, todo_list_id):
     Todo.delete(todo_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/long_term_todos", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos", methods=["GET"])
 def get_long_term_todos():
     long_term_todos = LongTermTodo.get_all()
 
@@ -257,14 +258,14 @@ def get_long_term_todos():
                            sort_by=sort_by, ascending_or_descending=ascending_or_descending)
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>", methods=["GET"])
 def get_long_term_todo(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
     return render_template("long_term_todo/long_term_todo.html", long_term_todo=long_term_todo, todos=todos)
 
 
-@app.route(URL_PREFIX + "/long_term_todos/add", methods=["POST"])
+@app.route(URL_PREFIX + "/long-term-todos/add", methods=["POST"])
 def add_long_term_todo():
     title = request.form.get("title")
     progress_goal = request.form.get("progress_goal")
@@ -272,7 +273,7 @@ def add_long_term_todo():
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/edit-title", methods=["POST"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/edit-title", methods=["POST"])
 def edit_long_term_todo_title(id):
     title = request.form.get("title")
     long_term_todo = LongTermTodo.get(id)
@@ -280,7 +281,7 @@ def edit_long_term_todo_title(id):
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/edit-progress-goal", methods=["POST"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/edit-progress-goal", methods=["POST"])
 def edit_long_term_todo_progress_goal(id):
     progress_goal = request.form.get("progress_goal")
     long_term_todo = LongTermTodo.get(id)
@@ -291,38 +292,38 @@ def edit_long_term_todo_progress_goal(id):
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/toggle-completed", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/toggle-completed", methods=["GET"])
 def toggle_long_term_todo_completed(id):
     long_term_todo = LongTermTodo.get(id)
     long_term_todo.toggle_completed()
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/delete", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/delete", methods=["GET"])
 def delete_long_term_todo(id):
     LongTermTodo.delete(id)
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/sort_todo_lists", methods=["POST"])
+@app.route(URL_PREFIX + "/sort-todo-lists", methods=["POST"])
 def sort_todo_lists():
     __handle_sort_request(setting_key="sort_todo_lists_by")
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/sort_todos/<int:todo_list_id>", methods=["POST"])
+@app.route(URL_PREFIX + "/sort-todos/<int:todo_list_id>", methods=["POST"])
 def sort_todos(todo_list_id):
     __handle_sort_request(setting_key="sort_todos_by")
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/sort_long_term_todos", methods=["POST"])
+@app.route(URL_PREFIX + "/sort-long-term-todos", methods=["POST"])
 def sort_long_term_todos():
     __handle_sort_request(setting_key="sort_long_term_todos_by")
     return redirect(url_for("get_long_term_todos"))
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/duration-overview", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/duration-overview", methods=["GET"])
 def get_long_term_todo_duration_overview(id):
     long_term_todo = LongTermTodo.get(id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=id)
@@ -350,7 +351,7 @@ def get_long_term_todo_duration_overview(id):
     )
 
 
-@app.route(URL_PREFIX + "/long_term_todos/<int:id>/progress-overview", methods=["GET"])
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/progress-overview", methods=["GET"])
 def get_long_term_todo_progress_overview(id):
     as_percents_arg = request.args.get("as_percents")
     as_percents = False

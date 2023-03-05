@@ -340,19 +340,30 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
+    # TODO use new class LongTermTodoStatistics
     long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress, time_span_last_x_days)
-    labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
+    progress_chart_labels, progress_chart_values = \
+        long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
+    duration_chart_labels, duration_chart_values = \
+        long_term_todo_overview.get_labels_and_values_for_duration_chart()
 
-    max_value = 100 if as_percents else long_term_todo.progress_goal
-    progress_overview_items = long_term_todo_overview.get_progress_overview_items()
+    # TODO use get_statistics_items of new class LongTermTodoStatistics, which should merge progress & duration items
+    statistics_items = long_term_todo_overview.get_progress_overview_items()
 
-    item_with_min_progress = min(progress_overview_items, key=lambda item: item["progress"])
-    min_value = item_with_min_progress["progress_as_percents"] if as_percents else item_with_min_progress["progress"]
+    max_progress_chart_value = 100 if as_percents else long_term_todo.progress_goal
+    item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])
+    min_progress_chart_value = item_with_min_progress["progress_as_percents"] if as_percents else item_with_min_progress["progress"]
 
     all_days_count = long_term_todo_overview.get_all_days_count()
     active_days_count = long_term_todo_overview.get_active_days_count()
     active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
 
+    average_daily_duration_all_days = Utils.convert_timedelta_to_string(
+        long_term_todo_overview.get_average_daily_duration_all_days()
+    )
+    average_daily_duration_active_days = Utils.convert_timedelta_to_string(
+        long_term_todo_overview.get_average_daily_duration_active_days()
+    )
     average_daily_progress_all_days = \
         Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_all_days())
     average_daily_progress_all_days_in_percents = \
@@ -369,15 +380,20 @@ def get_long_term_todo_statistics(long_term_todo_id):
     return render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos,
-        as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
-        labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=progress_overview_items,
+        progress_as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
+        statistics_items=statistics_items,
         all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
+        average_daily_duration_all_days=average_daily_duration_all_days,
+        average_daily_duration_active_days=average_daily_duration_active_days,
         average_daily_progress_all_days=average_daily_progress_all_days,
         average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
         average_daily_progress_active_days=average_daily_progress_active_days,
         average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents,
         estimated_days_until_completion=estimated_days_until_completion,
-        estimated_date_of_completion=estimated_date_of_completion
+        estimated_date_of_completion=estimated_date_of_completion,
+        progress_chart_labels=progress_chart_labels, progress_chart_values=progress_chart_values,
+        duration_chart_labels=duration_chart_labels, duration_chart_values=progress_chart_values,
+        min_progress_chart_value=min_progress_chart_value, max_progress_chart_value=max_progress_chart_value
     )
 
 

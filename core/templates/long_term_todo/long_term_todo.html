@@ -33,6 +33,12 @@
         <br>
 
         <h4>
+            <a class="btn btn-secondary"
+               href="{{ url_for('get_long_term_todo_statistics', long_term_todo_id=long_term_todo.id, as_percents=False) }}">
+                Show statistics
+            </a>
+        </h4>
+        <h4>
             <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_overview', id=long_term_todo.id) }}">
                 Show duration overview
             </a>

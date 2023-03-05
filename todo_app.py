@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import configparser
 
 from core.utils import Utils
-from core.logic.long_term_todo_overview import LongTermTodoOverview
+from core.logic.long_term_todo_statistics import LongTermTodoStatistics
 
 app = Flask(__name__, template_folder="core/templates")
 
@@ -340,42 +340,39 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
-    # TODO use new class LongTermTodoStatistics
-    long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress, time_span_last_x_days)
-    progress_chart_labels, progress_chart_values = \
-        long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
-    duration_chart_labels, duration_chart_values = \
-        long_term_todo_overview.get_labels_and_values_for_duration_chart()
+    statistics = LongTermTodoStatistics(todos, progress_goal, progress, time_span_last_x_days)
+    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
+    duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 
     # TODO use get_statistics_items of new class LongTermTodoStatistics, which should merge progress & duration items
-    statistics_items = long_term_todo_overview.get_progress_overview_items()
+    statistics_items = statistics.get_progress_overview_items()
 
     max_progress_chart_value = 100 if as_percents else long_term_todo.progress_goal
     item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])
     min_progress_chart_value = item_with_min_progress["progress_as_percents"] if as_percents else item_with_min_progress["progress"]
 
-    all_days_count = long_term_todo_overview.get_all_days_count()
-    active_days_count = long_term_todo_overview.get_active_days_count()
+    all_days_count = statistics.get_all_days_count()
+    active_days_count = statistics.get_active_days_count()
     active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
 
     average_daily_duration_all_days = Utils.convert_timedelta_to_string(
-        long_term_todo_overview.get_average_daily_duration_all_days()
+        statistics.get_average_daily_duration_all_days()
     )
     average_daily_duration_active_days = Utils.convert_timedelta_to_string(
-        long_term_todo_overview.get_average_daily_duration_active_days()
+        statistics.get_average_daily_duration_active_days()
     )
     average_daily_progress_all_days = \
-        Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_all_days())
+        Utils.round_decimal(statistics.get_average_daily_progress_all_days())
     average_daily_progress_all_days_in_percents = \
         Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
     average_daily_progress_active_days = \
-        Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_active_days())
+        Utils.round_decimal(statistics.get_average_daily_progress_active_days())
     average_daily_progress_active_days_in_percents = \
         Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
 
     estimated_days_until_completion = \
-        Utils.round_decimal(long_term_todo_overview.calculate_estimated_days_until_completion())
-    estimated_date_of_completion = long_term_todo_overview.calculate_estimated_date_of_completion()
+        Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
+    estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
 
     return render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",

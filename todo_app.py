@@ -323,6 +323,11 @@ def sort_long_term_todos():
     return redirect(url_for("get_long_term_todos"))
 
 
+@app.route(URL_PREFIX + "/long-term-todos/<int:long_term_todo_id>/statistics", methods=["GET"])
+def get_long_term_todo_statistics(long_term_todo_id):
+    return render_template("long_term_todo_statistics/long_term_todo_statistics.html")
+
+
 @app.route(URL_PREFIX + "/long-term-todos/<int:id>/duration-overview", methods=["GET"])
 def get_long_term_todo_duration_overview(id):
     long_term_todo = LongTermTodo.get(id)

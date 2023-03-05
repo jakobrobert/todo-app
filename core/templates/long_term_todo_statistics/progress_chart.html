@@ -1,4 +1,4 @@
-<canvas id="chart" width="400" height="400"></canvas>
+<canvas id="progress-chart" width="400" height="400"></canvas>
 
 <!--
 Inline script is hacky, but did not manage to do it in the recommended way.
@@ -6,19 +6,19 @@ If trying: url_for('static', filename='js/long_term_todo_progress_chart.js')
 Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
 -->
 <script>
-    const canvas = document.getElementById("chart");
-    const ctx = canvas.getContext("2d");
+    const progress_chart_canvas = document.getElementById("progress-chart");
+    const progress_chart_ctx = progress_chart_canvas.getContext("2d");
 
-    const chart = new Chart(ctx, {
+    const progress_chart = new Chart(progress_chart_ctx, {
         type: "line",
         data: {
             // safe -> Jinja2 pastes the data directly and does not convert it to a string
-            labels: {{ labels | safe }},
+            labels: {{ progress_chart_labels | safe }},
             datasets:
             [
                 {
                     label: "Progress",
-                    data: {{ values | safe }},
+                    data: {{ progress_chart_values | safe }},
                     fill: false,
                     borderColor: "gray",
                     borderWidth: 1.0,
@@ -31,8 +31,8 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             scales: {
                 y: {
                     type: "linear",
-                    min: {{ min_value }},
-                    max: {{ max_value }},
+                    min: {{ min_progress_chart_value }},
+                    max: {{ max_progress_chart_value }},
                 }
             },
             responsive: false,

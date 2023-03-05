@@ -18,7 +18,7 @@
         <h1>Long Term Todo Statistics<br>{{ long_term_todo.title }}</h1>
         <br>
 
-        <h2>Duration Summary</h2>
+        <h3>Duration Summary</h3>
         <table class="table-responsive">
             <tr>
                 <td>Total Duration</td>
@@ -43,7 +43,7 @@
         </table>
         <br>
 
-        <h2>Progress Summary</h2>
+        <h3>Progress Summary</h3>
         <table class="table-responsive">
             <tr>
                 <td>Progress Goal</td>
@@ -101,19 +101,13 @@
         </form>
         <br>
 
-        <h2>Duration Chart</h2>
-        <!--
-        TODO
+        <h3>Duration Chart</h3>
         {% include "long_term_todo_statistics/duration_chart.html" %}
-        -->
 
-        <h2>Progress Chart</h2>
-        <!--
-        TODO
-        {% include "long_term_todo_statistics/duration_chart.html" %}
-        -->
+        <h3>Progress Chart</h3>
+        {% include "long_term_todo_statistics/progress_chart.html" %}
 
-        <h2></h2>
+        <h3>Table</h3>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

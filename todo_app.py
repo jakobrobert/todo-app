@@ -325,7 +325,60 @@ def sort_long_term_todos():
 
 @app.route(URL_PREFIX + "/long-term-todos/<int:long_term_todo_id>/statistics", methods=["GET"])
 def get_long_term_todo_statistics(long_term_todo_id):
-    return render_template("long_term_todo_statistics/long_term_todo_statistics.html")
+    as_percents_arg = request.args.get("as_percents")
+    as_percents = False
+    if as_percents_arg == "on":
+        as_percents = True
+
+    time_span_last_x_days_arg = request.args.get("time_span_last_x_days")
+    time_span_last_x_days = None
+    if time_span_last_x_days_arg is not None:
+        time_span_last_x_days = int(time_span_last_x_days_arg)
+
+    long_term_todo = LongTermTodo.get(long_term_todo_id)
+    todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=long_term_todo_id)
+    progress_goal = long_term_todo.progress_goal
+    progress = long_term_todo.progress
+
+    long_term_todo_overview = LongTermTodoOverview(todos, progress_goal, progress, time_span_last_x_days)
+    labels, values = long_term_todo_overview.get_labels_and_values_for_progress_chart(as_percents)
+
+    max_value = 100 if as_percents else long_term_todo.progress_goal
+    progress_overview_items = long_term_todo_overview.get_progress_overview_items()
+
+    item_with_min_progress = min(progress_overview_items, key=lambda item: item["progress"])
+    min_value = item_with_min_progress["progress_as_percents"] if as_percents else item_with_min_progress["progress"]
+
+    all_days_count = long_term_todo_overview.get_all_days_count()
+    active_days_count = long_term_todo_overview.get_active_days_count()
+    active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
+
+    average_daily_progress_all_days = \
+        Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_all_days())
+    average_daily_progress_all_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
+    average_daily_progress_active_days = \
+        Utils.round_decimal(long_term_todo_overview.get_average_daily_progress_active_days())
+    average_daily_progress_active_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
+
+    estimated_days_until_completion = \
+        Utils.round_decimal(long_term_todo_overview.calculate_estimated_days_until_completion())
+    estimated_date_of_completion = long_term_todo_overview.calculate_estimated_date_of_completion()
+
+    return render_template(
+        "long_term_todo_statistics/long_term_todo_statistics.html",
+        long_term_todo=long_term_todo, todos=todos,
+        as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
+        labels=labels, values=values, min_value=min_value, max_value=max_value, table_data=progress_overview_items,
+        all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
+        average_daily_progress_all_days=average_daily_progress_all_days,
+        average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
+        average_daily_progress_active_days=average_daily_progress_active_days,
+        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents,
+        estimated_days_until_completion=estimated_days_until_completion,
+        estimated_date_of_completion=estimated_date_of_completion
+    )
 
 
 @app.route(URL_PREFIX + "/long-term-todos/<int:id>/duration-overview", methods=["GET"])

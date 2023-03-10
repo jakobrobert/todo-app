@@ -344,6 +344,8 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 
+    # TODO Optimize get_statistics_items() is also called by get_labels_and_values...
+    # -> better call update_statistics_items before, so only doing calculations once?
     statistics_items = statistics.get_statistics_items()
 
     max_progress_chart_value = 100 if as_percents else long_term_todo.progress_goal
@@ -388,7 +390,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
         estimated_days_until_completion=estimated_days_until_completion,
         estimated_date_of_completion=estimated_date_of_completion,
         progress_chart_labels=progress_chart_labels, progress_chart_values=progress_chart_values,
-        duration_chart_labels=duration_chart_labels, duration_chart_values=progress_chart_values,
+        duration_chart_labels=duration_chart_labels, duration_chart_values=duration_chart_values,
         min_progress_chart_value=min_progress_chart_value, max_progress_chart_value=max_progress_chart_value
     )
 

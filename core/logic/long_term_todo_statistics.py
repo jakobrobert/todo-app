@@ -15,72 +15,7 @@ class LongTermTodoStatistics:
         else:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
-    def get_labels_and_values_for_duration_chart(self):
-        labels = []
-        values = []
-
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
-            return labels, values
-
-        for item in duration_items:
-            date = item["date"]
-            labels.append(date)
-            duration = item["duration"]
-            # Cannot use timedelta directly in chart, so pass as seconds.
-            duration_as_seconds = duration.total_seconds()
-            values.append(duration_as_seconds)
-
-        return labels, values
-
-    def get_average_daily_duration_all_days(self):
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
-            return datetime.timedelta(seconds=0)
-
-        total_duration = datetime.timedelta(seconds=0)
-        for item in duration_items:
-            total_duration += item["duration"]
-
-        all_days_count = self.get_all_days_count()
-        if all_days_count == 0:
-            return total_duration
-
-        return total_duration / all_days_count
-
-    def get_average_daily_duration_active_days(self):
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
-            return datetime.timedelta(seconds=0)
-
-        total_duration = datetime.timedelta(seconds=0)
-        for item in duration_items:
-            total_duration += item["duration"]
-
-        active_days_count = self.get_active_days_count()
-        if active_days_count == 0:
-            return datetime.timedelta(seconds=0)
-
-        return total_duration / active_days_count
-
-    def get_labels_and_values_for_progress_chart(self, as_percents):
-        labels = []
-        values = []
-
-        progress_items = self.get_progress_overview_items()
-        if not progress_items:
-            return labels, values
-
-        for item in progress_items:
-            labels.append(item["date"])
-
-            if as_percents:
-                values.append(item["progress_as_percents"])
-            else:
-                values.append(item["progress"])
-
-        return labels, values
-
+    # TODO remove get_duration_overview_items
     def get_duration_overview_items(self):
         duration_items = []
 
@@ -98,6 +33,7 @@ class LongTermTodoStatistics:
 
         return duration_items
 
+    # TODO remove get_progress_overview_items
     def get_progress_overview_items(self):
         progress_items = []
 
@@ -142,6 +78,38 @@ class LongTermTodoStatistics:
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
 
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+
+    def get_average_daily_duration_all_days(self):
+        # TODO use get_statistics_items()
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return datetime.timedelta(seconds=0)
+
+        total_duration = datetime.timedelta(seconds=0)
+        for item in duration_items:
+            total_duration += item["duration"]
+
+        all_days_count = self.get_all_days_count()
+        if all_days_count == 0:
+            return total_duration
+
+        return total_duration / all_days_count
+
+    def get_average_daily_duration_active_days(self):
+        # TODO use get_statistics_items()
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return datetime.timedelta(seconds=0)
+
+        total_duration = datetime.timedelta(seconds=0)
+        for item in duration_items:
+            total_duration += item["duration"]
+
+        active_days_count = self.get_active_days_count()
+        if active_days_count == 0:
+            return datetime.timedelta(seconds=0)
+
+        return total_duration / active_days_count
 
     def get_average_daily_progress_all_days(self):
         all_dates = self.__collect_dates_of_todos()
@@ -189,6 +157,44 @@ class LongTermTodoStatistics:
     def calculate_estimated_date_of_completion(self):
         days_until_completion = self.calculate_estimated_days_until_completion()
         return datetime.date.today() + datetime.timedelta(days=days_until_completion)
+
+    def get_labels_and_values_for_duration_chart(self):
+        labels = []
+        values = []
+
+        # TODO use get_statistics_items()
+        duration_items = self.get_duration_overview_items()
+        if not duration_items:
+            return labels, values
+
+        for item in duration_items:
+            date = item["date"]
+            labels.append(date)
+            duration = item["duration"]
+            # Cannot use timedelta directly in chart, so pass as seconds.
+            duration_as_seconds = duration.total_seconds()
+            values.append(duration_as_seconds)
+
+        return labels, values
+
+    def get_labels_and_values_for_progress_chart(self, as_percents):
+        labels = []
+        values = []
+
+        # TODO use get_statistics_items()
+        progress_items = self.get_progress_overview_items()
+        if not progress_items:
+            return labels, values
+
+        for item in progress_items:
+            labels.append(item["date"])
+
+            if as_percents:
+                values.append(item["progress_as_percents"])
+            else:
+                values.append(item["progress"])
+
+        return labels, values
 
     def __collect_dates_of_todos(self):
         all_dates = []

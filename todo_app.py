@@ -344,8 +344,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 
-    # TODO use get_statistics_items of new class LongTermTodoStatistics, which should merge progress & duration items
-    statistics_items = statistics.get_progress_overview_items()
+    statistics_items = statistics.get_statistics_items()
 
     max_progress_chart_value = 100 if as_percents else long_term_todo.progress_goal
     item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])

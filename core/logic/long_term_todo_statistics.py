@@ -15,6 +15,28 @@ class LongTermTodoStatistics:
         else:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
+    def get_all_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        if not date_and_todos_mapping:
+            return 0
+
+        return LongTermTodoStatistics.__count_days(filtered_dates)
+
+    def get_active_days_count(self):
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        filtered_dates = self.__filter_dates(all_dates)
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+
+        return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+
     # TODO remove get_duration_overview_items
     def get_duration_overview_items(self):
         duration_items = []
@@ -55,38 +77,16 @@ class LongTermTodoStatistics:
 
     def get_statistics_items(self):
         # TODO Merge methods get_duration_overview_items & get_progress_overview_items here
-        return self.get_progress_overview_items()
-
-    def get_all_days_count(self):
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return 0
-
-        filtered_dates = self.__filter_dates(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
-            return 0
-
-        return LongTermTodoStatistics.__count_days(filtered_dates)
-
-    def get_active_days_count(self):
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return 0
-
-        filtered_dates = self.__filter_dates(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-
-        return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+        # TODO Filter dates as in get_progress_overview_items
+        return []
 
     def get_average_daily_duration_all_days(self):
-        # TODO use get_statistics_items()
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
             return datetime.timedelta(seconds=0)
 
         total_duration = datetime.timedelta(seconds=0)
-        for item in duration_items:
+        for item in statistics_items:
             total_duration += item["duration"]
 
         all_days_count = self.get_all_days_count()
@@ -96,13 +96,12 @@ class LongTermTodoStatistics:
         return total_duration / all_days_count
 
     def get_average_daily_duration_active_days(self):
-        # TODO use get_statistics_items()
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
             return datetime.timedelta(seconds=0)
 
         total_duration = datetime.timedelta(seconds=0)
-        for item in duration_items:
+        for item in statistics_items:
             total_duration += item["duration"]
 
         active_days_count = self.get_active_days_count()
@@ -162,12 +161,11 @@ class LongTermTodoStatistics:
         labels = []
         values = []
 
-        # TODO use get_statistics_items()
-        duration_items = self.get_duration_overview_items()
-        if not duration_items:
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
             return labels, values
 
-        for item in duration_items:
+        for item in statistics_items:
             date = item["date"]
             labels.append(date)
             duration = item["duration"]
@@ -181,12 +179,11 @@ class LongTermTodoStatistics:
         labels = []
         values = []
 
-        # TODO use get_statistics_items()
-        progress_items = self.get_progress_overview_items()
-        if not progress_items:
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
             return labels, values
 
-        for item in progress_items:
+        for item in statistics_items:
             labels.append(item["date"])
 
             if as_percents:

@@ -20,7 +20,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates(all_dates)
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         if not date_and_todos_mapping:
             return 0
@@ -32,7 +32,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates(all_dates)
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
 
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
@@ -66,7 +66,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return progress_items
 
-        filtered_dates = self.__filter_dates(all_dates)
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
 
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
@@ -76,9 +76,22 @@ class LongTermTodoStatistics:
         return progress_items
 
     def get_statistics_items(self):
-        # TODO Merge methods get_duration_overview_items & get_progress_overview_items here
-        # TODO Filter dates as in get_progress_overview_items
-        return []
+        if not self.todos:
+            return []
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return []
+
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
+
+        statistics_items = []
+
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        for date_and_todos_item in date_and_todos_mapping:
+            statistics_items.append(self.__create_statistics_item(date_and_todos_item, statistics_items))
+
+        return statistics_items
 
     def get_average_daily_duration_all_days(self):
         statistics_items = self.get_statistics_items()
@@ -115,7 +128,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates(all_dates)
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         if not date_and_todos_mapping:
             return 0
@@ -134,7 +147,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates(all_dates)
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         if not date_and_todos_mapping:
             return 0
@@ -205,7 +218,7 @@ class LongTermTodoStatistics:
 
         return all_dates
 
-    def __filter_dates(self, dates):
+    def __filter_dates_by_time_span(self, dates):
         if not dates:
             return dates
 
@@ -273,6 +286,28 @@ class LongTermTodoStatistics:
             curr_progress_item, prev_progress_item, progress)
 
         return curr_progress_item
+
+    def __create_statistics_item(self, date_and_todos_item, statistics_items):
+        result = {
+            "date": date_and_todos_item["date"],
+            "is_active_day": False
+        }
+
+        todos = date_and_todos_item["todos"]
+
+        for todo in todos:
+            if todo.completed:
+                result["is_active_day"] = True
+
+        result["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
+
+        # TODO fill with progress data, see __create_item_for_progress_overview
+        result["progress"] = 0
+        result["progress_as_percents"] = 0
+        result["daily_progress"] = 0
+        result["daily_progress_as_percents"] = 0
+
+        return result
 
     def __fill_item_for_progress_overview(self, curr_item, prev_item, progress):
         if progress == 0:
@@ -363,3 +398,4 @@ class LongTermTodoStatistics:
         curr_duration_item["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
 
         return curr_duration_item
+

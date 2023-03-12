@@ -37,44 +37,6 @@ class LongTermTodoStatistics:
 
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
 
-    # TODO remove get_duration_overview_items
-    def get_duration_overview_items(self):
-        duration_items = []
-
-        if not self.todos:
-            return duration_items
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return duration_items
-
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(all_dates)
-        for date_and_todos_item in date_and_todos_mapping:
-            curr_duration_item = self.__create_item_for_duration_overview(date_and_todos_item)
-            duration_items.append(curr_duration_item)
-
-        return duration_items
-
-    # TODO remove get_progress_overview_items
-    def get_progress_overview_items(self):
-        progress_items = []
-
-        if not self.todos:
-            return progress_items
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return progress_items
-
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        for date_and_todos_item in date_and_todos_mapping:
-            curr_progress_item = self.__create_item_for_progress_overview(date_and_todos_item, progress_items)
-            progress_items.append(curr_progress_item)
-
-        return progress_items
-
     def get_statistics_items(self):
         if not self.todos:
             return []
@@ -268,26 +230,6 @@ class LongTermTodoStatistics:
 
         return result
 
-    # TODO remove __create_item_for_progress_overview
-    def __create_item_for_progress_overview(self, date_and_todos_item, progress_items):
-        curr_progress_item = {
-            "date": date_and_todos_item["date"],
-            "is_active_day": False
-        }
-
-        todos = date_and_todos_item["todos"]
-
-        for todo in todos:
-            if todo.completed:
-                curr_progress_item["is_active_day"] = True
-
-        progress = self.__get_last_progress_of_todos(todos)
-        prev_progress_item = progress_items[-1] if len(progress_items) >= 1 else None
-        self.__add_progress_data_to_statistics_item(
-            curr_progress_item, prev_progress_item, progress)
-
-        return curr_progress_item
-
     def __create_statistics_item(self, date_and_todos_item, items):
         curr_item = {
             "date": date_and_todos_item["date"],
@@ -380,21 +322,3 @@ class LongTermTodoStatistics:
             return 0
 
         return progress
-
-    # TODO remove __create_item_for_duration_overview
-    @staticmethod
-    def __create_item_for_duration_overview(date_and_todos_item):
-        curr_duration_item = {
-            "date": date_and_todos_item["date"],
-            "is_active_day": False
-        }
-
-        todos = date_and_todos_item["todos"]
-
-        for todo in todos:
-            if todo.completed:
-                curr_duration_item["is_active_day"] = True
-
-        curr_duration_item["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
-
-        return curr_duration_item

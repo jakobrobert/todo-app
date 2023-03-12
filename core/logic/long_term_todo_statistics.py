@@ -288,7 +288,7 @@ class LongTermTodoStatistics:
         return curr_progress_item
 
     def __create_statistics_item(self, date_and_todos_item, statistics_items):
-        result = {
+        curr_statistics_item = {
             "date": date_and_todos_item["date"],
             "is_active_day": False
         }
@@ -297,17 +297,17 @@ class LongTermTodoStatistics:
 
         for todo in todos:
             if todo.completed:
-                result["is_active_day"] = True
+                curr_statistics_item["is_active_day"] = True
 
-        result["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
+        curr_statistics_item["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
 
-        # TODO fill with progress data, see __create_item_for_progress_overview
-        result["progress"] = 0
-        result["progress_as_percents"] = 0
-        result["daily_progress"] = 0
-        result["daily_progress_as_percents"] = 0
+        # TODO maybe also move into __fill_item_for_progress_overview method & rename it
+        progress = self.__get_last_progress_of_todos(todos)
+        prev_statistics_item = statistics_items[-1] if len(statistics_items) >= 1 else None
+        self.__fill_item_for_progress_overview(
+            curr_statistics_item, prev_statistics_item, progress)
 
-        return result
+        return curr_statistics_item
 
     def __fill_item_for_progress_overview(self, curr_item, prev_item, progress):
         if progress == 0:

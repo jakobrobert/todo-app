@@ -18,19 +18,19 @@
         <h1>Long Term Todo Statistics<br>{{ long_term_todo.title }}</h1>
         <br>
 
-        <h3>Duration Summary</h3>
+        <h3>Summary</h3>
         <table class="table-responsive">
-            <tr>
-                <td>Total Duration</td>
-                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
-            </tr>
             <tr>
                 <td>All Days</td>
                 <td>{{ all_days_count }}</td>
             </tr>
             <tr>
-                <td>Active Days</td>
+                <td>Active Days&nbsp;</td>
                 <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Total Duration</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
             </tr>
             <tr>
                 <td>Average Daily Duration (all days)</td>
@@ -40,11 +40,6 @@
                 <td>Average Daily Duration (active days)</td>
                 <td>{{ average_daily_duration_active_days }}</td>
             </tr>
-        </table>
-        <br>
-
-        <h3>Progress Summary</h3>
-        <table class="table-responsive">
             <tr>
                 <td>Progress Goal</td>
                 <td>{{ long_term_todo.progress_goal }}</td>
@@ -52,14 +47,6 @@
             <tr>
                 <td>Progress</td>
                 <td>{{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>All Days</td>
-                <td>{{ all_days_count }}</td>
-            </tr>
-            <tr>
-                <td>Active Days</td>
-                <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
             </tr>
             <tr>
                 <td>Average Daily Progress (all days)</td>

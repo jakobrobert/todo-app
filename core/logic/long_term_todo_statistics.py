@@ -86,6 +86,9 @@ class LongTermTodoStatistics:
         return total_duration / active_days_count
 
     def get_average_daily_progress_all_days(self):
+        if not self.progress:
+            return 0
+
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
@@ -105,6 +108,9 @@ class LongTermTodoStatistics:
         return progress_delta / (all_days_count - 1)
 
     def get_average_daily_progress_active_days(self):
+        if not self.progress:
+            return 0
+
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
@@ -123,6 +129,9 @@ class LongTermTodoStatistics:
         return progress_delta / (active_days_count - 1)
 
     def calculate_estimated_days_until_completion(self):
+        if not self.progress or not self.progress:
+            return 0
+
         remaining_progress = self.progress_goal - self.progress
         average_daily_progress = self.get_average_daily_progress_all_days()
 

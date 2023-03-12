@@ -1,9 +1,9 @@
 class Utils:
     @staticmethod
     def convert_to_percents(value, max_value):
-        # This check is needed, otherwise TypeError can occur
-        if value is None or max_value is None:
-            return
+        # Check to prevent TypeError or ZeroDivisionError
+        if not value or not max_value:
+            return 0
 
         progress_in_percents = 100.0 * value / max_value
         return Utils.round_decimal(progress_in_percents)

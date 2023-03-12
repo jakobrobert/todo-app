@@ -42,16 +42,3 @@ class TestSmoke(unittest.TestCase):
     def test_long_term_todo_1_statistics(self):
         response = self.app.get(f"{URL_PREFIX}/long-term-todos/1/statistics", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-
-    def test_long_term_todo_1_duration_overview(self):
-        response = self.app.get(f"{URL_PREFIX}/long-term-todos/1/duration-overview", follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-
-    def test_long_term_todo_1_progress_overview(self):
-        response = self.app.get(f"{URL_PREFIX}/long-term-todos/1/progress-overview", follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-
-    def test_long_term_todo_1_progress_overview_as_percents(self):
-        url = f"{URL_PREFIX}/long-term-todos/1/progress-overview?as_percents=on"
-        response = self.app.get(url, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)

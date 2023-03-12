@@ -15,10 +15,31 @@
 </head>
 <body>
     <div style="margin-top: 50px;" class="container">
-        <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
+        <h1>Long Term Todo Statistics<br>{{ long_term_todo.title }}</h1>
         <br>
 
+        <h3>Summary</h3>
         <table class="table-responsive">
+            <tr>
+                <td>All Days</td>
+                <td>{{ all_days_count }}</td>
+            </tr>
+            <tr>
+                <td>Active Days&nbsp;</td>
+                <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Total Duration</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
+            </tr>
+            <tr>
+                <td>Average Daily Duration (all days)</td>
+                <td>{{ average_daily_duration_all_days }}</td>
+            </tr>
+            <tr>
+                <td>Average Daily Duration (active days)</td>
+                <td>{{ average_daily_duration_active_days }}</td>
+            </tr>
             <tr>
                 <td>Progress Goal</td>
                 <td>{{ long_term_todo.progress_goal }}</td>
@@ -26,14 +47,6 @@
             <tr>
                 <td>Progress</td>
                 <td>{{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>All Days</td>
-                <td>{{ all_days_count }}</td>
-            </tr>
-            <tr>
-                <td>Active Days</td>
-                <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
             </tr>
             <tr>
                 <td>Average Daily Progress (all days)</td>
@@ -54,7 +67,7 @@
         </table>
         <br>
 
-        <form action="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id) }}" method="GET">
+        <form action="{{ url_for('get_long_term_todo_statistics', long_term_todo_id=long_term_todo.id) }}" method="GET">
             <div class="form-check">
                 <label class="form-check-label" for="as_percents">As percents</label>
                 <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
@@ -75,13 +88,19 @@
         </form>
         <br>
 
-        {% include "long_term_todo_overview/progress_overview/progress_chart.html" %}
+        <h3>Duration Chart</h3>
+        {% include "long_term_todo_statistics/duration_chart.html" %}
 
+        <h3>Progress Chart</h3>
+        {% include "long_term_todo_statistics/progress_chart.html" %}
+
+        <h3>Table</h3>
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
+                        <th scope="col">Duration</th>
                         <th scope="col">Progress</th>
                         <th scope="col">Progress (%)</th>
                         <th scope="col">Daily Progress</th>
@@ -89,9 +108,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in table_data %}
+                    {% for item in statistics_items %}
                         <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                             <td> {{ item["date"] }}</td>
+                            <td> {{ long_term_todo.convert_timedelta_to_string(item["duration"]) }}</td>
                             <td> {{ item["progress"] }}</td>
                             <td> {{ item["progress_as_percents"] }} </td>
                             <td> {{ item["daily_progress"] }} </td>

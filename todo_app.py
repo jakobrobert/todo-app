@@ -344,7 +344,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 
-    # TODO Optimize get_statistics_items() is also called by get_labels_and_values...
+    # TODO #158: Optimize -> get_statistics_items() is also called by get_labels_and_values...
     # -> better call update_statistics_items before, so only doing calculations once?
     statistics_items = statistics.get_statistics_items()
 

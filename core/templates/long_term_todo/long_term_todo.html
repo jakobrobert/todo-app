@@ -38,18 +38,6 @@
                 Show statistics
             </a>
         </h4>
-        <h4>
-            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_duration_overview', id=long_term_todo.id) }}">
-                Show duration overview
-            </a>
-        </h4>
-        {% if long_term_todo.progress_goal %}
-        <h4>
-            <a class="btn btn-secondary" href="{{ url_for('get_long_term_todo_progress_overview', id=long_term_todo.id, as_percents=False) }}">
-                Show progress overview
-            </a>
-        </h4>
-        {% endif %}
         <div style="margin-top: 20px;" class="table-responsive">
             <table class="table">
                 <thead>

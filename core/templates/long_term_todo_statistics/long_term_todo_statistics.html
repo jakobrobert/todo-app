@@ -19,52 +19,7 @@
         <br>
 
         <h3>Summary</h3>
-        <table class="table-responsive">
-            <tr>
-                <td>All Days</td>
-                <td>{{ all_days_count }}</td>
-            </tr>
-            <tr>
-                <td>Active Days&nbsp;</td>
-                <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>Total Duration</td>
-                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
-            </tr>
-            <tr>
-                <td>Average Daily Duration (all days)</td>
-                <td>{{ average_daily_duration_all_days }}</td>
-            </tr>
-            <tr>
-                <td>Average Daily Duration (active days)</td>
-                <td>{{ average_daily_duration_active_days }}</td>
-            </tr>
-            <tr>
-                <td>Progress Goal</td>
-                <td>{{ long_term_todo.progress_goal }}</td>
-            </tr>
-            <tr>
-                <td>Progress</td>
-                <td>{{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>Average Daily Progress (all days)</td>
-                <td>{{ average_daily_progress_all_days }} ({{ average_daily_progress_all_days_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>Average Daily Progress (active days)</td>
-                <td>{{ average_daily_progress_active_days }} ({{ average_daily_progress_active_days_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>Estimated Days until Completion</td>
-                <td>{{ estimated_days_until_completion }}</td>
-            </tr>
-            <tr>
-                <td>Estimated Date of Completion</td>
-                <td>{{ estimated_date_of_completion }}</td>
-            </tr>
-        </table>
+        {% include "long_term_todo_statistics/summary.html" %}
         <br>
 
         <form action="{{ url_for('get_long_term_todo_statistics', long_term_todo_id=long_term_todo.id) }}" method="GET">

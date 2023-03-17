@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Progress (%)</th>
+                <th scope="col">Daily Progress</th>
+                <th scope="col">Daily Progress (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in statistics_items %}
+                <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
+                    <td> {{ item["date"] }}</td>
+                    <td> {{ long_term_todo.convert_timedelta_to_string(item["duration"]) }}</td>
+                    <td> {{ item["progress"] }}</td>
+                    <td> {{ item["progress_as_percents"] }} </td>
+                    <td> {{ item["daily_progress"] }} </td>
+                    <td> {{ item["daily_progress_as_percents"] }} </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

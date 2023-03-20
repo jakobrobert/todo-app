@@ -25,8 +25,6 @@ class LongTermTodoStatistics:
         self.update_statistics_items()
 
     def update_date_and_todos_mapping(self):
-        start_time = time()
-
         self.date_and_todos_mapping = []
 
         all_dates = self.__collect_dates_of_todos()
@@ -48,34 +46,18 @@ class LongTermTodoStatistics:
             self.date_and_todos_mapping.append(curr_item)
             curr_date += one_day
 
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.update_date_and_todos_mapping => {elapsed_time_ms} ms")
-
     def update_statistics_items(self):
-        start_time = time()
-
         self.statistics_items = []
 
         if not self.todos:
-            end_time = time()
-            elapsed_time_ms = 1000 * (end_time - start_time)
-            print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
             return
 
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
-            end_time = time()
-            elapsed_time_ms = 1000 * (end_time - start_time)
-            print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
             return
 
         for date_and_todos_item in self.date_and_todos_mapping:
             self.statistics_items.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items))
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
 
     def get_statistics_items(self):
         return self.statistics_items
@@ -96,13 +78,9 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        date_and_todos_mapping = self.date_and_todos_mapping
-
-        return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+        return self.__get_active_days_count_by_date_and_todos_mapping()
 
     def get_average_daily_duration_all_days(self):
-        start_time = time()
-
         statistics_items = self.get_statistics_items()
         if not statistics_items:
             return datetime.timedelta(seconds=0)
@@ -115,13 +93,7 @@ class LongTermTodoStatistics:
         if all_days_count == 0:
             return total_duration
 
-        result = total_duration / all_days_count
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.get_average_daily_duration_all_days => {elapsed_time_ms} ms")
-
-        return result
+        return total_duration / all_days_count
 
     def get_average_daily_duration_active_days(self):
         statistics_items = self.get_statistics_items()
@@ -139,8 +111,6 @@ class LongTermTodoStatistics:
         return total_duration / active_days_count
 
     def get_average_daily_progress_all_days(self):
-        start_time = time()
-
         if not self.progress:
             return 0
 
@@ -151,7 +121,6 @@ class LongTermTodoStatistics:
         if not self.date_and_todos_mapping:
             return 0
 
-        # TODO also get rid of __filter_dates_by_time_span calls, integrate in update_data() ?
         filtered_dates = self.__filter_dates_by_time_span(all_dates)
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
         if all_days_count <= 1:
@@ -162,13 +131,7 @@ class LongTermTodoStatistics:
         progress_delta = self.progress - start_progress
 
         # Subtract 1 as fix for #126
-        result = progress_delta / (all_days_count - 1)
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.get_average_daily_progress_all_days => {elapsed_time_ms} ms")
-
-        return result
+        return progress_delta / (all_days_count - 1)
 
     def get_average_daily_progress_active_days(self):
         if not self.progress:
@@ -181,8 +144,7 @@ class LongTermTodoStatistics:
         if not self.date_and_todos_mapping:
             return 0
 
-        # TODO simplify
-        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(self.date_and_todos_mapping)
+        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping()
         if active_days_count <= 1:
             return 0
 
@@ -208,7 +170,6 @@ class LongTermTodoStatistics:
         days_until_completion = self.calculate_estimated_days_until_completion()
         return datetime.date.today() + datetime.timedelta(days=days_until_completion)
 
-    # TODO (remove this comment): The get_labels_and_values methods do not matter for performance, under 1 ms
     def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []
@@ -258,8 +219,6 @@ class LongTermTodoStatistics:
         return all_dates
 
     def __filter_dates_by_time_span(self, dates):
-        start_time = time()
-
         if not dates:
             return dates
 
@@ -275,10 +234,6 @@ class LongTermTodoStatistics:
         for date in dates:
             if date >= start_date:
                 filtered_dates.append(date)
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.__filter_dates_by_time_span => {elapsed_time_ms} ms")
 
         return filtered_dates
 
@@ -341,14 +296,13 @@ class LongTermTodoStatistics:
         curr_item["daily_progress"] = relative_progress
         curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
 
-    @staticmethod
-    def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):
-        if not date_and_todos_mapping:
+    def __get_active_days_count_by_date_and_todos_mapping(self):
+        if not self.date_and_todos_mapping:
             return 0
 
         active_days_count = 0
 
-        for date_and_todos_item in date_and_todos_mapping:
+        for date_and_todos_item in self.date_and_todos_mapping:
             for todo in date_and_todos_item["todos"]:
                 if todo.completed:
                     active_days_count += 1

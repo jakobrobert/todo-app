@@ -28,9 +28,11 @@
         {% include "long_term_todo_statistics/summary.html" %}
         <br>
 
+        {% if long_term_todo.total_duration %}
         <h3>Duration Chart</h3>
         {% include "long_term_todo_statistics/duration_chart.html" %}
         <br>
+        {% endif %}
 
         <h3>Progress Chart</h3>
         {% include "long_term_todo_statistics/progress_chart.html" %}

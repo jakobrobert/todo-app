@@ -99,6 +99,8 @@ class LongTermTodoStatistics:
             return 0
 
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
+        if all_days_count <= 1:
+            return 0
 
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
@@ -121,6 +123,9 @@ class LongTermTodoStatistics:
             return 0
 
         active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+        if active_days_count <= 1:
+            return 0
+
         todos_of_first_date = date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
@@ -134,6 +139,8 @@ class LongTermTodoStatistics:
 
         remaining_progress = self.progress_goal - self.progress
         average_daily_progress = self.get_average_daily_progress_all_days()
+        if average_daily_progress == 0:
+            return 0
 
         return remaining_progress / average_daily_progress
 

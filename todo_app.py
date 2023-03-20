@@ -1,6 +1,7 @@
 # WARNING This file is in root directory on purpose, else will lead to issues with imports
 
 import datetime
+from time import time
 
 from flask import Flask
 from flask import render_template, request, redirect, url_for
@@ -325,6 +326,8 @@ def sort_long_term_todos():
 
 @app.route(URL_PREFIX + "/long-term-todos/<int:long_term_todo_id>/statistics", methods=["GET"])
 def get_long_term_todo_statistics(long_term_todo_id):
+    start_time = time()
+
     as_percents_arg = request.args.get("as_percents")
     as_percents = False
     if as_percents_arg == "on":
@@ -375,7 +378,13 @@ def get_long_term_todo_statistics(long_term_todo_id):
         Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
     estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
 
-    return render_template(
+    end_time = time()
+    elapsed_time_ms = 1000 * (end_time - start_time)
+    print(f"get_long_term_todo_statistics part 1 (get data) => {elapsed_time_ms} ms")
+
+    start_time = time()
+
+    result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos,
         progress_as_percents=as_percents, time_span_last_x_days=time_span_last_x_days,
@@ -393,6 +402,12 @@ def get_long_term_todo_statistics(long_term_todo_id):
         duration_chart_labels=duration_chart_labels, duration_chart_values=duration_chart_values,
         min_progress_chart_value=min_progress_chart_value, max_progress_chart_value=max_progress_chart_value
     )
+
+    end_time = time()
+    elapsed_time_ms = 1000 * (end_time - start_time)
+    print(f"get_long_term_todo_statistics part 2 (render template) => {elapsed_time_ms} ms")
+
+    return result
 
 
 def __get_sort_by(setting_key):

@@ -1,4 +1,5 @@
 import datetime
+from time import time
 
 from core.utils import Utils
 
@@ -38,11 +39,19 @@ class LongTermTodoStatistics:
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
 
     def get_statistics_items(self):
+        start_time = time()
+
         if not self.todos:
+            end_time = time()
+            elapsed_time_ms = 1000 * (end_time - start_time)
+            print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
             return []
 
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
+            end_time = time()
+            elapsed_time_ms = 1000 * (end_time - start_time)
+            print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
             return []
 
         filtered_dates = self.__filter_dates_by_time_span(all_dates)
@@ -52,6 +61,10 @@ class LongTermTodoStatistics:
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
         for date_and_todos_item in date_and_todos_mapping:
             statistics_items.append(self.__create_statistics_item(date_and_todos_item, statistics_items))
+
+        end_time = time()
+        elapsed_time_ms = 1000 * (end_time - start_time)
+        print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
 
         return statistics_items
 

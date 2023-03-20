@@ -70,10 +70,7 @@ class LongTermTodoStatistics:
             print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
             return
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        for date_and_todos_item in date_and_todos_mapping:
+        for date_and_todos_item in self.date_and_todos_mapping:
             self.statistics_items.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items))
 
         end_time = time()
@@ -88,11 +85,10 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         return LongTermTodoStatistics.__count_days(filtered_dates)
 
     def get_active_days_count(self):
@@ -100,8 +96,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        date_and_todos_mapping = self.date_and_todos_mapping
 
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
 
@@ -153,16 +148,16 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
+        # TODO also get rid of __filter_dates_by_time_span calls, integrate in update_data() ?
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
         if all_days_count <= 1:
             return 0
 
-        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
@@ -183,16 +178,15 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
-        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+        # TODO simplify
+        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(self.date_and_todos_mapping)
         if active_days_count <= 1:
             return 0
 
-        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
@@ -300,30 +294,6 @@ class LongTermTodoStatistics:
                 todos_for_date.append(todo)
 
         return todos_for_date
-
-    def __get_date_and_todos_mapping(self, all_dates):
-        start_time = time()
-
-        result = []
-
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(all_dates)
-        end_date = max(all_dates)
-
-        while curr_date <= end_date:
-            curr_item = {
-                "date": str(curr_date),
-                "todos": self.__find_todos_for_date(curr_date)
-            }
-
-            result.append(curr_item)
-            curr_date += one_day
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.__get_date_and_todos_mapping => {elapsed_time_ms} ms")
-
-        return result
 
     def __create_statistics_item(self, date_and_todos_item, items):
         curr_item = {

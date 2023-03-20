@@ -36,9 +36,11 @@
             <br>
         {% endif %}
 
-        <h3>Progress Chart</h3>
-        {% include "long_term_todo_statistics/progress_chart.html" %}
-        <br>
+        {% if long_term_todo.progress_goal %}
+            <h3>Progress Chart</h3>
+            {% include "long_term_todo_statistics/progress_chart.html" %}
+            <br>
+        {% endif %}
 
         <h3>Duration & Progress Table</h3>
         {% include "long_term_todo_statistics/duration_and_progress_table.html" %}

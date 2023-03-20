@@ -16,8 +16,10 @@
 <body>
     <div style="margin-top: 50px;" class="container">
         <h1>
-            Long Term Todo Statistics<br>
-            → {{ long_term_todo.title }}</h1>
+            Long Term Todo Statistics
+            <br>
+            → {{ long_term_todo.title }}
+        </h1>
         <br>
 
         <h3>Options</h3>
@@ -28,13 +30,17 @@
         {% include "long_term_todo_statistics/summary.html" %}
         <br>
 
-        <h3>Duration Chart</h3>
-        {% include "long_term_todo_statistics/duration_chart.html" %}
-        <br>
+        {% if long_term_todo.total_duration %}
+            <h3>Duration Chart</h3>
+            {% include "long_term_todo_statistics/duration_chart.html" %}
+            <br>
+        {% endif %}
 
-        <h3>Progress Chart</h3>
-        {% include "long_term_todo_statistics/progress_chart.html" %}
-        <br>
+        {% if long_term_todo.progress_goal %}
+            <h3>Progress Chart</h3>
+            {% include "long_term_todo_statistics/progress_chart.html" %}
+            <br>
+        {% endif %}
 
         <h3>Duration & Progress Table</h3>
         {% include "long_term_todo_statistics/duration_and_progress_table.html" %}

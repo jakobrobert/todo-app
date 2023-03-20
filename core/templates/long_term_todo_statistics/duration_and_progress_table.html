@@ -3,22 +3,30 @@
         <thead>
             <tr>
                 <th scope="col">Date</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Progress</th>
-                <th scope="col">Progress (%)</th>
-                <th scope="col">Daily Progress</th>
-                <th scope="col">Daily Progress (%)</th>
+                {% if long_term_todo.total_duration %}
+                    <th scope="col">Duration</th>
+                {% endif %}
+                {% if long_term_todo.progress_goal %}
+                    <th scope="col">Progress</th>
+                    <th scope="col">Progress (%)</th>
+                    <th scope="col">Daily Progress</th>
+                    <th scope="col">Daily Progress (%)</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for item in statistics_items %}
                 <tr {% if item["is_active_day"] %} class="bg-success" {% else %} class="bg-danger" {% endif %}>
                     <td> {{ item["date"] }}</td>
-                    <td> {{ long_term_todo.convert_timedelta_to_string(item["duration"]) }}</td>
-                    <td> {{ item["progress"] }}</td>
-                    <td> {{ item["progress_as_percents"] }} </td>
-                    <td> {{ item["daily_progress"] }} </td>
-                    <td> {{ item["daily_progress_as_percents"] }} </td>
+                    {% if long_term_todo.total_duration %}
+                        <td> {{ long_term_todo.convert_timedelta_to_string(item["duration"]) }}</td>
+                    {% endif %}
+                    {% if long_term_todo.progress_goal %}
+                        <td>{{ item["progress"] }}</td>
+                        <td>{{ item["progress_as_percents"] }}</td>
+                        <td>{{ item["daily_progress"] }}</td>
+                        <td>{{ item["daily_progress_as_percents"] }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

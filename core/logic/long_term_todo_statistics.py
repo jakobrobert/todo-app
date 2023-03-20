@@ -1,4 +1,5 @@
 import datetime
+from time import time
 
 from core.utils import Utils
 
@@ -10,21 +11,66 @@ class LongTermTodoStatistics:
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
+
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None
         else:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
+
+        self.date_and_todos_mapping = []
+        self.statistics_items = []
+
+    def update_data(self):
+        self.update_date_and_todos_mapping()
+        self.update_statistics_items()
+
+    def update_date_and_todos_mapping(self):
+        self.date_and_todos_mapping = []
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return
+
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
+
+        one_day = datetime.timedelta(days=1)
+        curr_date = min(filtered_dates)
+        end_date = max(filtered_dates)
+
+        while curr_date <= end_date:
+            curr_item = {
+                "date": str(curr_date),
+                "todos": self.__find_todos_for_date(curr_date)
+            }
+
+            self.date_and_todos_mapping.append(curr_item)
+            curr_date += one_day
+
+    def update_statistics_items(self):
+        self.statistics_items = []
+
+        if not self.todos:
+            return
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return
+
+        for date_and_todos_item in self.date_and_todos_mapping:
+            self.statistics_items.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items))
+
+    def get_statistics_items(self):
+        return self.statistics_items
 
     def get_all_days_count(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         return LongTermTodoStatistics.__count_days(filtered_dates)
 
     def get_active_days_count(self):
@@ -32,28 +78,7 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-
-        return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
-
-    def get_statistics_items(self):
-        if not self.todos:
-            return []
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return []
-
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-
-        statistics_items = []
-
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        for date_and_todos_item in date_and_todos_mapping:
-            statistics_items.append(self.__create_statistics_item(date_and_todos_item, statistics_items))
-
-        return statistics_items
+        return self.__get_active_days_count_by_date_and_todos_mapping()
 
     def get_average_daily_duration_all_days(self):
         statistics_items = self.get_statistics_items()
@@ -93,16 +118,15 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
         if all_days_count <= 1:
             return 0
 
-        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
@@ -117,16 +141,14 @@ class LongTermTodoStatistics:
         if not all_dates:
             return 0
 
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        if not date_and_todos_mapping:
+        if not self.date_and_todos_mapping:
             return 0
 
-        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
+        active_days_count = self.__get_active_days_count_by_date_and_todos_mapping()
         if active_days_count <= 1:
             return 0
 
-        todos_of_first_date = date_and_todos_mapping[0]["todos"]
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.progress - start_progress
 
@@ -228,24 +250,6 @@ class LongTermTodoStatistics:
 
         return todos_for_date
 
-    def __get_date_and_todos_mapping(self, all_dates):
-        result = []
-
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(all_dates)
-        end_date = max(all_dates)
-
-        while curr_date <= end_date:
-            curr_item = {
-                "date": str(curr_date),
-                "todos": self.__find_todos_for_date(curr_date)
-            }
-
-            result.append(curr_item)
-            curr_date += one_day
-
-        return result
-
     def __create_statistics_item(self, date_and_todos_item, items):
         curr_item = {
             "date": date_and_todos_item["date"],
@@ -292,14 +296,13 @@ class LongTermTodoStatistics:
         curr_item["daily_progress"] = relative_progress
         curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
 
-    @staticmethod
-    def __get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping):
-        if not date_and_todos_mapping:
+    def __get_active_days_count_by_date_and_todos_mapping(self):
+        if not self.date_and_todos_mapping:
             return 0
 
         active_days_count = 0
 
-        for date_and_todos_item in date_and_todos_mapping:
+        for date_and_todos_item in self.date_and_todos_mapping:
             for todo in date_and_todos_item["todos"]:
                 if todo.completed:
                     active_days_count += 1

@@ -8,6 +8,8 @@
             <td>Active Days&nbsp;</td>
             <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
         </tr>
+
+        <!------------------------------------- Duration ---------------------------------------------------->
         {%if long_term_todo.total_duration %}
         <tr>
             <td>Total Duration</td>
@@ -22,6 +24,9 @@
             <td>{{ average_daily_duration_active_days }}</td>
         </tr>
         {% endif %}
+
+        <!------------------------------------- Progress ---------------------------------------------------->
+        {% if long_term_todo.progress_goal %}
         <tr>
             <td>Progress Goal</td>
             <td>{{ long_term_todo.progress_goal }}</td>
@@ -45,6 +50,6 @@
         <tr>
             <td>Estimated Date of Completion</td>
             <td>{{ estimated_date_of_completion }}</td>
-        </tr>
+        {% endif %}
     </table>
 </div>

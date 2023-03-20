@@ -8,6 +8,7 @@
             <td>Active Days&nbsp;</td>
             <td>{{ active_days_count }} ({{ active_days_percents }} %)</td>
         </tr>
+        {%if long_term_todo.total_duration %}
         <tr>
             <td>Total Duration</td>
             <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
@@ -20,6 +21,7 @@
             <td>Average Daily Duration (active days)</td>
             <td>{{ average_daily_duration_active_days }}</td>
         </tr>
+        {% endif %}
         <tr>
             <td>Progress Goal</td>
             <td>{{ long_term_todo.progress_goal }}</td>

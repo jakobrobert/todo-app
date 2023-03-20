@@ -345,12 +345,10 @@ def get_long_term_todo_statistics(long_term_todo_id):
 
     statistics = LongTermTodoStatistics(todos, progress_goal, progress, time_span_last_x_days)
     statistics.update_statistics_items()
+    statistics_items = statistics.get_statistics_items()
+
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
-
-    # TODO #158: Optimize -> get_statistics_items() is also called by get_labels_and_values...
-    # -> better call update_statistics_items before, so only doing calculations once?
-    statistics_items = statistics.get_statistics_items()
 
     max_progress_chart_value = 100 if as_percents else long_term_todo.progress_goal
     item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])

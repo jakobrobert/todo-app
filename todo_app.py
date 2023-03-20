@@ -344,6 +344,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
     progress = long_term_todo.progress
 
     statistics = LongTermTodoStatistics(todos, progress_goal, progress, time_span_last_x_days)
+    statistics.update_statistics_items()
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 

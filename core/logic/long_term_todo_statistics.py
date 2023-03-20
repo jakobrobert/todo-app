@@ -8,6 +8,7 @@ class LongTermTodoStatistics:
     # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
+        self.statistics_items = []
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
@@ -15,6 +16,37 @@ class LongTermTodoStatistics:
             self.time_span_last_x_days = None
         else:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
+
+    def update_statistics_items(self):
+        start_time = time()
+
+        self.statistics_items = []
+
+        if not self.todos:
+            end_time = time()
+            elapsed_time_ms = 1000 * (end_time - start_time)
+            print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
+            return
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            end_time = time()
+            elapsed_time_ms = 1000 * (end_time - start_time)
+            print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
+            return
+
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
+
+        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
+        for date_and_todos_item in date_and_todos_mapping:
+            self.statistics_items.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items))
+
+        end_time = time()
+        elapsed_time_ms = 1000 * (end_time - start_time)
+        print(f"LongTermTodo.update_statistics_items => {elapsed_time_ms} ms")
+
+    def get_statistics_items(self):
+        return self.statistics_items
 
     def get_all_days_count(self):
         all_dates = self.__collect_dates_of_todos()
@@ -37,36 +69,6 @@ class LongTermTodoStatistics:
         date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
 
         return LongTermTodoStatistics.__get_active_days_count_by_date_and_todos_mapping(date_and_todos_mapping)
-
-    def get_statistics_items(self):
-        start_time = time()
-
-        if not self.todos:
-            end_time = time()
-            elapsed_time_ms = 1000 * (end_time - start_time)
-            print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
-            return []
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            end_time = time()
-            elapsed_time_ms = 1000 * (end_time - start_time)
-            print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
-            return []
-
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-
-        statistics_items = []
-
-        date_and_todos_mapping = self.__get_date_and_todos_mapping(filtered_dates)
-        for date_and_todos_item in date_and_todos_mapping:
-            statistics_items.append(self.__create_statistics_item(date_and_todos_item, statistics_items))
-
-        end_time = time()
-        elapsed_time_ms = 1000 * (end_time - start_time)
-        print(f"LongTermTodo.get_statistics_items => {elapsed_time_ms} ms")
-
-        return statistics_items
 
     def get_average_daily_duration_all_days(self):
         statistics_items = self.get_statistics_items()

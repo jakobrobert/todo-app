@@ -8,14 +8,49 @@ class LongTermTodoStatistics:
     # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
     def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
-        self.statistics_items = []
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
+
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None
         else:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
+
+        self.date_and_todos_mapping = []
+        self.statistics_items = []
+
+    def update_data(self):
+        self.update_date_and_todos_mapping()
+        self.update_statistics_items()
+
+    def update_date_and_todos_mapping(self):
+        start_time = time()
+
+        self.date_and_todos_mapping = []
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return
+
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
+
+        one_day = datetime.timedelta(days=1)
+        curr_date = min(filtered_dates)
+        end_date = max(filtered_dates)
+
+        while curr_date <= end_date:
+            curr_item = {
+                "date": str(curr_date),
+                "todos": self.__find_todos_for_date(curr_date)
+            }
+
+            self.date_and_todos_mapping.append(curr_item)
+            curr_date += one_day
+
+        end_time = time()
+        elapsed_time_ms = 1000 * (end_time - start_time)
+        print(f"LongTermTodo.update_date_and_todos_mapping => {elapsed_time_ms} ms")
 
     def update_statistics_items(self):
         start_time = time()
@@ -253,8 +288,6 @@ class LongTermTodoStatistics:
 
         return filtered_dates
 
-    # TODO (remove this comment) this method takes like 0.3 ms for each call, but is called very often
-    #   -> see __get_date_and_todos_mapping
     def __find_todos_for_date(self, date):
         todos_for_date = []
 

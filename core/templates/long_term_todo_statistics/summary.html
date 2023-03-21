@@ -17,11 +17,11 @@
             </tr>
             <tr>
                 <td>Average Daily Duration (all days)</td>
-                <td>{{ average_daily_duration_all_days }}</td>
+                <td>{{ summary.average_daily_duration_all_days }}</td>
             </tr>
             <tr>
                 <td>Average Daily Duration (active days)</td>
-                <td>{{ average_daily_duration_active_days }}</td>
+                <td>{{ summary.average_daily_duration_active_days }}</td>
             </tr>
         {% endif %}
 
@@ -37,19 +37,19 @@
             </tr>
             <tr>
                 <td>Average Daily Progress (all days)</td>
-                <td>{{ average_daily_progress_all_days }} ({{ average_daily_progress_all_days_in_percents }} %)</td>
+                <td>{{ summary.average_daily_progress_all_days }} ({{ summary.average_daily_progress_all_days_in_percents }} %)</td>
             </tr>
             <tr>
                 <td>Average Daily Progress (active days)</td>
-                <td>{{ average_daily_progress_active_days }} ({{ average_daily_progress_active_days_in_percents }} %)</td>
+                <td>{{ summary.average_daily_progress_active_days }} ({{ summary.average_daily_progress_active_days_in_percents }} %)</td>
             </tr>
             <tr>
                 <td>Estimated Days until Completion</td>
-                <td>{{ estimated_days_until_completion }}</td>
+                <td>{{ summary.estimated_days_until_completion }}</td>
             </tr>
             <tr>
                 <td>Estimated Date of Completion</td>
-                <td>{{ estimated_date_of_completion }}</td>
+                <td>{{ summary.estimated_date_of_completion }}</td>
             </tr>
         {% endif %}
     </table>

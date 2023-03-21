@@ -11,9 +11,10 @@
         </select>
     </div>
     <div class="form-check">
-        <label class="form-check-label" for="as_percents">Progress chart as percents</label>
-        <input class="form-check-input" type="checkbox" name="as_percents" id="as_percents"
-            {% if as_percents %} checked {% endif %}>
+        <label class="form-check-label" for="progress_chart_as_percents">Progress chart as percents</label>
+        <input class="form-check-input" type="checkbox"
+               name="progress_chart_as_percents" id="progress_chart_as_percents"
+            {% if options.progress_chart_as_percents %} checked {% endif %}>
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>

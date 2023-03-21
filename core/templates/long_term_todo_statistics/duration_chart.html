@@ -25,12 +25,12 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
         type: "line",
         data: {
             // safe -> Jinja2 pastes the data directly and does not convert it to a string
-            labels: {{ duration_chart_labels | safe }},
+            labels: {{ duration_chart_data["labels"] | safe }},
             datasets:
             [
                 {
                     label: "Duration",
-                    data: {{ duration_chart_values | safe }},
+                    data: {{ duration_chart_data["values"] | safe }},
                     fill: false,
                     borderColor: "gray",
                     borderWidth: 1.0,

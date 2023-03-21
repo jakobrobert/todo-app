@@ -401,14 +401,24 @@ def get_long_term_todo_statistics(long_term_todo_id):
         "estimated_days_until_completion": estimated_days_until_completion,
         "estimated_date_of_completion": estimated_date_of_completion
     }
+
+    duration_chart_data = {
+        "labels": duration_chart_labels,
+        "values": duration_chart_values
+    }
+
+    progress_chart_data = {
+        "labels": progress_chart_labels,
+        "values": progress_chart_values,
+        "min_value": min_progress_chart_value,
+        "max_value": max_progress_chart_value
+    }
     
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos, statistics_items=statistics_items,
         options=options, summary=summary,
-        progress_chart_labels=progress_chart_labels, progress_chart_values=progress_chart_values,
-        duration_chart_labels=duration_chart_labels, duration_chart_values=duration_chart_values,
-        min_progress_chart_value=min_progress_chart_value, max_progress_chart_value=max_progress_chart_value
+        duration_chart_data=duration_chart_data, progress_chart_data=progress_chart_data
     )
 
     end_time = time()

@@ -336,8 +336,8 @@ class LongTermTodoStatistics:
         if not todos:
             return 0
 
-        progress = todos[-1].progress
-        if progress is None:
-            return 0
+        for todo in reversed(todos):
+            if todo.completed:
+                return todo.progress or 0
 
-        return progress
+        return 0

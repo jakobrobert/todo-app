@@ -20,21 +20,25 @@ class LongTermTodo(db.Model):
     def total_duration(self):
         todos = Todo.get_all_of_long_term_todo(self.id)
         total_duration = datetime.timedelta(seconds=0)
+
         for todo in todos:
             if todo.duration is not None:
                 total_duration += todo.duration
+
         return total_duration
 
     @property
     def progress(self):
         todos = Todo.get_all_of_long_term_todo(self.id)
-        max_progress = None
-        for todo in todos:
-            if todo.progress is None:
-                continue
-            if max_progress is None or todo.progress > max_progress:
-                max_progress = todo.progress
-        return max_progress
+
+        if not todos:
+            return 0
+
+        for todo in reversed(todos):
+            if todo.completed:
+                return todo.progress or 0
+
+        return 0
 
     @property
     def progress_in_percents(self):

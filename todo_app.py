@@ -388,19 +388,24 @@ def get_long_term_todo_statistics(long_term_todo_id):
         "progress_chart_as_percents": progress_chart_as_percents
     }
 
+    summary = {
+        "all_days_count": all_days_count,
+        "active_days_count": active_days_count,
+        "active_days_percents": active_days_percents,
+        "average_daily_duration_all_days": average_daily_duration_all_days,
+        "average_daily_duration_active_days": average_daily_duration_active_days,
+        "average_daily_progress_all_days": average_daily_progress_all_days,
+        "average_daily_progress_all_days_in_percents": average_daily_progress_all_days_in_percents,
+        "average_daily_progress_active_days": average_daily_progress_active_days,
+        "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
+        "estimated_days_until_completion": estimated_days_until_completion,
+        "estimated_date_of_completion": estimated_date_of_completion
+    }
+    
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos, statistics_items=statistics_items,
-        options=options,
-        all_days_count=all_days_count, active_days_count=active_days_count, active_days_percents=active_days_percents,
-        average_daily_duration_all_days=average_daily_duration_all_days,
-        average_daily_duration_active_days=average_daily_duration_active_days,
-        average_daily_progress_all_days=average_daily_progress_all_days,
-        average_daily_progress_all_days_in_percents=average_daily_progress_all_days_in_percents,
-        average_daily_progress_active_days=average_daily_progress_active_days,
-        average_daily_progress_active_days_in_percents=average_daily_progress_active_days_in_percents,
-        estimated_days_until_completion=estimated_days_until_completion,
-        estimated_date_of_completion=estimated_date_of_completion,
+        options=options, summary=summary,
         progress_chart_labels=progress_chart_labels, progress_chart_values=progress_chart_values,
         duration_chart_labels=duration_chart_labels, duration_chart_values=duration_chart_values,
         min_progress_chart_value=min_progress_chart_value, max_progress_chart_value=max_progress_chart_value

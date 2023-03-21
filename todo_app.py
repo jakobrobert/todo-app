@@ -383,10 +383,10 @@ def get_long_term_todo_statistics(long_term_todo_id):
 
     start_time = time()
 
-    # TODO fix error: jinja2.exceptions.UndefinedError: 'options' is undefined
-    options = {}
-    options.time_span_last_x_days = time_span_last_x_days
-    options.progress_chart_as_percents = progress_chart_as_percents
+    options = {
+        "time_span_last_x_days": time_span_last_x_days,
+        "progress_chart_as_percents": progress_chart_as_percents
+    }
 
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",

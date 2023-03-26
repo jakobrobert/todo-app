@@ -2,12 +2,12 @@
     <div>
         <label class="select-label" for="time_span_last_x_days">Time Span</label>
         <select class="form-select" id="time_span_last_x_days" name="time_span_last_x_days">
-            <option value="0" {% if time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>
-            <option value="14" {% if time_span_last_x_days == 14 %} selected {% endif %}>Last 14 Days</option>
-            <option value="30" {% if time_span_last_x_days == 30 %} selected {% endif %}>Last 30 Days</option>
-            <option value="60" {% if time_span_last_x_days == 60 %} selected {% endif %}>Last 60 Days</option>
-            <option value="90" {% if time_span_last_x_days == 90 %} selected {% endif %}>Last 90 Days</option>
-            <option value="180" {% if time_span_last_x_days == 180 %} selected {% endif %}>Last 180 Days</option>
+            <option value="0" {% if options.time_span_last_x_days == 0 %} selected {% endif %}>All Days</option>
+            <option value="14" {% if options.time_span_last_x_days == 14 %} selected {% endif %}>Last 14 Days</option>
+            <option value="30" {% if options.time_span_last_x_days == 30 %} selected {% endif %}>Last 30 Days</option>
+            <option value="60" {% if options.time_span_last_x_days == 60 %} selected {% endif %}>Last 60 Days</option>
+            <option value="90" {% if options.time_span_last_x_days == 90 %} selected {% endif %}>Last 90 Days</option>
+            <option value="180" {% if options.time_span_last_x_days == 180 %} selected {% endif %}>Last 180 Days</option>
         </select>
     </div>
     <div class="form-check">

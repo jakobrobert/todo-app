@@ -339,10 +339,10 @@ def get_long_term_todo_statistics(long_term_todo_id):
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(
-        options["progress_chart_as_percents"])
     duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
 
+    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(
+        options["progress_chart_as_percents"])
     max_progress_chart_value = 100 if options["progress_chart_as_percents"] else long_term_todo.progress_goal
     item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])
     min_progress_chart_value = item_with_min_progress["progress_as_percents"] \

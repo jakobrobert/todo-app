@@ -339,8 +339,6 @@ def get_long_term_todo_statistics(long_term_todo_id):
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
-
     progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(
         options["progress_chart_as_percents"])
     max_progress_chart_value = 100 if options["progress_chart_as_percents"] else long_term_todo.progress_goal
@@ -357,10 +355,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
 
     summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
 
-    duration_chart_data = {
-        "labels": duration_chart_labels,
-        "values": duration_chart_values
-    }
+    duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
 
     progress_chart_data = {
         "labels": progress_chart_labels,
@@ -483,4 +478,13 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
         "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
         "estimated_days_until_completion": estimated_days_until_completion,
         "estimated_date_of_completion": estimated_date_of_completion
+    }
+
+
+def __get_duration_chart_data_for_long_term_todo_statistics(statistics):
+    duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
+
+    return {
+        "labels": duration_chart_labels,
+        "values": duration_chart_values
     }

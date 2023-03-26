@@ -339,19 +339,18 @@ def get_long_term_todo_statistics(long_term_todo_id):
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    # TODO adjust time measurement, include creation of dicts into time for data, NOT template.
+    summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
+
+    duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
+    progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
+        statistics, progress_goal, options["progress_chart_as_percents"])
+
     end_time = time()
     elapsed_time_ms = 1000 * (end_time - start_time)
     print(f"get_long_term_todo_statistics part 1 (get data) => {elapsed_time_ms} ms")
 
     start_time = time()
 
-    summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
-
-    duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
-    progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
-        statistics, progress_goal, options["progress_chart_as_percents"])
-    
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos, statistics_items=statistics_items,

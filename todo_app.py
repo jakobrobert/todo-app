@@ -361,6 +361,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
     average_daily_duration_all_days = Utils.convert_timedelta_to_string(
         statistics.get_average_daily_duration_all_days()
     )
+
     average_daily_duration_active_days = Utils.convert_timedelta_to_string(
         statistics.get_average_daily_duration_active_days()
     )

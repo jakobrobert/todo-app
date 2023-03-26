@@ -328,55 +328,22 @@ def sort_long_term_todos():
 def get_long_term_todo_statistics(long_term_todo_id):
     start_time = time()
 
-    time_span_last_x_days_arg = request.args.get("time_span_last_x_days")
-    time_span_last_x_days = None
-    if time_span_last_x_days_arg is not None:
-        time_span_last_x_days = int(time_span_last_x_days_arg)
-
-    progress_chart_as_percents_arg = request.args.get("progress_chart_as_percents")
-    progress_chart_as_percents = False
-    if progress_chart_as_percents_arg == "on":
-        progress_chart_as_percents = True
+    options = __get_options_for_long_term_todo_statistics()
 
     long_term_todo = LongTermTodo.get(long_term_todo_id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=long_term_todo_id)
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
 
-    statistics = LongTermTodoStatistics(todos, progress_goal, progress, time_span_last_x_days)
+    statistics = LongTermTodoStatistics(todos, progress_goal, progress, options["time_span_last_x_days"])
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(progress_chart_as_percents)
-    duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
+    summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
 
-    max_progress_chart_value = 100 if progress_chart_as_percents else long_term_todo.progress_goal
-    item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])
-    min_progress_chart_value = item_with_min_progress["progress_as_percents"] if progress_chart_as_percents else item_with_min_progress["progress"]
-
-    all_days_count = statistics.get_all_days_count()
-    active_days_count = statistics.get_active_days_count()
-    active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
-
-    average_daily_duration_all_days = Utils.convert_timedelta_to_string(
-        statistics.get_average_daily_duration_all_days()
-    )
-
-    average_daily_duration_active_days = Utils.convert_timedelta_to_string(
-        statistics.get_average_daily_duration_active_days()
-    )
-    average_daily_progress_all_days = \
-        Utils.round_decimal(statistics.get_average_daily_progress_all_days())
-    average_daily_progress_all_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
-    average_daily_progress_active_days = \
-        Utils.round_decimal(statistics.get_average_daily_progress_active_days())
-    average_daily_progress_active_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
-
-    estimated_days_until_completion = \
-        Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
-    estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
+    duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
+    progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
+        statistics, progress_goal, options["progress_chart_as_percents"])
 
     end_time = time()
     elapsed_time_ms = 1000 * (end_time - start_time)
@@ -384,37 +351,6 @@ def get_long_term_todo_statistics(long_term_todo_id):
 
     start_time = time()
 
-    options = {
-        "time_span_last_x_days": time_span_last_x_days,
-        "progress_chart_as_percents": progress_chart_as_percents
-    }
-
-    summary = {
-        "all_days_count": all_days_count,
-        "active_days_count": active_days_count,
-        "active_days_percents": active_days_percents,
-        "average_daily_duration_all_days": average_daily_duration_all_days,
-        "average_daily_duration_active_days": average_daily_duration_active_days,
-        "average_daily_progress_all_days": average_daily_progress_all_days,
-        "average_daily_progress_all_days_in_percents": average_daily_progress_all_days_in_percents,
-        "average_daily_progress_active_days": average_daily_progress_active_days,
-        "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
-        "estimated_days_until_completion": estimated_days_until_completion,
-        "estimated_date_of_completion": estimated_date_of_completion
-    }
-
-    duration_chart_data = {
-        "labels": duration_chart_labels,
-        "values": duration_chart_values
-    }
-
-    progress_chart_data = {
-        "labels": progress_chart_labels,
-        "values": progress_chart_values,
-        "min_value": min_progress_chart_value,
-        "max_value": max_progress_chart_value
-    }
-    
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos, statistics_items=statistics_items,
@@ -470,3 +406,87 @@ def __get_timestamp_of_todo_for_timeline(todo):
         return todo.timestamp_started
 
     return todo.timestamp_completed
+
+
+def __get_options_for_long_term_todo_statistics():
+    time_span_last_x_days_arg = request.args.get("time_span_last_x_days")
+    time_span_last_x_days = None
+    if time_span_last_x_days_arg is not None:
+        time_span_last_x_days = int(time_span_last_x_days_arg)
+
+    progress_chart_as_percents_arg = request.args.get("progress_chart_as_percents")
+    progress_chart_as_percents = False
+    if progress_chart_as_percents_arg == "on":
+        progress_chart_as_percents = True
+
+    return {
+        "time_span_last_x_days": time_span_last_x_days,
+        "progress_chart_as_percents": progress_chart_as_percents
+    }
+
+
+def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
+    all_days_count = statistics.get_all_days_count()
+    active_days_count = statistics.get_active_days_count()
+    active_days_percents = Utils.convert_to_percents(active_days_count, all_days_count)
+
+    average_daily_duration_all_days = \
+        Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_all_days())
+
+    average_daily_duration_active_days = \
+        Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_active_days())
+
+    average_daily_progress_all_days = \
+        Utils.round_decimal(statistics.get_average_daily_progress_all_days())
+
+    average_daily_progress_all_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
+
+    average_daily_progress_active_days = \
+        Utils.round_decimal(statistics.get_average_daily_progress_active_days())
+
+    average_daily_progress_active_days_in_percents = \
+        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
+
+    estimated_days_until_completion = \
+        Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
+
+    estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
+
+    return {
+        "all_days_count": all_days_count,
+        "active_days_count": active_days_count,
+        "active_days_percents": active_days_percents,
+        "average_daily_duration_all_days": average_daily_duration_all_days,
+        "average_daily_duration_active_days": average_daily_duration_active_days,
+        "average_daily_progress_all_days": average_daily_progress_all_days,
+        "average_daily_progress_all_days_in_percents": average_daily_progress_all_days_in_percents,
+        "average_daily_progress_active_days": average_daily_progress_active_days,
+        "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
+        "estimated_days_until_completion": estimated_days_until_completion,
+        "estimated_date_of_completion": estimated_date_of_completion
+    }
+
+
+def __get_duration_chart_data_for_long_term_todo_statistics(statistics):
+    duration_chart_labels, duration_chart_values = statistics.get_labels_and_values_for_duration_chart()
+
+    return {
+        "labels": duration_chart_labels,
+        "values": duration_chart_values
+    }
+
+
+def __get_progress_chart_data_for_long_term_todo_statistics(statistics, progress_goal, as_percents):
+    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
+    max_progress_chart_value = 100 if as_percents else progress_goal
+    item_with_min_progress = min(statistics.get_statistics_items(), key=lambda item: item["progress"])
+    min_progress_chart_value = item_with_min_progress["progress_as_percents"] \
+        if as_percents else item_with_min_progress["progress"]
+
+    return {
+        "labels": progress_chart_labels,
+        "values": progress_chart_values,
+        "min_value": min_progress_chart_value,
+        "max_value": max_progress_chart_value
+    }

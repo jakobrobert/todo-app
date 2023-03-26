@@ -339,13 +339,6 @@ def get_long_term_todo_statistics(long_term_todo_id):
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(
-        options["progress_chart_as_percents"])
-    max_progress_chart_value = 100 if options["progress_chart_as_percents"] else long_term_todo.progress_goal
-    item_with_min_progress = min(statistics_items, key=lambda item: item["progress"])
-    min_progress_chart_value = item_with_min_progress["progress_as_percents"] \
-        if options["progress_chart_as_percents"] else item_with_min_progress["progress"]
-
     # TODO adjust time measurement, include creation of dicts into time for data, NOT template.
     end_time = time()
     elapsed_time_ms = 1000 * (end_time - start_time)
@@ -356,13 +349,8 @@ def get_long_term_todo_statistics(long_term_todo_id):
     summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
 
     duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
-
-    progress_chart_data = {
-        "labels": progress_chart_labels,
-        "values": progress_chart_values,
-        "min_value": min_progress_chart_value,
-        "max_value": max_progress_chart_value
-    }
+    progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
+        statistics, progress_goal, options["progress_chart_as_percents"])
     
     result = render_template(
         "long_term_todo_statistics/long_term_todo_statistics.html",
@@ -487,4 +475,19 @@ def __get_duration_chart_data_for_long_term_todo_statistics(statistics):
     return {
         "labels": duration_chart_labels,
         "values": duration_chart_values
+    }
+
+
+def __get_progress_chart_data_for_long_term_todo_statistics(statistics, progress_goal, as_percents):
+    progress_chart_labels, progress_chart_values = statistics.get_labels_and_values_for_progress_chart(as_percents)
+    max_progress_chart_value = 100 if as_percents else progress_goal
+    item_with_min_progress = min(statistics.get_statistics_items(), key=lambda item: item["progress"])
+    min_progress_chart_value = item_with_min_progress["progress_as_percents"] \
+        if as_percents else item_with_min_progress["progress"]
+
+    return {
+        "labels": progress_chart_labels,
+        "values": progress_chart_values,
+        "min_value": min_progress_chart_value,
+        "max_value": max_progress_chart_value
     }

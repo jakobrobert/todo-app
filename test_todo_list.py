@@ -9,7 +9,7 @@ from todo_app import db
 from core.models.todo_list import TodoList
 
 
-class TestSmoke(unittest.TestCase):
+class TestTodoList(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True

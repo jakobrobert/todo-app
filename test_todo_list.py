@@ -37,3 +37,15 @@ class TestTodoList(unittest.TestCase):
 
         response = self.app.get(f"{self.url_prefix}/{todo_list.id}")
         self.assertEqual(response.status_code, 200)
+
+    def test_edit_todo_list_title(self):
+        self.assertFalse(True)
+
+    def test_delete_todo_list(self):
+        self.assertFalse(True)
+
+    def test_add_todo(self):
+        self.assertFalse(True)
+
+    def test_add_todo_by_long_term_todo(self):
+        self.assertFalse(True)

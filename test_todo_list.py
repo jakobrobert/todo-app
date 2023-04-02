@@ -32,3 +32,7 @@ class TestSmoke(unittest.TestCase):
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
+        todo_list = todo_lists[0]
+
+        response = self.app.get(f"{URL_PREFIX}/todo-lists/{todo_list.id}", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)

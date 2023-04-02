@@ -21,19 +21,19 @@ class TestTodoList(unittest.TestCase):
         db.session.commit()
 
     def test_get_todo_lists(self):
-        response = self.app.get(self.url_prefix, follow_redirects=True)
+        response = self.app.get(self.url_prefix)
         self.assertEqual(response.status_code, 200)
 
     def test_add_todo_list(self):
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 0)
 
-        response = self.app.post(f"{self.url_prefix}/add", follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        response = self.app.post(f"{self.url_prefix}/add")
+        self.assertEqual(response.status_code, 302)
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
         todo_list = todo_lists[0]
 
-        response = self.app.get(f"{self.url_prefix}/{todo_list.id}", follow_redirects=True)
+        response = self.app.get(f"{self.url_prefix}/{todo_list.id}")
         self.assertEqual(response.status_code, 200)

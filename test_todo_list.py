@@ -4,6 +4,7 @@ import unittest
 
 from todo_app import app
 from todo_app import URL_PREFIX
+from todo_app import db
 
 from core.models.todo_list import TodoList
 
@@ -13,11 +14,10 @@ class TestSmoke(unittest.TestCase):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True
         self.app = app.test_client()
-        # TODO set up database uri. first use real database, is fine, can change later.
 
     def tearDown(self):
-        # TODO clear the entire database
-        pass
+        db.session.query(TodoList).delete()
+        db.session.commit()
 
     def test_get_todo_lists(self):
         response = self.app.get(f"{URL_PREFIX}/todo-lists", follow_redirects=True)

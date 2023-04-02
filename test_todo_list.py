@@ -5,6 +5,8 @@ import unittest
 from todo_app import app
 from todo_app import URL_PREFIX
 
+from core.models.todo_list import TodoList
+
 
 class TestSmoke(unittest.TestCase):
     def setUp(self):
@@ -19,4 +21,11 @@ class TestSmoke(unittest.TestCase):
 
     def test_get_todo_lists(self):
         response = self.app.get(f"{URL_PREFIX}/todo-lists", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_todo_list(self):
+        todo_lists = TodoList.get_all()
+        self.assertEqual(len(todo_lists), 0)
+
+        response = self.app.post(f"{URL_PREFIX}/todo-lists/add", follow_redirects=True)
         self.assertEqual(response.status_code, 200)

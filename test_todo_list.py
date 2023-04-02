@@ -14,25 +14,26 @@ class TestTodoList(unittest.TestCase):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True
         self.app = app.test_client()
+        self.url_prefix = f"{URL_PREFIX}/todo-lists"
 
     def tearDown(self):
         db.session.query(TodoList).delete()
         db.session.commit()
 
     def test_get_todo_lists(self):
-        response = self.app.get(f"{URL_PREFIX}/todo-lists", follow_redirects=True)
+        response = self.app.get(self.url_prefix, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
     def test_add_todo_list(self):
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 0)
 
-        response = self.app.post(f"{URL_PREFIX}/todo-lists/add", follow_redirects=True)
+        response = self.app.post(f"{self.url_prefix}/add", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
         todo_list = todo_lists[0]
 
-        response = self.app.get(f"{URL_PREFIX}/todo-lists/{todo_list.id}", follow_redirects=True)
+        response = self.app.get(f"{self.url_prefix}/{todo_list.id}", follow_redirects=True)
         self.assertEqual(response.status_code, 200)

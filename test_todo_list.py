@@ -48,23 +48,9 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo_list.title, old_title)
 
-        # TODO url is broken
-        # ValueError: unknown url type: '://%7B%27title%27:%20%27New%20Title%27%7D/todo-app/test/todo-lists/25/edit-title'
-
         url = f"{self.url_prefix}/{todo_list.id}/edit-title"
-
-        # url looks correct: '/todo-app/test/todo-lists/37/edit-title'
-        #self.assertEqual("", url)
-        # Does not work even with this context, says AttributeError: 'FlaskClient' object has no attribute 'app_context'
-        """
-        with self.client.app_context():
-            test_url = url_for("edit_todo_list_title", id=todo_list.id)
-        """
-
         new_title = "New Title"
-        #data = {"title": new_title}
-        data = dict(title=new_title)
-        response = self.client.post(url, json=data)
+        response = self.client.post(url, json={"title": new_title})
         self.assertEqual(response.status_code, 302)
 
         # TODO test that title is correct

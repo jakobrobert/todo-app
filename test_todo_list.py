@@ -39,7 +39,23 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_edit_todo_list_title(self):
-        self.assertFalse(True)
+        old_title = "Old Title"
+        todo_list = TodoList(title=old_title)
+        db.session.add(todo_list)
+        db.session.commit()
+
+        self.assertEqual(todo_list.title, old_title)
+
+        # TODO url is broken
+        # ValueError: unknown url type: '://%7B%27title%27:%20%27New%20Title%27%7D/todo-app/test/todo-lists/25/edit-title'
+
+        url = f"{self.url_prefix}/{todo_list.id}/edit-title"
+        new_title = "New Title"
+        data = {"title": new_title}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+
+        #self.assertFalse(True)
 
     def test_delete_todo_list(self):
         self.assertFalse(True)

@@ -2,6 +2,8 @@
 
 import unittest
 
+from flask import url_for
+
 from todo_app import app
 from todo_app import URL_PREFIX
 from todo_app import db
@@ -50,12 +52,22 @@ class TestTodoList(unittest.TestCase):
         # ValueError: unknown url type: '://%7B%27title%27:%20%27New%20Title%27%7D/todo-app/test/todo-lists/25/edit-title'
 
         url = f"{self.url_prefix}/{todo_list.id}/edit-title"
-        new_title = "New Title"
-        data = {"title": new_title}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
 
-        #self.assertFalse(True)
+        # url looks correct: '/todo-app/test/todo-lists/37/edit-title'
+        #self.assertEqual("", url)
+        # Does not work even with this context, says AttributeError: 'FlaskClient' object has no attribute 'app_context'
+        """
+        with self.client.app_context():
+            test_url = url_for("edit_todo_list_title", id=todo_list.id)
+        """
+
+        new_title = "New Title"
+        #data = {"title": new_title}
+        data = dict(title=new_title)
+        response = self.client.post(url, json=data)
+        self.assertEqual(response.status_code, 302)
+
+        # TODO test that title is correct
 
     def test_delete_todo_list(self):
         self.assertFalse(True)

@@ -17,9 +17,9 @@ class TestTodoList(unittest.TestCase):
         self.url_prefix = f"{URL_PREFIX}/todo-lists"
 
     def tearDown(self):
-        #db.session.query(TodoList).delete()
-        #db.session.commit()
-        pass
+        # TODO change, better use drop? Will ids then start counting from 0? Now they are always incremented
+        db.session.query(TodoList).delete()
+        db.session.commit()
 
     def test_get_todo_lists(self):
         response = self.client.get(self.url_prefix)
@@ -58,9 +58,7 @@ class TestTodoList(unittest.TestCase):
         response = self.client.post(url, json={"title": new_title})
         self.assertEqual(response.status_code, 302)
 
-        # TODO fix error  sqlalchemy.orm.exc.DetachedInstanceError
         updated_todo_list = TodoList.get(todo_list_id)
-        #self.assertEqual(-1, updated_todo_list.id)
         self.assertEqual(updated_todo_list.title, new_title)
 
     def test_delete_todo_list(self):

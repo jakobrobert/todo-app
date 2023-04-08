@@ -36,6 +36,7 @@ class TodoList(db.Model):
         todo_list = TodoList(title=title)
         db.session.add(todo_list)
         db.session.commit()
+        return todo_list
 
     @staticmethod
     def delete(id):

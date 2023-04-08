@@ -46,10 +46,7 @@ class TestTodoList(unittest.TestCase):
 
     def test_edit_todo_list_title(self):
         old_title = "Old Title"
-        # TODO CLEANUP instead use TodoList.add, need to adjust method so returns the id
-        todo_list = TodoList(title=old_title)
-        db.session.add(todo_list)
-        db.session.commit()
+        todo_list = TodoList.add(old_title)
 
         self.assertEqual(todo_list.title, old_title)
         todo_list_id = todo_list.id
@@ -63,7 +60,6 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(updated_todo_list.title, new_title)
 
     def test_delete_todo_list(self):
-        # TODO CLEANUP instead use TodoList.add, need to adjust method so returns the id
         todo_list = TodoList()
         db.session.add(todo_list)
         db.session.commit()

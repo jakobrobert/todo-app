@@ -76,11 +76,7 @@ def add_daily_todo_list():
 
 @app.route(URL_PREFIX + "/todo-lists/<int:id>/edit-title", methods=["POST"])
 def edit_todo_list_title(id):
-    # TODO CLEANUP test if request.form still necessary for using in Browser. Added "json" so unit test works
     title = request.form.get("title")
-    if title is None:
-        title = request.json.get("title")
-    print(f"edit_todo_list_title -> id: {id}, title: {title}")
     todo_list = TodoList.get(id)
     todo_list.set_title(title)
     return redirect(url_for("get_todo_lists"))

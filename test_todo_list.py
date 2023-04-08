@@ -55,7 +55,7 @@ class TestTodoList(unittest.TestCase):
 
         url = f"{self.url_prefix}/{todo_list_id}/edit-title"
         new_title = "New Title"
-        response = self.client.post(url, json={"title": new_title})
+        response = self.client.post(url, data={"title": new_title})
         self.assertEqual(response.status_code, 302)
 
         updated_todo_list = TodoList.get(todo_list_id)

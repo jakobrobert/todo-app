@@ -47,9 +47,9 @@ class TestTodoList(unittest.TestCase):
     def test_edit_todo_list_title(self):
         old_title = "Old Title"
         todo_list = TodoList.add(old_title)
+        todo_list_id = todo_list.id
 
         self.assertEqual(todo_list.title, old_title)
-        todo_list_id = todo_list.id
 
         url = f"{self.url_prefix}/{todo_list_id}/edit-title"
         new_title = "New Title"
@@ -60,10 +60,7 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(updated_todo_list.title, new_title)
 
     def test_delete_todo_list(self):
-        todo_list = TodoList()
-        db.session.add(todo_list)
-        db.session.commit()
-
+        todo_list = TodoList.add()
         todo_list_id = todo_list.id
 
         found_todo_list = TodoList.get(todo_list_id)

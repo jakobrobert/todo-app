@@ -32,7 +32,7 @@ class TodoList(db.Model):
         return query.all()
 
     @staticmethod
-    def add(title):
+    def add(title=None):
         todo_list = TodoList(title=title)
         db.session.add(todo_list)
         db.session.commit()

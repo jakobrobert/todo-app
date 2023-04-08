@@ -2,8 +2,6 @@
 
 import unittest
 
-from flask import url_for
-
 from todo_app import app
 from todo_app import URL_PREFIX
 from todo_app import db
@@ -25,6 +23,11 @@ class TestTodoList(unittest.TestCase):
     def test_get_todo_lists(self):
         response = self.client.get(self.url_prefix)
         self.assertEqual(response.status_code, 200)
+
+    def test_get_todo_list(self):
+        # TODO add todo list to database, remember the id
+        # TODO get request for this id, check response success
+        self.assertFalse(True)
 
     def test_add_todo_list(self):
         todo_lists = TodoList.get_all()
@@ -53,7 +56,9 @@ class TestTodoList(unittest.TestCase):
         response = self.client.post(url, json={"title": new_title})
         self.assertEqual(response.status_code, 302)
 
-        # TODO test that title is correct
+        # TODO fix error  sqlalchemy.orm.exc.DetachedInstanceError
+        updated_todo_list = TodoList.query.get(todo_list.id)
+        self.assertEqual(updated_todo_list.title, new_title)
 
     def test_delete_todo_list(self):
         self.assertFalse(True)

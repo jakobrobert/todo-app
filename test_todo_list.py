@@ -27,9 +27,13 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_todo_list(self):
-        # TODO add todo list to database, remember the id
-        # TODO get request for this id, check response success
-        pass
+        title = "Test Title"
+        todo_list = TodoList.add(title)
+        todo_list_id = todo_list.id
+
+        url = f"{self.url_prefix}/{todo_list_id}"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
     def test_add_todo_list(self):
         todo_lists = TodoList.get_all()
@@ -77,8 +81,8 @@ class TestTodoList(unittest.TestCase):
 
     def test_add_todo(self):
         # TODO
-        pass
+        self.assertTrue(False, "TODO")
 
     def test_add_todo_by_long_term_todo(self):
         # TODO
-        pass
+        self.assertTrue(False, "TODO")

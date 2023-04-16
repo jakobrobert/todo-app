@@ -51,21 +51,6 @@ class TestTodoList(unittest.TestCase):
         response = self.client.get(f"{self.url_prefix}/{todo_list.id}")
         self.assertEqual(response.status_code, 200)
 
-    def test_edit_todo_list_title(self):
-        old_title = "Old Title"
-        todo_list = TodoList.add(old_title)
-        todo_list_id = todo_list.id
-
-        self.assertEqual(todo_list.title, old_title)
-
-        url = f"{self.url_prefix}/{todo_list_id}/edit-title"
-        new_title = "New Title"
-        response = self.client.post(url, data={"title": new_title})
-        self.assertEqual(response.status_code, 302)
-
-        updated_todo_list = TodoList.get(todo_list_id)
-        self.assertEqual(updated_todo_list.title, new_title)
-
     def test_delete_todo_list(self):
         todo_list = TodoList.add()
         todo_list_id = todo_list.id
@@ -80,6 +65,21 @@ class TestTodoList(unittest.TestCase):
 
         found_todo_list = TodoList.get(todo_list_id)
         self.assertTrue(found_todo_list is None)
+
+    def test_edit_todo_list_title(self):
+        old_title = "Old Title"
+        todo_list = TodoList.add(old_title)
+        todo_list_id = todo_list.id
+
+        self.assertEqual(todo_list.title, old_title)
+
+        url = f"{self.url_prefix}/{todo_list_id}/edit-title"
+        new_title = "New Title"
+        response = self.client.post(url, data={"title": new_title})
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo_list = TodoList.get(todo_list_id)
+        self.assertEqual(updated_todo_list.title, new_title)
 
     def test_add_todo(self):
         todo_list = TodoList.add()
@@ -131,4 +131,4 @@ class TestTodoList(unittest.TestCase):
         todo = todos[0]
         self.assertEqual(todo.long_term_todo_id, long_term_todo_id)
 
-    # TODO maybe tests for other todo-lists endpoints
+    def test_

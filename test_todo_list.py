@@ -7,6 +7,7 @@ from todo_app import URL_PREFIX
 from todo_app import db
 
 from core.models.todo_list import TodoList
+from core.models.todo import Todo
 
 
 class TestTodoList(unittest.TestCase):
@@ -19,6 +20,7 @@ class TestTodoList(unittest.TestCase):
     def tearDown(self):
         # Wanted to use db.drop_all() instead, but then tests fail because tables do not exist
         # Seems like they are not re-created for each test as assumed
+        db.session.query(Todo).delete()
         db.session.query(TodoList).delete()
         db.session.commit()
 
@@ -70,7 +72,7 @@ class TestTodoList(unittest.TestCase):
         found_todo_list = TodoList.get(todo_list_id)
         self.assertTrue(found_todo_list is not None)
 
-        # TODO CLEANUP should be DELETE method, NOT GET. Will change in #48
+        # TODO #48 should be DELETE method, NOT GET
         url = f"{self.url_prefix}/{todo_list_id}/delete"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -79,9 +81,39 @@ class TestTodoList(unittest.TestCase):
         self.assertTrue(found_todo_list is None)
 
     def test_add_todo(self):
-        # TODO
-        self.assertTrue(False, "TODO")
+        todo_list = TodoList.add()
+        todo_list_id = todo_list.id
 
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 0)
+
+        url = f"{self.url_prefix}/{todo_list_id}/todos/add"
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 1)
+
+    def test_delete_todo(self):
+        todo_list = TodoList.add()
+        todo_list_id = todo_list.id
+        todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list_id)
+        todo_id = todo.id
+
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 1)
+
+        # TODO #48 should be DELETE method, NOT GET
+        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/delete"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 0)
+
+    """
     def test_add_todo_by_long_term_todo(self):
         # TODO
-        self.assertTrue(False, "TODO")
+    """
+
+    # TODO maybe tests for other todo-lists endpoints

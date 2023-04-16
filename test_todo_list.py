@@ -73,6 +73,7 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo_list.title, old_title)
 
+        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
         url = f"{self.url_prefix}/{todo_list_id}/edit-title"
         new_title = "New Title"
         response = self.client.post(url, data={"title": new_title})
@@ -131,4 +132,34 @@ class TestTodoList(unittest.TestCase):
         todo = todos[0]
         self.assertEqual(todo.long_term_todo_id, long_term_todo_id)
 
-    def test_
+    def test_edit_todo_title(self):
+        # TODO add test
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        self.assertTrue(False, "TODO")
+
+    def test_toggle_todo_completed(self):
+        # TODO add test
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        self.assertTrue(False, "TODO")
+
+    def test_toggle_todo_priority(self):
+        # TODO add test
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        self.assertTrue(False, "TODO")
+
+    def test_edit_todo_comment(self):
+        # TODO add test
+        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
+        self.assertTrue(False, "TODO")
+
+    def test_edit_todo_progress(self):
+        # TODO add test
+        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
+        self.assertTrue(False, "TODO")
+
+    def test_start_and_stop_todo(self):
+        # TODO add test
+        #  -> testing 2 endpoints in one test is not clean, but they are closely related.
+        #  -> Should be fine for now, and not testing details like if correct duration anyway
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        self.assertTrue(False, "TODO")

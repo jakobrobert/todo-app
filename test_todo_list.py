@@ -17,7 +17,8 @@ class TestTodoList(unittest.TestCase):
         self.url_prefix = f"{URL_PREFIX}/todo-lists"
 
     def tearDown(self):
-        # TODO change, better use drop? Will ids then start counting from 0? Now they are always incremented
+        # Wanted to use db.drop_all() instead, but then tests fail because tables do not exist
+        # Seems like they are not re-created for each test as assumed
         db.session.query(TodoList).delete()
         db.session.commit()
 

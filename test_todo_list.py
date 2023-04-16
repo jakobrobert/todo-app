@@ -27,8 +27,7 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_todo_list(self):
-        title = "Test Title"
-        todo_list = TodoList.add(title)
+        todo_list = TodoList.add()
         todo_list_id = todo_list.id
 
         url = f"{self.url_prefix}/{todo_list_id}"

@@ -8,6 +8,7 @@ from todo_app import db
 
 from core.models.todo_list import TodoList
 from core.models.todo import Todo
+from core.models.long_term_todo import LongTermTodo
 
 
 class TestTodoList(unittest.TestCase):
@@ -111,9 +112,23 @@ class TestTodoList(unittest.TestCase):
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 0)
 
-    """
     def test_add_todo_by_long_term_todo(self):
-        # TODO
-    """
+        todo_list = TodoList.add()
+        todo_list_id = todo_list.id
+        long_term_todo = LongTermTodo.add(title=None, progress_goal=None)
+        long_term_todo_id = long_term_todo.id
+
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 0)
+
+        url = f"{self.url_prefix}/{todo_list_id}/todos/add-by-long-term-todo"
+        data = {"long_term_todo_id": long_term_todo_id}
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, 302)
+
+        todos = Todo.get_all_of_todo_list(todo_list_id)
+        self.assertEqual(len(todos), 1)
+        todo = todos[0]
+        self.assertEqual(todo.long_term_todo_id, long_term_todo_id)
 
     # TODO maybe tests for other todo-lists endpoints

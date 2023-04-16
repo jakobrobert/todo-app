@@ -89,6 +89,7 @@ class LongTermTodo(db.Model):
         long_term_todo = LongTermTodo(title=title, progress_goal=progress_goal)
         db.session.add(long_term_todo)
         db.session.commit()
+        return long_term_todo
 
     @staticmethod
     def delete(id):

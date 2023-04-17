@@ -210,11 +210,29 @@ class TestTodoList(unittest.TestCase):
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.progress, new_progress)
 
-    """
     def test_start_and_stop_todo(self):
-        # TODO add test
-        #  -> testing 2 endpoints in one test is not clean, but they are closely related.
-        #  -> Should be fine for now, and not testing details like if correct duration anyway
+        # REMARK Testing 2 endpoints in one test is not clean, but they are closely related.
+        # Should be fine for now, currently not testing details like duration anyway
+
+        todo_list = TodoList.add()
+        todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
+        todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list.id)
+        todo_id = todo.id  # Need to remember id, else DetachedInstanceError below
+
+        self.assertTrue(todo.timestamp_started is None)
+
         # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
-        self.assertTrue(False, "TODO")
-    """
+        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/start"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertTrue(updated_todo.timestamp_started is not None)
+
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/stop"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertTrue(updated_todo.timestamp_started is None)

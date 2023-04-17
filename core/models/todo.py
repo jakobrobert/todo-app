@@ -115,6 +115,7 @@ class Todo(db.Model):
         todo = Todo(title=title, high_priority=high_priority, todo_list_id=todo_list_id)
         db.session.add(todo)
         db.session.commit()
+        return todo
 
     @staticmethod
     def delete(id):

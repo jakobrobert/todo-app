@@ -6,6 +6,7 @@ from todo_app import app
 from todo_app import URL_PREFIX
 
 
+# TODO #179 Fix smoke tests, they fail because data does not exist.
 class TestSmoke(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True

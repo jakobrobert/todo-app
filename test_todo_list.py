@@ -93,7 +93,7 @@ class TestTodoList(unittest.TestCase):
 
     def test_delete_todo(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id
+        todo_list_id = todo_list.id # Need to remember id, else DetachedInstanceError below
         todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list_id)
         todo_id = todo.id
 
@@ -144,12 +144,22 @@ class TestTodoList(unittest.TestCase):
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.title, new_title)
 
-    """"
     def test_toggle_todo_completed(self):
-        # TODO add test
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
-        self.assertTrue(False, "TODO")
+        todo_list = TodoList.add()
+        todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list.id)
+        todo_id = todo.id  # Need to remember id, else DetachedInstanceError below
 
+        self.assertEqual(todo.completed, False)
+
+        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
+        url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/toggle-completed"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertEqual(updated_todo.completed, True)
+
+    """
     def test_toggle_todo_priority(self):
         # TODO add test
         # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET

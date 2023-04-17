@@ -133,10 +133,24 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(todo.long_term_todo_id, long_term_todo_id)
 
     def test_edit_todo_title(self):
-        # TODO add test
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
-        self.assertTrue(False, "TODO")
+        todo_list = TodoList.add()
+        todo_list_id = todo_list.id # TODO CLEANUP can inline, also in other places? but be careful with "DetachedInstanceError"
+        old_title = "Old Title"
+        todo = Todo.add(title=old_title, high_priority=False, todo_list_id=todo_list_id)
+        todo_id = todo.id
 
+        self.assertEqual(todo.title, old_title)
+
+        # TODO #48 maybe should be method PATCH because changing existing resource
+        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/edit-title"
+        new_title = "New Title"
+        response = self.client.post(url, data={"title": new_title})
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertEqual(updated_todo.title, new_title)
+
+    """"
     def test_toggle_todo_completed(self):
         # TODO add test
         # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
@@ -163,3 +177,4 @@ class TestTodoList(unittest.TestCase):
         #  -> Should be fine for now, and not testing details like if correct duration anyway
         # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
         self.assertTrue(False, "TODO")
+    """

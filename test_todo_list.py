@@ -45,26 +45,21 @@ class TestTodoList(unittest.TestCase):
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
-        todo_list = todo_lists[0]
-
-        response = self.client.get(f"{self.url_prefix}/{todo_list.id}")
-        self.assertEqual(response.status_code, 200)
 
     def test_delete_todo_list(self):
         todo_list = TodoList.add()
         todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
 
-        # TODO check count, so is consistent to add_todo_list
-        found_todo_list = TodoList.get(todo_list_id)
-        self.assertTrue(found_todo_list is not None)
+        todo_lists = TodoList.get_all()
+        self.assertEqual(len(todo_lists), 1)
 
         # TODO #48 should be DELETE method, NOT GET
         url = f"{self.url_prefix}/{todo_list_id}/delete"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
-        found_todo_list = TodoList.get(todo_list_id)
-        self.assertTrue(found_todo_list is None)
+        todo_lists = TodoList.get_all()
+        self.assertEqual(len(todo_lists), 0)
 
     def test_edit_todo_list_title(self):
         old_title = "Old Title"

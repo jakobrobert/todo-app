@@ -174,17 +174,43 @@ class TestTodoList(unittest.TestCase):
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.high_priority, True)
 
-    """
     def test_edit_todo_comment(self):
-        # TODO add test
-        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
-        self.assertTrue(False, "TODO")
+        todo_list = TodoList.add()
+        todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list.id)
+        todo_id = todo.id  # Need to remember id, else DetachedInstanceError below
+        old_comment = "Old Comment"
+        todo.comment = old_comment
+
+        self.assertEqual(todo.comment, old_comment)
+
+        # TODO #48 maybe should be method PATCH because changing existing resource
+        url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-comment"
+        new_comment = "New Comment"
+        response = self.client.post(url, data={"comment": new_comment})
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertEqual(updated_todo.comment, new_comment)
 
     def test_edit_todo_progress(self):
-        # TODO add test
-        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
-        self.assertTrue(False, "TODO")
+        todo_list = TodoList.add()
+        todo = Todo.add(title=None, high_priority=False, todo_list_id=todo_list.id)
+        todo_id = todo.id  # Need to remember id, else DetachedInstanceError below
+        old_progress = 42
+        todo.progress = old_progress
 
+        self.assertEqual(todo.progress, old_progress)
+
+        # TODO #48 maybe should be method PATCH because changing existing resource
+        url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-progress"
+        new_progress = 69
+        response = self.client.post(url, data={"progress": new_progress})
+        self.assertEqual(response.status_code, 302)
+
+        updated_todo = Todo.get(todo_id)
+        self.assertEqual(updated_todo.progress, new_progress)
+
+    """
     def test_start_and_stop_todo(self):
         # TODO add test
         #  -> testing 2 endpoints in one test is not clean, but they are closely related.

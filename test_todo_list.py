@@ -31,9 +31,8 @@ class TestTodoList(unittest.TestCase):
 
     def test_get_todo_list(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id
 
-        url = f"{self.url_prefix}/{todo_list_id}"
+        url = f"{self.url_prefix}/{todo_list.id}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -53,8 +52,9 @@ class TestTodoList(unittest.TestCase):
 
     def test_delete_todo_list(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id
+        todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
 
+        # TODO check count, so is consistent to add_todo_list
         found_todo_list = TodoList.get(todo_list_id)
         self.assertTrue(found_todo_list is not None)
 
@@ -69,7 +69,7 @@ class TestTodoList(unittest.TestCase):
     def test_edit_todo_list_title(self):
         old_title = "Old Title"
         todo_list = TodoList.add(old_title)
-        todo_list_id = todo_list.id
+        todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
 
         self.assertEqual(todo_list.title, old_title)
 
@@ -84,7 +84,7 @@ class TestTodoList(unittest.TestCase):
 
     def test_add_todo(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id
+        todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 0)
@@ -115,9 +115,9 @@ class TestTodoList(unittest.TestCase):
 
     def test_add_todo_by_long_term_todo(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id
+        todo_list_id = todo_list.id  # Need to remember id, else DetachedInstanceError below
         long_term_todo = LongTermTodo.add(title=None, progress_goal=None)
-        long_term_todo_id = long_term_todo.id
+        long_term_todo_id = long_term_todo.id  # Need to remember id, else DetachedInstanceError below
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 0)
@@ -134,15 +134,14 @@ class TestTodoList(unittest.TestCase):
 
     def test_edit_todo_title(self):
         todo_list = TodoList.add()
-        todo_list_id = todo_list.id # TODO CLEANUP can inline, also in other places? but be careful with "DetachedInstanceError"
         old_title = "Old Title"
-        todo = Todo.add(title=old_title, high_priority=False, todo_list_id=todo_list_id)
-        todo_id = todo.id
+        todo = Todo.add(title=old_title, high_priority=False, todo_list_id=todo_list.id)
+        todo_id = todo.id  # Need to remember id, else DetachedInstanceError below
 
         self.assertEqual(todo.title, old_title)
 
         # TODO #48 maybe should be method PATCH because changing existing resource
-        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/edit-title"
+        url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-title"
         new_title = "New Title"
         response = self.client.post(url, data={"title": new_title})
         self.assertEqual(response.status_code, 302)

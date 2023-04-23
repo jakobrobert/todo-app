@@ -40,8 +40,7 @@ class TestTodoList(unittest.TestCase):
 
         url = f"{self.url_prefix}/add"
         data = None # TODO simplify later
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
@@ -71,8 +70,7 @@ class TestTodoList(unittest.TestCase):
         url = f"{self.url_prefix}/{todo_list_id}/edit-title"
         new_title = "New Title"
         data = {"title": new_title}
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         updated_todo_list = TodoList.get(todo_list_id)
         self.assertEqual(updated_todo_list.title, new_title)
@@ -86,8 +84,7 @@ class TestTodoList(unittest.TestCase):
 
         url = f"{self.url_prefix}/{todo_list_id}/todos/add"
         data = None # TODO simplify later
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 1)
@@ -119,8 +116,7 @@ class TestTodoList(unittest.TestCase):
 
         url = f"{self.url_prefix}/{todo_list_id}/todos/add-by-long-term-todo"
         data = {"long_term_todo_id": long_term_todo_id}
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 1)
@@ -139,8 +135,7 @@ class TestTodoList(unittest.TestCase):
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-title"
         new_title = "New Title"
         data = {"title": new_title}
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.title, new_title)
@@ -186,8 +181,7 @@ class TestTodoList(unittest.TestCase):
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-comment"
         new_comment = "New Comment"
         data = {"comment": new_comment}
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.comment, new_comment)
@@ -205,8 +199,7 @@ class TestTodoList(unittest.TestCase):
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-progress"
         new_progress = 69
         data = {"progress": new_progress}
-        response = self.client.post(url, data=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.__send_post_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.progress, new_progress)

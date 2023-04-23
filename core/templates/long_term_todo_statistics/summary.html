@@ -5,8 +5,8 @@
             <td>{{ summary.all_days_count }}</td>
         </tr>
         <tr>
-            <td>Active Days&nbsp;</td>
-            <td>{{ summary.active_days_count }} ({{ summary.active_days_percents }} %)</td>
+            <td>Active Days</td>
+            <td>{{ summary.active_days_count }} ({{ summary.active_days_in_percents }} %)</td>
         </tr>
 
         <!------------------------------------- Duration ---------------------------------------------------->
@@ -34,6 +34,10 @@
             <tr>
                 <td>Progress</td>
                 <td>{{ long_term_todo.progress }} ({{ long_term_todo.progress_in_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Remaining Progress</td>
+                <td>{{ summary.remaining_progress }} ({{ summary.remaining_progress_in_percents }} %)</td>
             </tr>
             <tr>
                 <td>Average Daily Progress (all days)</td>

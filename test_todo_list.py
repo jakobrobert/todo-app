@@ -234,3 +234,11 @@ class TestTodoList(unittest.TestCase):
     def __send_post_request_and_assert_success(self, url, data=None):
         response = self.client.post(url, data=data, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
+
+    def __send_delete_request_and_assert_success(self, url, data=None):
+        response = self.client.delete(url, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+    def __send_patch_request_and_assert_success(self, url, data=None):
+        response = self.client.patch(url, data=data, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)

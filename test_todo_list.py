@@ -51,9 +51,8 @@ class TestTodoList(unittest.TestCase):
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
 
-        # TODO #48 should be DELETE method, NOT GET
-        url = f"{self.url_prefix}/{todo_list_id}/delete"
-        self.__send_get_request_and_assert_success(url)
+        url = f"{self.url_prefix}/{todo_list_id}"
+        self.__send_delete_request_and_assert_success(url)
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 0)
@@ -96,9 +95,8 @@ class TestTodoList(unittest.TestCase):
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 1)
 
-        # TODO #48 should be DELETE method, NOT GET
-        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/delete"
-        self.__send_get_request_and_assert_success(url)
+        url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}"
+        self.__send_delete_request_and_assert_success(url)
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 0)

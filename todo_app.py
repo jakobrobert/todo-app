@@ -82,7 +82,7 @@ def edit_todo_list_title(id):
     return redirect(url_for("get_todo_lists"))
 
 
-@app.route(URL_PREFIX + "/todo-lists/<int:id>/delete", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:id>", methods=["DELETE"])
 def delete_todo_list(id):
     TodoList.delete(id)
     return redirect(url_for("get_todo_lists"))
@@ -241,7 +241,7 @@ def stop_todo(todo_id, todo_list_id):
     return redirect(url_for("get_todo_list", id=todo_list_id))
 
 
-@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>/delete", methods=["GET"])
+@app.route(URL_PREFIX + "/todo-lists/<int:todo_list_id>/todos/<int:todo_id>", methods=["DELETE"])
 def delete_todo(todo_id, todo_list_id):
     Todo.delete(todo_id)
     return redirect(url_for("get_todo_list", id=todo_list_id))

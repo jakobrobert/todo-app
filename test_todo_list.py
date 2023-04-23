@@ -39,8 +39,7 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(len(todo_lists), 0)
 
         url = f"{self.url_prefix}/add"
-        data = None # TODO simplify later
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_post_request_and_assert_success(url)
 
         todo_lists = TodoList.get_all()
         self.assertEqual(len(todo_lists), 1)
@@ -83,8 +82,7 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(len(todos), 0)
 
         url = f"{self.url_prefix}/{todo_list_id}/todos/add"
-        data = None # TODO simplify later
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_post_request_and_assert_success(url)
 
         todos = Todo.get_all_of_todo_list(todo_list_id)
         self.assertEqual(len(todos), 1)
@@ -233,6 +231,6 @@ class TestTodoList(unittest.TestCase):
         response = self.client.get(url, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
-    def __send_post_request_and_assert_success(self, url, data):
+    def __send_post_request_and_assert_success(self, url, data=None):
         response = self.client.post(url, data=data, follow_redirects=True)
         self.assertEqual(response.status_code, 200)

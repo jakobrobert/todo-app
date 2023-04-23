@@ -64,11 +64,10 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo_list.title, old_title)
 
-        # TODO #48 maybe should be method PATCH instead of POST because changing existing resource
         url = f"{self.url_prefix}/{todo_list_id}/edit-title"
         new_title = "New Title"
         data = {"title": new_title}
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_patch_request_and_assert_success(url, data)
 
         updated_todo_list = TodoList.get(todo_list_id)
         self.assertEqual(updated_todo_list.title, new_title)
@@ -127,11 +126,10 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo.title, old_title)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-title"
         new_title = "New Title"
         data = {"title": new_title}
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_patch_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.title, new_title)
@@ -143,9 +141,8 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo.completed, False)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/toggle-completed"
-        self.__send_get_request_and_assert_success(url)
+        self.__send_patch_request_and_assert_success(url)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.completed, True)
@@ -157,9 +154,8 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo.high_priority, False)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/toggle-priority"
-        self.__send_get_request_and_assert_success(url)
+        self.__send_patch_request_and_assert_success(url)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.high_priority, True)
@@ -173,11 +169,10 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo.comment, old_comment)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-comment"
         new_comment = "New Comment"
         data = {"comment": new_comment}
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_patch_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.comment, new_comment)
@@ -191,11 +186,10 @@ class TestTodoList(unittest.TestCase):
 
         self.assertEqual(todo.progress, old_progress)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource
         url = f"{self.url_prefix}/{todo_list.id}/todos/{todo_id}/edit-progress"
         new_progress = 69
         data = {"progress": new_progress}
-        self.__send_post_request_and_assert_success(url, data)
+        self.__send_patch_request_and_assert_success(url, data)
 
         updated_todo = Todo.get(todo_id)
         self.assertEqual(updated_todo.progress, new_progress)
@@ -211,16 +205,14 @@ class TestTodoList(unittest.TestCase):
 
         self.assertTrue(todo.timestamp_started is None)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
         url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/start"
-        self.__send_get_request_and_assert_success(url)
+        self.__send_patch_request_and_assert_success(url)
 
         updated_todo = Todo.get(todo_id)
         self.assertTrue(updated_todo.timestamp_started is not None)
 
-        # TODO #48 maybe should be method PATCH because changing existing resource, but definitely NOT GET
         url = f"{self.url_prefix}/{todo_list_id}/todos/{todo_id}/stop"
-        self.__send_get_request_and_assert_success(url)
+        self.__send_patch_request_and_assert_success(url)
 
         updated_todo = Todo.get(todo_id)
         self.assertTrue(updated_todo.timestamp_started is None)
@@ -233,7 +225,7 @@ class TestTodoList(unittest.TestCase):
         response = self.client.post(url, data=data, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
-    def __send_delete_request_and_assert_success(self, url, data=None):
+    def __send_delete_request_and_assert_success(self, url):
         response = self.client.delete(url, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 

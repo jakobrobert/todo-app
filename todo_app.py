@@ -344,6 +344,9 @@ def get_long_term_todo_statistics(long_term_todo_id):
     duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
     progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
         statistics, progress_goal, options["progress_chart_as_percents"])
+    daily_progress_chart_data = __get_daily_progress_chart_data_for_long_term_todo_statistics(
+        statistics, options["progress_chart_as_percents"]
+    )
 
     end_time = time()
     elapsed_time_ms = 1000 * (end_time - start_time)
@@ -355,7 +358,9 @@ def get_long_term_todo_statistics(long_term_todo_id):
         "long_term_todo_statistics/long_term_todo_statistics.html",
         long_term_todo=long_term_todo, todos=todos, statistics_items=statistics_items,
         options=options, summary=summary,
-        duration_chart_data=duration_chart_data, progress_chart_data=progress_chart_data
+        duration_chart_data=duration_chart_data,
+        progress_chart_data=progress_chart_data,
+        daily_progress_chart_data=daily_progress_chart_data
     )
 
     end_time = time()
@@ -493,4 +498,28 @@ def __get_progress_chart_data_for_long_term_todo_statistics(statistics, progress
         "values": progress_chart_values,
         "min_value": min_progress_chart_value,
         "max_value": max_progress_chart_value
+    }
+
+
+def __get_daily_progress_chart_data_for_long_term_todo_statistics(statistics, as_percents):
+    progress_chart_labels, progress_chart_values = \
+        statistics.get_labels_and_values_for_daily_progress_chart(as_percents)
+
+    item_with_min_daily_progress = min(statistics.get_statistics_items(), key=lambda item: item["daily_progress"])
+    if as_percents:
+        min_daily_progress_chart_value = item_with_min_daily_progress["daily_progress_as_percents"]
+    else:
+        min_daily_progress_chart_value = item_with_min_daily_progress["daily_progress"]
+
+    item_with_max_daily_progress = max(statistics.get_statistics_items(), key=lambda item: item["daily_progress"])
+    if as_percents:
+        max_daily_progress_chart_value = item_with_max_daily_progress["daily_progress_as_percents"]
+    else:
+        max_daily_progress_chart_value = item_with_max_daily_progress["daily_progress"]
+
+    return {
+        "labels": progress_chart_labels,
+        "values": progress_chart_values,
+        "min_value": min_daily_progress_chart_value,
+        "max_value": max_daily_progress_chart_value
     }

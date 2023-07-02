@@ -13,13 +13,12 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
         type: "line",
         data: {
             // safe -> Jinja2 pastes the data directly and does not convert it to a string
-            // TODONOW pass daily_progress_chart_data to template
-            labels: {{ progress_chart_data["labels"] | safe }},
+            labels: {{ daily_progress_chart_data["labels"] | safe }},
             datasets:
             [
                 {
                     label: "Progress",
-                    data: {{ progress_chart_data["values"] | safe }},
+                    data: {{ daily_progress_chart_data["values"] | safe }},
                     fill: false,
                     borderColor: "gray",
                     borderWidth: 1.0,
@@ -32,8 +31,8 @@ Then it adds 'static' to the root of the webpage and does not add the url prefix
             scales: {
                 y: {
                     type: "linear",
-                    min: {{ progress_chart_data["min_value"] }},
-                    max: {{ progress_chart_data["max_value"] }},
+                    min: {{ daily_progress_chart_data["min_value"] }},
+                    max: {{ daily_progress_chart_data["max_value"] }},
                 }
             },
             responsive: false,

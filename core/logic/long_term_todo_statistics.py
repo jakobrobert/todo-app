@@ -206,6 +206,24 @@ class LongTermTodoStatistics:
 
         return labels, values
 
+    def get_labels_and_values_for_daily_progress_chart(self, as_percents):
+        labels = []
+        values = []
+
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
+            return labels, values
+
+        for item in statistics_items:
+            labels.append(item["date"])
+
+            if as_percents:
+                values.append(item["daily_progress_as_percents"])
+            else:
+                values.append(item["daily_progress"])
+
+        return labels, values
+
     def __collect_dates_of_todos(self):
         all_dates = []
 

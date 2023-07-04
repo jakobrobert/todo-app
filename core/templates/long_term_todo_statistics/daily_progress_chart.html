@@ -1,0 +1,46 @@
+<canvas id="daily-progress-chart" width="400" height="400"></canvas>
+
+<!--
+Inline script is hacky, but did not manage to do it in the recommended way.
+If trying: url_for('static', filename='js/long_term_todo_progress_chart.js')
+Then it adds 'static' to the root of the webpage and does not add the url prefix (see URL_PREFIX in todo_app.py)
+-->
+<script>
+    const daily_progress_chart_canvas = document.getElementById("daily-progress-chart");
+    const daily_progress_chart_ctx = daily_progress_chart_canvas.getContext("2d");
+
+    const daily_progress_chart = new Chart(daily_progress_chart_ctx, {
+        type: "line",
+        data: {
+            // safe -> Jinja2 pastes the data directly and does not convert it to a string
+            labels: {{ daily_progress_chart_data["labels"] | safe }},
+            datasets:
+            [
+                {
+                    label: "Progress",
+                    data: {{ daily_progress_chart_data["values"] | safe }},
+                    fill: false,
+                    borderColor: "gray",
+                    borderWidth: 1.0,
+                    lineTension: 0.1,
+                    lineWidth: 1.0
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    type: "linear",
+                    min: {{ daily_progress_chart_data["min_value"] }},
+                    max: {{ daily_progress_chart_data["max_value"] }},
+                }
+            },
+            responsive: false,
+            elements: {
+                point: {
+                    radius: 2.0
+                }
+            }
+        }
+    });
+</script>

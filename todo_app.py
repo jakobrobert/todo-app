@@ -339,7 +339,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
-    summary = __get_summary_for_long_term_todo_statistics(statistics, progress_goal)
+    summary = __get_summary_for_long_term_todo_statistics(statistics)
 
     duration_chart_data = __get_duration_chart_data_for_long_term_todo_statistics(statistics)
     progress_chart_data = __get_progress_chart_data_for_long_term_todo_statistics(
@@ -430,8 +430,7 @@ def __get_options_for_long_term_todo_statistics():
     }
 
 
-# TODONOW remove progress_goal, always use statistics.progress_goal
-def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
+def __get_summary_for_long_term_todo_statistics(statistics):
     all_days_count = statistics.get_all_days_count()
     active_days_count = statistics.get_active_days_count()
     active_days_in_percents = Utils.convert_to_percents(active_days_count, all_days_count)
@@ -453,13 +452,13 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
         Utils.round_decimal(statistics.get_average_daily_progress_all_days())
 
     average_daily_progress_all_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
+        Utils.convert_to_percents(average_daily_progress_all_days, statistics.progress_goal)
 
     average_daily_progress_active_days = \
         Utils.round_decimal(statistics.get_average_daily_progress_active_days())
 
     average_daily_progress_active_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
+        Utils.convert_to_percents(average_daily_progress_active_days, statistics.progress_goal)
 
     # TODONOW add average_progress_per_hour to statistics
     # TODONOW add estimated_hours_until_completion to statistics

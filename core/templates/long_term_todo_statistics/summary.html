@@ -40,6 +40,14 @@
                 <td>{{ summary.remaining_progress }} ({{ summary.remaining_progress_in_percents }} %)</td>
             </tr>
             <tr>
+                <td>Estimated Days until Completion</td>
+                <td>{{ summary.estimated_days_until_completion }}</td>
+            </tr>
+            <tr>
+                <td>Estimated Date of Completion</td>
+                <td>{{ summary.estimated_date_of_completion }}</td>
+            </tr>
+            <tr>
                 <td>Average Daily Progress (all days)</td>
                 <td>{{ summary.average_daily_progress_all_days }} ({{ summary.average_daily_progress_all_days_in_percents }} %)</td>
             </tr>
@@ -48,12 +56,12 @@
                 <td>{{ summary.average_daily_progress_active_days }} ({{ summary.average_daily_progress_active_days_in_percents }} %)</td>
             </tr>
             <tr>
-                <td>Estimated Days until Completion</td>
-                <td>{{ summary.estimated_days_until_completion }}</td>
+                <td>Average Progress per Hour</td>
+                <td>{{ summary.average_progress_per_hour }}</td>
             </tr>
             <tr>
-                <td>Estimated Date of Completion</td>
-                <td>{{ summary.estimated_date_of_completion }}</td>
+                <td>Estimated Hours until Completion</td>
+                <td>{{ summary.estimated_hours_until_completion }}</td>
             </tr>
         {% endif %}
     </table>

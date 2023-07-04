@@ -437,6 +437,9 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
     remaining_progress = statistics.progress_goal - statistics.progress
     remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, statistics.progress_goal)
 
+    # TODONOW adjust order so it is consistent to order in template
+    # TODONOW add average_progress_per_hour to statistics
+    # TODONOW add estimated_hours_until_completion to statistics
     average_daily_duration_all_days = \
         Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_all_days())
 
@@ -463,7 +466,7 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
     return {
         "all_days_count": all_days_count,
         "active_days_count": active_days_count,
-        "active_days_in_percents": active_days_in_percents,  # TODO rename to "_in_percents"
+        "active_days_in_percents": active_days_in_percents,
         "remaining_progress": remaining_progress,
         "remaining_progress_in_percents": remaining_progress_in_percents,
         "average_daily_duration_all_days": average_daily_duration_all_days,
@@ -473,7 +476,9 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
         "average_daily_progress_active_days": average_daily_progress_active_days,
         "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
         "estimated_days_until_completion": estimated_days_until_completion,
-        "estimated_date_of_completion": estimated_date_of_completion
+        "estimated_date_of_completion": estimated_date_of_completion,
+        "average_progress_per_hour": 69,
+        "estimated_hours_until_completion": 42
     }
 
 

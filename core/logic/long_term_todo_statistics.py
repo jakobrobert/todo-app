@@ -79,18 +79,18 @@ class LongTermTodoStatistics:
 
         return self.__get_active_days_count_by_date_and_todos_mapping()
 
-    # TODONOW add getter for remaining_progress for consistency & use it in get_estimated_days_until_completion
+    def get_remaining_progress(self):
+        return self.progress_goal - self.progress
 
     def get_estimated_days_until_completion(self):
         if not self.progress or not self.progress:
             return 0
 
-        remaining_progress = self.progress_goal - self.progress
         average_daily_progress = self.get_average_daily_progress_all_days()
         if average_daily_progress == 0:
             return 0
 
-        return remaining_progress / average_daily_progress
+        return self.get_remaining_progress() / average_daily_progress
 
     def get_estimated_date_of_completion(self):
         days_until_completion = self.get_estimated_days_until_completion()

@@ -434,7 +434,7 @@ def __get_summary_for_long_term_todo_statistics(statistics):
     all_days_count = statistics.get_all_days_count()
     active_days_count = statistics.get_active_days_count()
     active_days_in_percents = Utils.convert_to_percents(active_days_count, all_days_count)
-    remaining_progress = statistics.progress_goal - statistics.progress
+    remaining_progress = statistics.get_remaining_progress()
     remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, statistics.progress_goal)
 
     estimated_days_until_completion = \

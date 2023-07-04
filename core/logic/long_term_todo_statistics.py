@@ -188,6 +188,14 @@ class LongTermTodoStatistics:
         days_until_completion = self.get_estimated_days_until_completion()
         return datetime.date.today() + datetime.timedelta(days=days_until_completion)
 
+    def get_average_progress_per_hour(self):
+        # TODO implement
+        return 42
+
+    def get_estimated_duration_until_completion(self):
+        # TODO implement
+        return datetime.timedelta(hours=69, minutes=42)
+
     def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []

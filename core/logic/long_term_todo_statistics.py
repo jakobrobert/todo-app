@@ -172,8 +172,31 @@ class LongTermTodoStatistics:
         return progress_delta / (active_days_count - 1)
 
     def get_average_progress_per_hour(self):
-        # TODO implement
-        return 42
+        if not self.progress:
+            return 0
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return 0
+
+        if not self.date_and_todos_mapping:
+            return 0
+
+        total_duration_as_hours = 0
+        for date_and_todos_mapping_item in self.date_and_todos_mapping:
+            curr_todos = date_and_todos_mapping_item["todos"]
+            curr_todos_duration = self.__get_total_duration_for_todos(curr_todos)
+            curr_todos_duration_as_hours = curr_todos_duration.total_seconds() / 3600
+            total_duration_as_hours += curr_todos_duration_as_hours
+
+        if total_duration_as_hours == 0:
+            return 0
+
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        progress_delta = self.progress - start_progress
+
+        return progress_delta / total_duration_as_hours
 
     def get_estimated_duration_until_completion(self):
         # TODO implement

@@ -199,8 +199,8 @@ class LongTermTodoStatistics:
         return progress_delta / total_duration_as_hours
 
     def get_estimated_duration_until_completion(self):
-        # TODO implement
-        return datetime.timedelta(hours=69, minutes=42)
+        estimated_duration_as_hours = self.get_remaining_progress() / self.get_average_progress_per_hour()
+        return datetime.timedelta(hours=estimated_duration_as_hours)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

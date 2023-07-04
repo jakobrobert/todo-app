@@ -430,6 +430,7 @@ def __get_options_for_long_term_todo_statistics():
     }
 
 
+# TODONOW remove progress_goal, always use statistics.progress_goal
 def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
     all_days_count = statistics.get_all_days_count()
     active_days_count = statistics.get_active_days_count()
@@ -437,9 +438,11 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
     remaining_progress = statistics.progress_goal - statistics.progress
     remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, statistics.progress_goal)
 
-    # TODONOW adjust order so it is consistent to order in template
-    # TODONOW add average_progress_per_hour to statistics
-    # TODONOW add estimated_hours_until_completion to statistics
+    estimated_days_until_completion = \
+        Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
+
+    estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
+
     average_daily_duration_all_days = \
         Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_all_days())
 
@@ -458,10 +461,8 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
     average_daily_progress_active_days_in_percents = \
         Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
 
-    estimated_days_until_completion = \
-        Utils.round_decimal(statistics.calculate_estimated_days_until_completion())
-
-    estimated_date_of_completion = statistics.calculate_estimated_date_of_completion()
+    # TODONOW add average_progress_per_hour to statistics
+    # TODONOW add estimated_hours_until_completion to statistics
 
     return {
         "all_days_count": all_days_count,
@@ -469,14 +470,14 @@ def __get_summary_for_long_term_todo_statistics(statistics, progress_goal):
         "active_days_in_percents": active_days_in_percents,
         "remaining_progress": remaining_progress,
         "remaining_progress_in_percents": remaining_progress_in_percents,
+        "estimated_days_until_completion": estimated_days_until_completion,
+        "estimated_date_of_completion": estimated_date_of_completion,
         "average_daily_duration_all_days": average_daily_duration_all_days,
         "average_daily_duration_active_days": average_daily_duration_active_days,
         "average_daily_progress_all_days": average_daily_progress_all_days,
         "average_daily_progress_all_days_in_percents": average_daily_progress_all_days_in_percents,
         "average_daily_progress_active_days": average_daily_progress_active_days,
         "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
-        "estimated_days_until_completion": estimated_days_until_completion,
-        "estimated_date_of_completion": estimated_date_of_completion,
         "average_progress_per_hour": 69,
         "estimated_hours_until_completion": 42
     }

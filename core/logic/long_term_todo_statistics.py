@@ -1,5 +1,4 @@
 import datetime
-from time import time
 
 from core.utils import Utils
 
@@ -61,6 +60,25 @@ class LongTermTodoStatistics:
 
     def get_statistics_items(self):
         return self.statistics_items
+
+        # TODONOW adjust order
+        """
+        "all_days_count": all_days_count,
+            "active_days_count": active_days_count,
+            "active_days_in_percents": active_days_in_percents,
+            "remaining_progress": remaining_progress,
+            "remaining_progress_in_percents": remaining_progress_in_percents,
+            "estimated_days_until_completion": estimated_days_until_completion,
+            "estimated_date_of_completion": estimated_date_of_completion,
+            "average_daily_duration_all_days": average_daily_duration_all_days,
+            "average_daily_duration_active_days": average_daily_duration_active_days,
+            "average_daily_progress_all_days": average_daily_progress_all_days,
+            "average_daily_progress_all_days_in_percents": average_daily_progress_all_days_in_percents,
+            "average_daily_progress_active_days": average_daily_progress_active_days,
+            "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
+            "average_progress_per_hour": average_progress_per_hour,
+            "estimated_hours_until_completion": estimated_hours_until_completion
+        """
 
     def get_all_days_count(self):
         all_dates = self.__collect_dates_of_todos()
@@ -155,7 +173,7 @@ class LongTermTodoStatistics:
         # Subtract 1 as fix for #126
         return progress_delta / (active_days_count - 1)
 
-    def calculate_estimated_days_until_completion(self):
+    def get_estimated_days_until_completion(self):
         if not self.progress or not self.progress:
             return 0
 
@@ -166,9 +184,17 @@ class LongTermTodoStatistics:
 
         return remaining_progress / average_daily_progress
 
-    def calculate_estimated_date_of_completion(self):
-        days_until_completion = self.calculate_estimated_days_until_completion()
+    def get_estimated_date_of_completion(self):
+        days_until_completion = self.get_estimated_days_until_completion()
         return datetime.date.today() + datetime.timedelta(days=days_until_completion)
+
+    def get_average_progress_per_hour(self):
+        # TODO implement
+        return 42
+
+    def get_estimated_duration_until_completion(self):
+        # TODO implement
+        return datetime.timedelta(hours=69, minutes=42)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

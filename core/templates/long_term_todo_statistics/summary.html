@@ -9,23 +9,6 @@
             <td>{{ summary.active_days_count }} ({{ summary.active_days_in_percents }} %)</td>
         </tr>
 
-        <!------------------------------------- Duration ---------------------------------------------------->
-        {%if long_term_todo.total_duration %}
-            <tr>
-                <td>Total Duration</td>
-                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
-            </tr>
-            <tr>
-                <td>Average Daily Duration (all days)</td>
-                <td>{{ summary.average_daily_duration_all_days }}</td>
-            </tr>
-            <tr>
-                <td>Average Daily Duration (active days)</td>
-                <td>{{ summary.average_daily_duration_active_days }}</td>
-            </tr>
-        {% endif %}
-
-        <!------------------------------------- Progress ---------------------------------------------------->
         {% if long_term_todo.progress_goal %}
             <tr>
                 <td>Progress Goal</td>
@@ -40,6 +23,32 @@
                 <td>{{ summary.remaining_progress }} ({{ summary.remaining_progress_in_percents }} %)</td>
             </tr>
             <tr>
+                <td>Estimated Days until Completion</td>
+                <td>{{ summary.estimated_days_until_completion }}</td>
+            </tr>
+            <tr>
+                <td>Estimated Date of Completion</td>
+                <td>{{ summary.estimated_date_of_completion }}</td>
+            </tr>
+        {% endif %}
+
+        {% if long_term_todo.total_duration %}
+            <tr>
+                <td>Total Duration</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
+            </tr>
+            <tr>
+                <td>Average Daily Duration (all days)</td>
+                <td>{{ summary.average_daily_duration_all_days }}</td>
+            </tr>
+            <tr>
+                <td>Average Daily Duration (active days)</td>
+                <td>{{ summary.average_daily_duration_active_days }}</td>
+            </tr>
+        {% endif %}
+
+        {% if long_term_todo.progress_goal %}
+            <tr>
                 <td>Average Daily Progress (all days)</td>
                 <td>{{ summary.average_daily_progress_all_days }} ({{ summary.average_daily_progress_all_days_in_percents }} %)</td>
             </tr>
@@ -47,13 +56,16 @@
                 <td>Average Daily Progress (active days)</td>
                 <td>{{ summary.average_daily_progress_active_days }} ({{ summary.average_daily_progress_active_days_in_percents }} %)</td>
             </tr>
+        {% endif %}
+
+        {% if long_term_todo.progress_goal and long_term_todo.total_duration %}
             <tr>
-                <td>Estimated Days until Completion</td>
-                <td>{{ summary.estimated_days_until_completion }}</td>
+                <td>Average Progress per Hour</td>
+                <td>{{ summary.average_progress_per_hour }}</td>
             </tr>
             <tr>
-                <td>Estimated Date of Completion</td>
-                <td>{{ summary.estimated_date_of_completion }}</td>
+                <td>Estimated Duration until Completion</td>
+                <td>{{ summary.estimated_duration_until_completion }}</td>
             </tr>
         {% endif %}
     </table>

@@ -1,5 +1,4 @@
 import datetime
-from time import time
 
 from core.utils import Utils
 
@@ -80,6 +79,23 @@ class LongTermTodoStatistics:
 
         return self.__get_active_days_count_by_date_and_todos_mapping()
 
+    def get_remaining_progress(self):
+        return self.progress_goal - self.progress
+
+    def get_estimated_days_until_completion(self):
+        if not self.progress or not self.progress:
+            return 0
+
+        average_daily_progress = self.get_average_daily_progress_all_days()
+        if average_daily_progress == 0:
+            return 0
+
+        return self.get_remaining_progress() / average_daily_progress
+
+    def get_estimated_date_of_completion(self):
+        days_until_completion = self.get_estimated_days_until_completion()
+        return datetime.date.today() + datetime.timedelta(days=days_until_completion)
+
     def get_average_daily_duration_all_days(self):
         statistics_items = self.get_statistics_items()
         if not statistics_items:
@@ -155,20 +171,36 @@ class LongTermTodoStatistics:
         # Subtract 1 as fix for #126
         return progress_delta / (active_days_count - 1)
 
-    def calculate_estimated_days_until_completion(self):
-        if not self.progress or not self.progress:
+    def get_average_progress_per_hour(self):
+        if not self.progress:
             return 0
 
-        remaining_progress = self.progress_goal - self.progress
-        average_daily_progress = self.get_average_daily_progress_all_days()
-        if average_daily_progress == 0:
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
             return 0
 
-        return remaining_progress / average_daily_progress
+        if not self.date_and_todos_mapping:
+            return 0
 
-    def calculate_estimated_date_of_completion(self):
-        days_until_completion = self.calculate_estimated_days_until_completion()
-        return datetime.date.today() + datetime.timedelta(days=days_until_completion)
+        total_duration_as_hours = 0
+        for date_and_todos_mapping_item in self.date_and_todos_mapping:
+            curr_todos = date_and_todos_mapping_item["todos"]
+            curr_todos_duration = self.__get_total_duration_for_todos(curr_todos)
+            curr_todos_duration_as_hours = curr_todos_duration.total_seconds() / 3600
+            total_duration_as_hours += curr_todos_duration_as_hours
+
+        if total_duration_as_hours == 0:
+            return 0
+
+        todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
+        start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
+        progress_delta = self.progress - start_progress
+
+        return progress_delta / total_duration_as_hours
+
+    def get_estimated_duration_until_completion(self):
+        estimated_duration_as_hours = self.get_remaining_progress() / self.get_average_progress_per_hour()
+        return datetime.timedelta(hours=estimated_duration_as_hours)
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

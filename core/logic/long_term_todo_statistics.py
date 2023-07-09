@@ -319,6 +319,10 @@ class LongTermTodoStatistics:
         curr_item["duration"] = LongTermTodoStatistics.__get_total_duration_for_todos(todos)
         self.__add_progress_data_to_statistics_item(curr_item, items, todos)
 
+        if curr_item["duration"] and curr_item["daily_progress"]:
+            duration_as_hours = curr_item["duration"].total_seconds() / 3600
+            curr_item["daily_progress_per_hour"] = curr_item["daily_progress"] / duration_as_hours
+
         return curr_item
 
     def __add_progress_data_to_statistics_item(self, curr_item, items, todos):

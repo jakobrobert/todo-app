@@ -347,6 +347,8 @@ def get_long_term_todo_statistics(long_term_todo_id):
     daily_progress_chart_data = __get_daily_progress_chart_data_for_long_term_todo_statistics(
         statistics, options["progress_chart_as_percents"]
     )
+    daily_progress_per_hour_chart_data = __get_daily_progress_per_hour_chart_data_for_long_term_todo_statistics(
+        statistics)
 
     end_time = time()
     elapsed_time_ms = 1000 * (end_time - start_time)
@@ -360,7 +362,8 @@ def get_long_term_todo_statistics(long_term_todo_id):
         options=options, summary=summary,
         duration_chart_data=duration_chart_data,
         progress_chart_data=progress_chart_data,
-        daily_progress_chart_data=daily_progress_chart_data
+        daily_progress_chart_data=daily_progress_chart_data,
+        daily_progress_per_hour_chart_data=daily_progress_per_hour_chart_data
     )
 
     end_time = time()
@@ -530,4 +533,24 @@ def __get_daily_progress_chart_data_for_long_term_todo_statistics(statistics, as
         "values": progress_chart_values,
         "min_value": min_daily_progress_chart_value,
         "max_value": max_daily_progress_chart_value
+    }
+
+
+def __get_daily_progress_per_hour_chart_data_for_long_term_todo_statistics(statistics):
+    labels, values = \
+        statistics.get_labels_and_values_for_daily_progress_per_hour_chart()
+
+    item_with_min_value = min(
+        statistics.get_statistics_items(), key=lambda item: item["daily_progress_per_hour"])
+    min_value = item_with_min_value["daily_progress_per_hour"]
+
+    item_with_max_value = max(
+        statistics.get_statistics_items(), key=lambda item: item["daily_progress_per_hour"])
+    max_value = item_with_max_value["daily_progress_per_hour"]
+
+    return {
+        "labels": labels,
+        "values": values,
+        "min_value": min_value,
+        "max_value": max_value
     }

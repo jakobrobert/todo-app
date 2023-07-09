@@ -260,6 +260,20 @@ class LongTermTodoStatistics:
 
         return labels, values
 
+    def get_labels_and_values_for_daily_progress_per_hour_chart(self):
+        labels = []
+        values = []
+
+        statistics_items = self.get_statistics_items()
+        if not statistics_items:
+            return labels, values
+
+        for item in statistics_items:
+            labels.append(item["date"])
+            values.append(item["daily_progress_per_hour"])
+
+        return labels, values
+
     def __collect_dates_of_todos(self):
         all_dates = []
 
@@ -322,6 +336,8 @@ class LongTermTodoStatistics:
         if curr_item["duration"] and curr_item["daily_progress"]:
             duration_as_hours = curr_item["duration"].total_seconds() / 3600
             curr_item["daily_progress_per_hour"] = curr_item["daily_progress"] / duration_as_hours
+        else:
+            curr_item["daily_progress_per_hour"] = 0
 
         return curr_item
 

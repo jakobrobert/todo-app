@@ -30,10 +30,8 @@
                         <td>{{ item["daily_progress"] }}</td>
                         <td>{{ item["daily_progress_as_percents"] }}</td>
                     {% endif %}
-                    {% if item["daily_progress_per_hour"] %}
+                    {% if long_term_todo.total_duration and long_term_todo.progress_goal %}
                         <td>{{ long_term_todo.round_decimal(item["daily_progress_per_hour"]) }}</td>
-                    {% else %}
-                        <td>n/a</td>
                     {% endif %}
                 </tr>
             {% endfor %}

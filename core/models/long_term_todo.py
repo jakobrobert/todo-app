@@ -68,9 +68,12 @@ class LongTermTodo(db.Model):
         self.progress_goal = progress_goal
         db.session.commit()
 
-    # REMARK Non-static Wrapper method here so can access it in template, with static methods it seems to be a bit tricky
+    # REMARK Non-static Wrapper methods here so can access it in template, with static methods it seems to be a bit tricky
     def convert_timedelta_to_string(self, timedelta):
         return Utils.convert_timedelta_to_string(timedelta)
+
+    def round_decimal(self, value):
+        return Utils.round_decimal(value)
 
     @staticmethod
     def get(id):

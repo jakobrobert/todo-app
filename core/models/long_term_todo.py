@@ -34,11 +34,19 @@ class LongTermTodo(db.Model):
         if not todos:
             return 0
 
-        for todo in reversed(todos):
-            if todo.completed:
-                return todo.progress or 0
+        # Find item with max timestamp. Cannot assume that already sorted.
+        # Before, assumed it and just iterated through items reversed,
+        # but then sometimes progress had value of an older date.
+        max_timestamp = 0
+        progress = 0
 
-        return 0
+        for todo in todos:
+            if todo.timestamp_completed:
+                if not max_timestamp or todo.timestamp_completed > max_timestamp:
+                    max_timestamp = todo.timestamp_completed
+                    progress = todo.progress
+
+        return progress
 
     @property
     def progress_in_percents(self):

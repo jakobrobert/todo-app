@@ -338,7 +338,7 @@ def get_long_term_todo_statistics(long_term_todo_id):
 
     # TODONOW try to pass long_term_todo directly, but I think there was issue in past with circular dependency
     statistics = LongTermTodoStatistics(
-        todos, progress_goal, progress, total_duration, options["time_span_last_x_days"])
+        long_term_todo, todos, progress_goal, progress, total_duration, options["time_span_last_x_days"])
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 

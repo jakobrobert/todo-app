@@ -331,10 +331,10 @@ def get_long_term_todo_statistics(long_term_todo_id):
     options = __get_options_for_long_term_todo_statistics()
 
     long_term_todo = LongTermTodo.get(long_term_todo_id)
+    # WARNING Need to get todos outside LongTermTodoStatistics, got ImportError: cannot import name 'db'
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=long_term_todo_id)
     progress_goal = long_term_todo.progress_goal
 
-    # TODONOW try to pass long_term_todo directly, but I think there was issue in past with circular dependency
     statistics = LongTermTodoStatistics(long_term_todo, todos, options["time_span_last_x_days"])
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()

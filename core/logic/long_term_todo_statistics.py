@@ -7,8 +7,8 @@ class LongTermTodoStatistics:
     # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
     def __init__(self, long_term_todo, todos, time_span_last_x_days=None):
-        self.todos = todos
         self.long_term_todo = long_term_todo
+        self.todos = todos
 
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None

@@ -334,8 +334,11 @@ def get_long_term_todo_statistics(long_term_todo_id):
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=long_term_todo_id)
     progress_goal = long_term_todo.progress_goal
     progress = long_term_todo.progress
+    total_duration = long_term_todo.total_duration
 
-    statistics = LongTermTodoStatistics(todos, progress_goal, progress, options["time_span_last_x_days"])
+    # TODONOW try to pass long_term_todo directly, but I think there was issue in past with circular dependency
+    statistics = LongTermTodoStatistics(
+        todos, progress_goal, progress, total_duration, options["time_span_last_x_days"])
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 

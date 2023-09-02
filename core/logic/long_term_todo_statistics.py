@@ -6,10 +6,11 @@ from core.utils import Utils
 class LongTermTodoStatistics:
     # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
-    def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
+    def __init__(self, todos, progress_goal, progress, total_duration, time_span_last_x_days=None):
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
+        self.total_duration = total_duration
 
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None
@@ -207,8 +208,9 @@ class LongTermTodoStatistics:
         return datetime.timedelta(hours=estimated_duration_as_hours)
 
     def get_estimated_total_duration_at_completion(self):
-        # TODONOW implement calculation
-        return datetime.timedelta(seconds=0)
+        estimated_remaining_duration = self.get_estimated_remaining_duration_until_completion()
+        estimated_total_duration = self.total_duration + estimated_remaining_duration
+        return estimated_total_duration
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []

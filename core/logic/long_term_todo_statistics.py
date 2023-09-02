@@ -206,6 +206,10 @@ class LongTermTodoStatistics:
         estimated_duration_as_hours = self.get_remaining_progress() / average_progress_per_hour
         return datetime.timedelta(hours=estimated_duration_as_hours)
 
+    def get_estimated_total_duration_at_completion(self):
+        # TODONOW implement calculation
+        return datetime.timedelta(seconds=0)
+
     def get_labels_and_values_for_duration_chart(self):
         labels = []
         values = []

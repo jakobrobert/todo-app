@@ -469,6 +469,9 @@ def __get_summary_for_long_term_todo_statistics(statistics):
     estimated_remaining_duration_until_completion = \
         Utils.convert_timedelta_to_string(statistics.get_estimated_remaining_duration_until_completion())
 
+    estimated_total_duration_at_completion = \
+        Utils.convert_timedelta_to_string(statistics.get_estimated_total_duration_at_completion())
+
     return {
         "all_days_count": all_days_count,
         "active_days_count": active_days_count,
@@ -484,7 +487,8 @@ def __get_summary_for_long_term_todo_statistics(statistics):
         "average_daily_progress_active_days": average_daily_progress_active_days,
         "average_daily_progress_active_days_in_percents": average_daily_progress_active_days_in_percents,
         "average_progress_per_hour": average_progress_per_hour,
-        "estimated_remaining_duration_until_completion": estimated_remaining_duration_until_completion
+        "estimated_remaining_duration_until_completion": estimated_remaining_duration_until_completion,
+        "estimated_total_duration_at_completion": estimated_total_duration_at_completion
     }
 
 

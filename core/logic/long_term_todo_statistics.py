@@ -198,7 +198,7 @@ class LongTermTodoStatistics:
 
         return progress_delta / total_duration_as_hours
 
-    def get_estimated_duration_until_completion(self):
+    def get_estimated_remaining_duration_until_completion(self):
         average_progress_per_hour = self.get_average_progress_per_hour()
         if average_progress_per_hour == 0:
             return None

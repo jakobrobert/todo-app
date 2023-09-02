@@ -333,11 +333,9 @@ def get_long_term_todo_statistics(long_term_todo_id):
     long_term_todo = LongTermTodo.get(long_term_todo_id)
     todos = Todo.get_all_of_long_term_todo_sorted_using_setting(long_term_todo_id=long_term_todo_id)
     progress_goal = long_term_todo.progress_goal
-    progress = long_term_todo.progress
 
     # TODONOW try to pass long_term_todo directly, but I think there was issue in past with circular dependency
-    statistics = LongTermTodoStatistics(
-        long_term_todo, todos, progress_goal, progress, options["time_span_last_x_days"])
+    statistics = LongTermTodoStatistics(long_term_todo, todos, options["time_span_last_x_days"])
     statistics.update_data()
     statistics_items = statistics.get_statistics_items()
 
@@ -440,7 +438,8 @@ def __get_summary_for_long_term_todo_statistics(statistics):
     active_days_count = statistics.get_active_days_count()
     active_days_in_percents = Utils.convert_to_percents(active_days_count, all_days_count)
     remaining_progress = statistics.get_remaining_progress()
-    remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, statistics.progress_goal)
+    progress_goal = statistics.long_term_todo.progress_goal
+    remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, progress_goal)
 
     estimated_days_until_completion = \
         Utils.round_decimal(statistics.get_estimated_days_until_completion())
@@ -457,13 +456,13 @@ def __get_summary_for_long_term_todo_statistics(statistics):
         Utils.round_decimal(statistics.get_average_daily_progress_all_days())
 
     average_daily_progress_all_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_all_days, statistics.progress_goal)
+        Utils.convert_to_percents(average_daily_progress_all_days, progress_goal)
 
     average_daily_progress_active_days = \
         Utils.round_decimal(statistics.get_average_daily_progress_active_days())
 
     average_daily_progress_active_days_in_percents = \
-        Utils.convert_to_percents(average_daily_progress_active_days, statistics.progress_goal)
+        Utils.convert_to_percents(average_daily_progress_active_days, progress_goal)
 
     average_progress_per_hour = \
         Utils.round_decimal(statistics.get_average_progress_per_hour())

@@ -6,10 +6,9 @@ from core.utils import Utils
 class LongTermTodoStatistics:
     # Need to pass values separately instead of passing long_term_todo as a whole, then would raise Import error
     # when trying to import long_term_todo in this file
-    def __init__(self, todos, progress_goal, progress, time_span_last_x_days=None):
+    def __init__(self, long_term_todo, todos, time_span_last_x_days=None):
+        self.long_term_todo = long_term_todo
         self.todos = todos
-        self.progress_goal = progress_goal
-        self.progress = progress
 
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None
@@ -80,10 +79,10 @@ class LongTermTodoStatistics:
         return self.__get_active_days_count_by_date_and_todos_mapping()
 
     def get_remaining_progress(self):
-        return self.progress_goal - self.progress
+        return self.long_term_todo.progress_goal - self.long_term_todo.progress
 
     def get_estimated_days_until_completion(self):
-        if not self.progress or not self.progress:
+        if not self.long_term_todo.progress or not self.long_term_todo.progress:
             return 0
 
         average_daily_progress = self.get_average_daily_progress_all_days()
@@ -127,7 +126,7 @@ class LongTermTodoStatistics:
         return total_duration / active_days_count
 
     def get_average_daily_progress_all_days(self):
-        if not self.progress:
+        if not self.long_term_todo.progress:
             return 0
 
         all_dates = self.__collect_dates_of_todos()
@@ -144,13 +143,13 @@ class LongTermTodoStatistics:
 
         todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
-        progress_delta = self.progress - start_progress
+        progress_delta = self.long_term_todo.progress - start_progress
 
         # Subtract 1 as fix for #126
         return progress_delta / (all_days_count - 1)
 
     def get_average_daily_progress_active_days(self):
-        if not self.progress:
+        if not self.long_term_todo.progress:
             return 0
 
         all_dates = self.__collect_dates_of_todos()
@@ -166,13 +165,13 @@ class LongTermTodoStatistics:
 
         todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
-        progress_delta = self.progress - start_progress
+        progress_delta = self.long_term_todo.progress - start_progress
 
         # Subtract 1 as fix for #126
         return progress_delta / (active_days_count - 1)
 
     def get_average_progress_per_hour(self):
-        if not self.progress:
+        if not self.long_term_todo.progress:
             return 0
 
         all_dates = self.__collect_dates_of_todos()
@@ -194,17 +193,22 @@ class LongTermTodoStatistics:
 
         todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
-        progress_delta = self.progress - start_progress
+        progress_delta = self.long_term_todo.progress - start_progress
 
         return progress_delta / total_duration_as_hours
 
-    def get_estimated_duration_until_completion(self):
+    def get_estimated_remaining_duration_until_completion(self):
         average_progress_per_hour = self.get_average_progress_per_hour()
         if average_progress_per_hour == 0:
             return None
 
         estimated_duration_as_hours = self.get_remaining_progress() / average_progress_per_hour
         return datetime.timedelta(hours=estimated_duration_as_hours)
+
+    def get_estimated_total_duration_at_completion(self):
+        estimated_remaining_duration = self.get_estimated_remaining_duration_until_completion()
+        estimated_total_duration = self.long_term_todo.total_duration + estimated_remaining_duration
+        return estimated_total_duration
 
     def get_labels_and_values_for_duration_chart(self):
         labels = []
@@ -342,6 +346,7 @@ class LongTermTodoStatistics:
         return curr_item
 
     def __add_progress_data_to_statistics_item(self, curr_item, items, todos):
+        progress_goal = self.long_term_todo.progress_goal
         progress = self.__get_last_progress_of_todos(todos)
         prev_item = items[-1] if len(items) >= 1 else None
 
@@ -361,14 +366,14 @@ class LongTermTodoStatistics:
             return
 
         curr_item["progress"] = progress
-        curr_item["progress_as_percents"] = Utils.convert_to_percents(progress, self.progress_goal)
+        curr_item["progress_as_percents"] = Utils.convert_to_percents(progress, progress_goal)
 
         relative_progress = progress
         if prev_item is not None:
             relative_progress -= prev_item["progress"]
 
         curr_item["daily_progress"] = relative_progress
-        curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, self.progress_goal)
+        curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, progress_goal)
 
     def __get_active_days_count_by_date_and_todos_mapping(self):
         if not self.date_and_todos_mapping:

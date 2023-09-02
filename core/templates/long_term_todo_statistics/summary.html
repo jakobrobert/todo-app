@@ -64,8 +64,12 @@
                 <td>{{ summary.average_progress_per_hour }}</td>
             </tr>
             <tr>
-                <td>Estimated Duration until Completion</td>
-                <td>{{ summary.estimated_duration_until_completion }}</td>
+                <td>Estimated Remaining Duration until Completion</td>
+                <td>{{ summary.estimated_remaining_duration_until_completion }}</td>
+            </tr>
+            <tr>
+                <td>Estimated Total Duration at Completion</td>
+                <td>{{ summary.estimated_total_duration_at_completion }}</td>
             </tr>
         {% endif %}
     </table>

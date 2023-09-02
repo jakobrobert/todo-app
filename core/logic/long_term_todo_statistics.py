@@ -10,9 +10,7 @@ class LongTermTodoStatistics:
         self.todos = todos
         self.progress_goal = progress_goal
         self.progress = progress
-        self.total_duration = total_duration
         self.long_term_todo = long_term_todo
-        print(f"total_duration: {long_term_todo.total_duration}") # TODONOW remove
 
         if time_span_last_x_days is None:
             self.time_span_last_x_days = None
@@ -211,7 +209,7 @@ class LongTermTodoStatistics:
 
     def get_estimated_total_duration_at_completion(self):
         estimated_remaining_duration = self.get_estimated_remaining_duration_until_completion()
-        estimated_total_duration = self.total_duration + estimated_remaining_duration
+        estimated_total_duration = self.long_term_todo.total_duration + estimated_remaining_duration
         return estimated_total_duration
 
     def get_labels_and_values_for_duration_chart(self):

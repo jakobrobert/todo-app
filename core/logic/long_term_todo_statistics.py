@@ -79,7 +79,7 @@ class LongTermTodoStatistics:
         return self.__get_active_days_count_by_date_and_todos_mapping()
 
     def get_remaining_progress(self):
-        if not self.long_term_todo.progress_goal or self.long_term_todo.progress:
+        if not self.long_term_todo.progress_goal or not self.long_term_todo.progress:
             return 0
 
         return self.long_term_todo.progress_goal - self.long_term_todo.progress

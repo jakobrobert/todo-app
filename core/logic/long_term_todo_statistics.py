@@ -84,7 +84,7 @@ class LongTermTodoStatistics:
 
         return self.long_term_todo.progress_goal - self.long_term_todo.progress
 
-    def get_estimated_days_until_completion(self):
+    def get_estimated_remaining_days_until_completion(self):
         if not self.long_term_todo.progress or not self.long_term_todo.progress:
             return 0
 
@@ -94,8 +94,11 @@ class LongTermTodoStatistics:
 
         return self.get_remaining_progress() / average_daily_progress
 
-    def get_estimated_date_of_completion(self):
-        days_until_completion = self.get_estimated_days_until_completion()
+    def get_estimated_completion_date(self):
+        days_until_completion = self.get_estimated_remaining_days_until_completion()
+        if not days_until_completion:
+            return None
+
         return datetime.date.today() + datetime.timedelta(days=days_until_completion)
 
     def get_average_daily_duration_all_days(self):

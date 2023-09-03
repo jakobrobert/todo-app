@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    <table>
+        {% if long_term_todo.total_duration %}
+            <tr>
+                <td>Daily Duration (all days)</td>
+                <td>{{ summary.average_daily_duration_all_days }}</td>
+            </tr>
+            <tr>
+                <td>Daily Duration (active days)</td>
+                <td>{{ summary.average_daily_duration_active_days }}</td>
+            </tr>
+        {% endif %}
+
+        {% if long_term_todo.progress_goal %}
+            <tr>
+                <td>Daily Progress (all days)</td>
+                <td>{{ summary.average_daily_progress_all_days }} ({{ summary.average_daily_progress_all_days_in_percents }} %)</td>
+            </tr>
+            <tr>
+                <td>Daily Progress (active days)</td>
+                <td>{{ summary.average_daily_progress_active_days }} ({{ summary.average_daily_progress_active_days_in_percents }} %)</td>
+            </tr>
+        {% endif %}
+
+        {% if long_term_todo.progress_goal and long_term_todo.total_duration %}
+            <tr>
+                <td>Progress per Hour</td>
+                <td>{{ summary.average_progress_per_hour }}</td>
+            </tr>
+        {% endif %}
+    </table>
+</div>

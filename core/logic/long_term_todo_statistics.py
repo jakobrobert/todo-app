@@ -202,7 +202,7 @@ class LongTermTodoStatistics:
 
     def get_estimated_remaining_duration_until_completion(self):
         average_progress_per_hour = self.get_average_progress_per_hour()
-        if average_progress_per_hour == 0:  # TODONOW check "not" for consistency
+        if not average_progress_per_hour:
             return None
 
         estimated_duration_as_hours = self.get_remaining_progress() / average_progress_per_hour

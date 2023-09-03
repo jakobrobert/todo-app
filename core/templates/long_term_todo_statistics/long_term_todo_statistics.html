@@ -30,6 +30,10 @@
         {% include "long_term_todo_statistics/summary.html" %}
         <br>
 
+        <h3>Average Values</h3>
+        {% include "long_term_todo_statistics/average_values.html" %}
+        <br>
+
         {% if long_term_todo.total_duration and long_term_todo.progress_goal %}
             <h3>Estimates for Completion</h3>
             {% include "long_term_todo_statistics/estimates_for_completion.html" %}

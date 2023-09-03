@@ -1,6 +1,11 @@
 <div class="table-responsive">
     <table>
-        <!-- TODONOW move total duration here -->
+        {% if long_term_todo.total_duration %}
+            <tr>
+                <td>Total Duration</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
+            </tr>
+        {% endif %}
         <tr>
             <td>All Days</td>
             <td>{{ summary.all_days_count }}</td>
@@ -27,10 +32,6 @@
         {% endif %}
 
         {% if long_term_todo.total_duration %}
-            <tr>
-                <td>Total Duration</td>
-                <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
-            </tr>
             <tr>
                 <td>Average Daily Duration (all days)</td>
                 <td>{{ summary.average_daily_duration_all_days }}</td>

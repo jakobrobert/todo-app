@@ -1,5 +1,6 @@
 <div class="table-responsive">
     <table>
+        <!-- TODONOW move total duration here -->
         <tr>
             <td>All Days</td>
             <td>{{ summary.all_days_count }}</td>
@@ -22,14 +23,7 @@
                 <td>Remaining Progress</td>
                 <td>{{ summary.remaining_progress }} ({{ summary.remaining_progress_in_percents }} %)</td>
             </tr>
-            <tr>
-                <td>Estimated Days until Completion</td>
-                <td>{{ summary.estimated_days_until_completion }}</td>
-            </tr>
-            <tr>
-                <td>Estimated Date of Completion</td>
-                <td>{{ summary.estimated_date_of_completion }}</td>
-            </tr>
+
         {% endif %}
 
         {% if long_term_todo.total_duration %}
@@ -62,14 +56,6 @@
             <tr>
                 <td>Average Progress per Hour</td>
                 <td>{{ summary.average_progress_per_hour }}</td>
-            </tr>
-            <tr>
-                <td>Estimated Remaining Duration until Completion</td>
-                <td>{{ summary.estimated_remaining_duration_until_completion }}</td>
-            </tr>
-            <tr>
-                <td>Estimated Total Duration at Completion</td>
-                <td>{{ summary.estimated_total_duration_at_completion }}</td>
             </tr>
         {% endif %}
     </table>

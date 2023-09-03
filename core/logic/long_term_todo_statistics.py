@@ -79,6 +79,9 @@ class LongTermTodoStatistics:
         return self.__get_active_days_count_by_date_and_todos_mapping()
 
     def get_remaining_progress(self):
+        if not self.long_term_todo.progress_goal or self.long_term_todo.progress:
+            return 0
+
         return self.long_term_todo.progress_goal - self.long_term_todo.progress
 
     def get_estimated_days_until_completion(self):
@@ -199,7 +202,7 @@ class LongTermTodoStatistics:
 
     def get_estimated_remaining_duration_until_completion(self):
         average_progress_per_hour = self.get_average_progress_per_hour()
-        if average_progress_per_hour == 0:
+        if average_progress_per_hour == 0:  # TODONOW check "not" for consistency
             return None
 
         estimated_duration_as_hours = self.get_remaining_progress() / average_progress_per_hour
@@ -207,6 +210,9 @@ class LongTermTodoStatistics:
 
     def get_estimated_total_duration_at_completion(self):
         estimated_remaining_duration = self.get_estimated_remaining_duration_until_completion()
+        if not estimated_remaining_duration:
+            return None
+
         estimated_total_duration = self.long_term_todo.total_duration + estimated_remaining_duration
         return estimated_total_duration
 

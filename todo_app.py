@@ -442,8 +442,6 @@ def __get_summary_for_long_term_todo_statistics(statistics):
     remaining_progress_in_percents = Utils.convert_to_percents(remaining_progress, progress_goal)
     progress_delta = statistics.get_progress_delta()
     progress_delta_in_percents = Utils.convert_to_percents(progress_delta, progress_goal)
-    # TODONOW remove debug log
-    print(f"progress_delta: {progress_delta}, progress_delta_in_percents: {progress_delta_in_percents}")
 
     average_daily_duration_all_days = \
         Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_all_days())
@@ -483,6 +481,8 @@ def __get_summary_for_long_term_todo_statistics(statistics):
         "active_days_in_percents": active_days_in_percents,
         "remaining_progress": remaining_progress,
         "remaining_progress_in_percents": remaining_progress_in_percents,
+        "progress_delta": progress_delta,
+        "progress_delta_in_percents": progress_delta_in_percents,
         "average_daily_duration_all_days": average_daily_duration_all_days,
         "average_daily_duration_active_days": average_daily_duration_active_days,
         "average_daily_progress_all_days": average_daily_progress_all_days,

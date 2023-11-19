@@ -60,11 +60,6 @@ class LongTermTodoStatistics:
     def get_statistics_items(self):
         return self.statistics_items
 
-    # TODONOW remove, use the one below instead
-    def get_duration_in_time_span(self):
-        # TODONOW implement calculation
-        return datetime.timedelta(hours=42)
-
     def get_total_duration_delta_as_hours(self):
         # Excluding the first date here because first date is excluded for progress_delta as well.
         # Would be more intuitive for full time span that first date is included for progress_delta
@@ -211,6 +206,7 @@ class LongTermTodoStatistics:
         if not self.long_term_todo.progress:
             return 0
 
+        # TODOLATER Remove unused code, see similar occurrences
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0

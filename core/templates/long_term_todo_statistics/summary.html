@@ -6,8 +6,8 @@
                 <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
             </tr>
             <tr>
-                <td>Duration in Time Span</td>
-                <td>{{ long_term_todo.convert_timedelta_to_string(summary.duration_in_time_span) }}</td>
+                <td>Total Duration Delta (Hours)</td>
+                <td>{{ summary.total_duration_delta_as_hours }}</td>
             </tr>
         {% endif %}
         <tr>

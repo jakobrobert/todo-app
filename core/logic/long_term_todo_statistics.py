@@ -60,6 +60,21 @@ class LongTermTodoStatistics:
     def get_statistics_items(self):
         return self.statistics_items
 
+    def get_total_duration_delta_as_hours(self):
+        # Excluding the first date here because first date is excluded for progress_delta as well.
+        # Would be more intuitive for full time span that first date is included for progress_delta
+        #   but this might be trickier and need some adjustments of date_and_todos_mapping
+        total_duration_delta_as_hours = 0
+        date_and_todos_mapping_without_first_date = self.date_and_todos_mapping[1:]
+
+        for date_and_todos_mapping_item in date_and_todos_mapping_without_first_date:
+            curr_todos = date_and_todos_mapping_item["todos"]
+            curr_todos_duration = self.__get_total_duration_for_todos(curr_todos)
+            curr_todos_duration_as_hours = curr_todos_duration.total_seconds() / 3600
+            total_duration_delta_as_hours += curr_todos_duration_as_hours
+
+        return total_duration_delta_as_hours
+
     def get_all_days_count(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
@@ -84,7 +99,7 @@ class LongTermTodoStatistics:
 
         return self.long_term_todo.progress_goal - self.long_term_todo.progress
 
-    # TODONOW find occurrences of progress_delta, re-use this method there
+    # TODOLATER find occurrences of progress_delta, re-use this method there
     def get_progress_delta(self):
         if not self.date_and_todos_mapping:
             return 0
@@ -154,7 +169,7 @@ class LongTermTodoStatistics:
 
         filtered_dates = self.__filter_dates_by_time_span(all_dates)
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
-        # TODONOW can simplify? use date_and_todos_mapping, is already filtered
+        # TODOLATER can simplify? use date_and_todos_mapping, is already filtered
         if all_days_count <= 1:
             return 0
 
@@ -191,6 +206,7 @@ class LongTermTodoStatistics:
         if not self.long_term_todo.progress:
             return 0
 
+        # TODOLATER Remove unused code, see similar occurrences
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return 0
@@ -198,26 +214,15 @@ class LongTermTodoStatistics:
         if not self.date_and_todos_mapping:
             return 0
 
-        # Excluding the first date for calculation of total duration
-        #   because first date is excluded for progress_delta as well (see below).
-        # Would be more intuitive for full time span that first date is included for progress_delta
-        #   but this might be trickier and need some adjustments of date_and_todos_mapping
-        total_duration_as_hours = 0
-        date_and_todos_mapping_without_first_date = self.date_and_todos_mapping[1:]
-        for date_and_todos_mapping_item in date_and_todos_mapping_without_first_date:
-            curr_todos = date_and_todos_mapping_item["todos"]
-            curr_todos_duration = self.__get_total_duration_for_todos(curr_todos)
-            curr_todos_duration_as_hours = curr_todos_duration.total_seconds() / 3600
-            total_duration_as_hours += curr_todos_duration_as_hours
-
-        if total_duration_as_hours == 0:
+        total_duration_delta_as_hours = self.get_total_duration_delta_as_hours()
+        if total_duration_delta_as_hours == 0:
             return 0
 
         todos_of_first_date = self.date_and_todos_mapping[0]["todos"]
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.long_term_todo.progress - start_progress
 
-        return progress_delta / total_duration_as_hours
+        return progress_delta / total_duration_delta_as_hours
 
     def get_estimated_remaining_duration_until_completion(self):
         average_progress_per_hour = self.get_average_progress_per_hour()

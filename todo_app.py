@@ -434,6 +434,7 @@ def __get_options_for_long_term_todo_statistics():
 
 
 def __get_summary_for_long_term_todo_statistics(statistics):
+    total_duration_delta_as_hours = Utils.round_decimal(statistics.get_total_duration_delta_as_hours())
     all_days_count = statistics.get_all_days_count()
     active_days_count = statistics.get_active_days_count()
     active_days_in_percents = Utils.convert_to_percents(active_days_count, all_days_count)
@@ -443,6 +444,7 @@ def __get_summary_for_long_term_todo_statistics(statistics):
     progress_delta = statistics.get_progress_delta()
     progress_delta_in_percents = Utils.convert_to_percents(progress_delta, progress_goal)
 
+    # TODOLATER Get rid of obsolete line breaks if fits into one line
     average_daily_duration_all_days = \
         Utils.convert_timedelta_to_string(statistics.get_average_daily_duration_all_days())
 
@@ -476,6 +478,7 @@ def __get_summary_for_long_term_todo_statistics(statistics):
         Utils.convert_timedelta_to_string(statistics.get_estimated_total_duration_at_completion())
 
     return {
+        "total_duration_delta_as_hours": total_duration_delta_as_hours,
         "all_days_count": all_days_count,
         "active_days_count": active_days_count,
         "active_days_in_percents": active_days_in_percents,

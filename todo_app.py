@@ -434,6 +434,7 @@ def __get_options_for_long_term_todo_statistics():
 
 
 def __get_summary_for_long_term_todo_statistics(statistics):
+    duration_in_time_span = statistics.get_duration_in_time_span()
     all_days_count = statistics.get_all_days_count()
     active_days_count = statistics.get_active_days_count()
     active_days_in_percents = Utils.convert_to_percents(active_days_count, all_days_count)
@@ -476,6 +477,7 @@ def __get_summary_for_long_term_todo_statistics(statistics):
         Utils.convert_timedelta_to_string(statistics.get_estimated_total_duration_at_completion())
 
     return {
+        "duration_in_time_span": duration_in_time_span,
         "all_days_count": all_days_count,
         "active_days_count": active_days_count,
         "active_days_in_percents": active_days_in_percents,

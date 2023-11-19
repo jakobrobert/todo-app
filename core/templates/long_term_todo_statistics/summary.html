@@ -5,6 +5,10 @@
                 <td>Total Duration</td>
                 <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
             </tr>
+            <tr>
+                <td>Duration in Time Span</td>
+                <td>{{ long_term_todo.convert_timedelta_to_string(summary.duration_in_time_span) }}</td>
+            </tr>
         {% endif %}
         <tr>
             <td>All Days</td>

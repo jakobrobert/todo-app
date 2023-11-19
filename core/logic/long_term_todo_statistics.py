@@ -60,6 +60,10 @@ class LongTermTodoStatistics:
     def get_statistics_items(self):
         return self.statistics_items
 
+    def get_duration_in_time_span(self):
+        # TODONOW implement calculation
+        return datetime.timedelta(hours=42)
+
     def get_all_days_count(self):
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
@@ -84,7 +88,7 @@ class LongTermTodoStatistics:
 
         return self.long_term_todo.progress_goal - self.long_term_todo.progress
 
-    # TODONOW find occurrences of progress_delta, re-use this method there
+    # TODOLATER find occurrences of progress_delta, re-use this method there
     def get_progress_delta(self):
         if not self.date_and_todos_mapping:
             return 0
@@ -154,7 +158,7 @@ class LongTermTodoStatistics:
 
         filtered_dates = self.__filter_dates_by_time_span(all_dates)
         all_days_count = LongTermTodoStatistics.__count_days(filtered_dates)
-        # TODONOW can simplify? use date_and_todos_mapping, is already filtered
+        # TODOLATER can simplify? use date_and_todos_mapping, is already filtered
         if all_days_count <= 1:
             return 0
 

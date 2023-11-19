@@ -1,0 +1,17 @@
+<div class="table-responsive">
+    <table>
+        {% if long_term_todo.total_duration %}
+            <tr>
+                <td>Total Duration Delta (Hours)</td>
+                <td>{{ summary.total_duration_delta_as_hours }}</td>
+            </tr>
+        {% endif %}
+
+        {% if long_term_todo.progress_goal %}
+            <tr>
+                <td>Progress Delta</td>
+                <td>{{ summary.progress_delta }} ({{ summary.progress_delta_in_percents }} %)</td>
+            </tr>
+        {% endif %}
+    </table>
+</div>

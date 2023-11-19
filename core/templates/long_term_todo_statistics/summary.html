@@ -5,10 +5,6 @@
                 <td>Total Duration</td>
                 <td>{{ long_term_todo.convert_timedelta_to_string(long_term_todo.total_duration) }}</td>
             </tr>
-            <tr>
-                <td>Total Duration Delta (Hours)</td>
-                <td>{{ summary.total_duration_delta_as_hours }}</td>
-            </tr>
         {% endif %}
         <tr>
             <td>All Days</td>
@@ -31,10 +27,6 @@
             <tr>
                 <td>Remaining Progress</td>
                 <td>{{ summary.remaining_progress }} ({{ summary.remaining_progress_in_percents }} %)</td>
-            </tr>
-            <tr>
-                <td>Progress Delta</td>
-                <td>{{ summary.progress_delta }} ({{ summary.progress_delta_in_percents }} %)</td>
             </tr>
         {% endif %}
     </table>

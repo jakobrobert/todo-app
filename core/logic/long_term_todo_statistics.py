@@ -151,7 +151,7 @@ class LongTermTodoStatistics:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.long_term_todo.progress - start_progress
 
-        # Subtract 1 as fix for #126
+        # Subtract 1 because progress_delta excludes the first date. Compare with get_average_progress_per_hour.
         return progress_delta / (all_days_count - 1)
 
     def get_average_daily_progress_active_days(self):
@@ -173,7 +173,7 @@ class LongTermTodoStatistics:
         start_progress = self.__get_last_progress_of_todos(todos_of_first_date)
         progress_delta = self.long_term_todo.progress - start_progress
 
-        # Subtract 1 as fix for #126
+        # Subtract 1 because progress_delta excludes the first date. Compare with get_average_progress_per_hour.
         return progress_delta / (active_days_count - 1)
 
     def get_average_progress_per_hour(self):
@@ -187,8 +187,13 @@ class LongTermTodoStatistics:
         if not self.date_and_todos_mapping:
             return 0
 
+        # Excluding the first date for calculation of total duration
+        #   because first date is excluded for progress_delta as well (see below).
+        # Would be more intuitive for full time span that first date is included for progress_delta
+        #   but this might be trickier and need some adjustments of date_and_todos_mapping
         total_duration_as_hours = 0
-        for date_and_todos_mapping_item in self.date_and_todos_mapping:
+        date_and_todos_mapping_without_first_date = self.date_and_todos_mapping[1:]
+        for date_and_todos_mapping_item in date_and_todos_mapping_without_first_date:
             curr_todos = date_and_todos_mapping_item["todos"]
             curr_todos_duration = self.__get_total_duration_for_todos(curr_todos)
             curr_todos_duration_as_hours = curr_todos_duration.total_seconds() / 3600

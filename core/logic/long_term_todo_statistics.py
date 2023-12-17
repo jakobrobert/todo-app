@@ -54,6 +54,8 @@ class LongTermTodoStatistics:
         if not all_dates:
             return
 
+        # TODONOW create statistics item for one day before time span if possible (is not possible if time span includes the total available range)
+
         for date_and_todos_item in self.date_and_todos_mapping:
             self.statistics_items.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items))
 
@@ -398,6 +400,7 @@ class LongTermTodoStatistics:
         curr_item["progress"] = progress
         curr_item["progress_as_percents"] = Utils.convert_to_percents(progress, progress_goal)
 
+        # TODONOW fix calculation of relative_progress. store statistics_item for one day before time range, then use this as fallback
         relative_progress = progress
         if prev_item is not None:
             relative_progress -= prev_item["progress"]

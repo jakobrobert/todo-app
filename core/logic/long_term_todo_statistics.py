@@ -24,33 +24,6 @@ class LongTermTodoStatistics:
         self.update_progress_for_last_day_before_time_span()
         self.update_statistics_items_for_time_span()
 
-    def update_progress_for_last_day_before_time_span(self):
-        self.progress_for_last_day_before_time_span = 0
-
-        if not self.time_span_last_x_days:
-            return
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return
-
-        one_day = datetime.timedelta(days=1)
-        start_date = all_dates[0]
-        end_date = all_dates[-1]
-        time_span_start_date = end_date - self.time_span_last_x_days
-        curr_date = time_span_start_date - one_day
-        print(f"start_date: {start_date}, end_date: {end_date}, time_span_start_date: {time_span_start_date}, curr_date: {curr_date}")
-
-        while curr_date >= start_date:
-            todos_for_date = self.__find_todos_for_date(curr_date)
-            print(f"curr_date: {curr_date}, len(todos_for_date): {len(todos_for_date)}")
-
-            if todos_for_date:
-                self.progress_for_last_day_before_time_span = self.__get_last_progress_of_todos(todos_for_date)
-                return
-
-            curr_date -= one_day
-
     def update_date_and_todos_mapping_for_time_span(self):
         self.date_and_todos_mapping_for_time_span = []
 
@@ -73,15 +46,35 @@ class LongTermTodoStatistics:
             self.date_and_todos_mapping_for_time_span.append(curr_item)
             curr_date += one_day
 
-    def update_statistics_items_for_time_span(self):
-        self.statistics_items_for_time_span = []
+    def update_progress_for_last_day_before_time_span(self):
+        self.progress_for_last_day_before_time_span = 0
 
-        # TODONOW remove checks?
-        if not self.todos:
+        if not self.time_span_last_x_days:
             return
 
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
+            return
+
+        one_day = datetime.timedelta(days=1)
+        start_date = all_dates[0]
+        end_date = all_dates[-1]
+        time_span_start_date = end_date - self.time_span_last_x_days
+        curr_date = time_span_start_date - one_day
+
+        while curr_date >= start_date:
+            todos_for_date = self.__find_todos_for_date(curr_date)
+
+            if todos_for_date:
+                self.progress_for_last_day_before_time_span = self.__get_last_progress_of_todos(todos_for_date)
+                return
+
+            curr_date -= one_day
+
+    def update_statistics_items_for_time_span(self):
+        self.statistics_items_for_time_span = []
+
+        if not self.date_and_todos_mapping_for_time_span:
             return
 
         for date_and_todos_item in self.date_and_todos_mapping_for_time_span:
@@ -433,7 +426,6 @@ class LongTermTodoStatistics:
         if prev_item is not None:
             daily_progress -= prev_item["progress"]
         else:
-            print("WTF")
             daily_progress -= self.progress_for_last_day_before_time_span
 
         curr_item["daily_progress"] = daily_progress
@@ -480,7 +472,6 @@ class LongTermTodoStatistics:
             return 0
 
         for todo in reversed(todos):
-            print(f"todo.timestamp_completed: {todo.timestamp_completed}, todo.completed: {todo.completed}, todo.progress: {todo.progress}")
             if todo.completed:
                 return todo.progress or 0
 

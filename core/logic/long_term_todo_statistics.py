@@ -16,50 +16,13 @@ class LongTermTodoStatistics:
             self.time_span_last_x_days = datetime.timedelta(days=time_span_last_x_days)
 
         self.date_and_todos_mapping_for_time_span = []
-        self.statistics_items_for_time_span = []
         self.progress_for_last_day_before_time_span = 0
+        self.statistics_items_for_time_span = []
 
     def update_data(self):
-        self.update_date_and_todos_mapping()
-        self.update_statistics_items()
+        self.update_date_and_todos_mapping_for_time_span()
         self.update_progress_for_last_day_before_time_span()
-
-    def update_date_and_todos_mapping(self):
-        self.date_and_todos_mapping_for_time_span = []
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return
-
-        filtered_dates = self.__filter_dates_by_time_span(all_dates)
-
-        one_day = datetime.timedelta(days=1)
-        curr_date = min(filtered_dates)
-        end_date = max(filtered_dates)
-
-        while curr_date <= end_date:
-            curr_item = {
-                "date": str(curr_date),
-                "todos": self.__find_todos_for_date(curr_date)
-            }
-
-            self.date_and_todos_mapping_for_time_span.append(curr_item)
-            curr_date += one_day
-
-    def update_statistics_items(self):
-        self.statistics_items_for_time_span = []
-
-        # TODONOW remove checks?
-        if not self.todos:
-            return
-
-        all_dates = self.__collect_dates_of_todos()
-        if not all_dates:
-            return
-
-        for date_and_todos_item in self.date_and_todos_mapping_for_time_span:
-            statistics_item = self.__create_statistics_item(date_and_todos_item, self.statistics_items_for_time_span)
-            self.statistics_items_for_time_span.append(statistics_item)
+        self.update_statistics_items_for_time_span()
 
     def update_progress_for_last_day_before_time_span(self):
         self.progress_for_last_day_before_time_span = 0
@@ -87,6 +50,43 @@ class LongTermTodoStatistics:
                 return
 
             curr_date -= one_day
+
+    def update_date_and_todos_mapping_for_time_span(self):
+        self.date_and_todos_mapping_for_time_span = []
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return
+
+        filtered_dates = self.__filter_dates_by_time_span(all_dates)
+
+        one_day = datetime.timedelta(days=1)
+        curr_date = min(filtered_dates)
+        end_date = max(filtered_dates)
+
+        while curr_date <= end_date:
+            curr_item = {
+                "date": str(curr_date),
+                "todos": self.__find_todos_for_date(curr_date)
+            }
+
+            self.date_and_todos_mapping_for_time_span.append(curr_item)
+            curr_date += one_day
+
+    def update_statistics_items_for_time_span(self):
+        self.statistics_items_for_time_span = []
+
+        # TODONOW remove checks?
+        if not self.todos:
+            return
+
+        all_dates = self.__collect_dates_of_todos()
+        if not all_dates:
+            return
+
+        for date_and_todos_item in self.date_and_todos_mapping_for_time_span:
+            statistics_item = self.__create_statistics_item(date_and_todos_item, self.statistics_items_for_time_span)
+            self.statistics_items_for_time_span.append(statistics_item)
 
     def get_statistics_items(self):
         return self.statistics_items_for_time_span
@@ -433,6 +433,7 @@ class LongTermTodoStatistics:
         if prev_item is not None:
             daily_progress -= prev_item["progress"]
         else:
+            print("WTF")
             daily_progress -= self.progress_for_last_day_before_time_span
 
         curr_item["daily_progress"] = daily_progress
@@ -479,6 +480,7 @@ class LongTermTodoStatistics:
             return 0
 
         for todo in reversed(todos):
+            print(f"todo.timestamp_completed: {todo.timestamp_completed}, todo.completed: {todo.completed}, todo.progress: {todo.progress}")
             if todo.completed:
                 return todo.progress or 0
 

@@ -17,7 +17,7 @@ class LongTermTodoStatistics:
 
         self.date_and_todos_mapping_for_time_span = []
         self.statistics_items_for_time_span = []
-        self.statistics_item_for_one_day_before_time_span = None
+        self.progress_for_one_day_before_time_span = 0
 
     def update_data(self):
         self.update_date_and_todos_mapping()
@@ -48,23 +48,27 @@ class LongTermTodoStatistics:
     def update_statistics_items(self):
         self.statistics_items_for_time_span = []
 
+        # TODONOW remove this check?
         if not self.todos:
             return
 
+        # TODONOW move this into block for time_span ..., extract method
         all_dates = self.__collect_dates_of_todos()
         if not all_dates:
             return
 
-        # TODONOW create statistics item for one day before time span if possible (is not possible if time span includes the total available range)
         if self.time_span_last_x_days:
             end_date = all_dates[-1]
             start_date = end_date - self.time_span_last_x_days
             date_one_day_before_start = start_date - datetime.timedelta(days=1)
             print(f"start_date: {start_date}, date_one_day_before_start: {date_one_day_before_start}") # TODONOW remove
-
+            # TODONOW fix: need to find the last todo until this date
+            todos_for_one_day_before_start = self.__find_todos_for_date(date_one_day_before_start)
+            self.progress_for_one_day_before_time_span = self.__get_last_progress_of_todos(todos_for_one_day_before_start)
 
         for date_and_todos_item in self.date_and_todos_mapping_for_time_span:
-            self.statistics_items_for_time_span.append(self.__create_statistics_item(date_and_todos_item, self.statistics_items_for_time_span))
+            statistics_item = self.__create_statistics_item(date_and_todos_item, self.statistics_items_for_time_span)
+            self.statistics_items_for_time_span.append(statistics_item)
 
     def get_statistics_items(self):
         return self.statistics_items_for_time_span
@@ -407,13 +411,14 @@ class LongTermTodoStatistics:
         curr_item["progress"] = progress
         curr_item["progress_as_percents"] = Utils.convert_to_percents(progress, progress_goal)
 
-        # TODONOW fix calculation of relative_progress. store statistics_item for one day before time range, then use this as fallback
-        relative_progress = progress
+        daily_progress = progress
         if prev_item is not None:
-            relative_progress -= prev_item["progress"]
+            daily_progress -= prev_item["progress"]
+        else:
+            daily_progress -= self.progress_for_one_day_before_time_span
 
-        curr_item["daily_progress"] = relative_progress
-        curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(relative_progress, progress_goal)
+        curr_item["daily_progress"] = daily_progress
+        curr_item["daily_progress_as_percents"] = Utils.convert_to_percents(daily_progress, progress_goal)
 
     def __get_active_days_count_by_date_and_todos_mapping(self):
         if not self.date_and_todos_mapping_for_time_span:

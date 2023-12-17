@@ -71,14 +71,22 @@ class LongTermTodoStatistics:
         if not all_dates:
             return
 
+        one_day = datetime.timedelta(days=1)
+        start_date = all_dates[0]
         end_date = all_dates[-1]
-        start_date = end_date - self.time_span_last_x_days
-        date_one_day_before_start = start_date - datetime.timedelta(days=1)
-        print(f"start_date: {start_date}, date_one_day_before_start: {date_one_day_before_start}")
-        # TODONOW fix: need to find the last todo until this date
-        todos_for_one_day_before_start = self.__find_todos_for_date(date_one_day_before_start)
-        print(f"len(todos_for_one_day_before_start): {len(todos_for_one_day_before_start)}") # -> this is 0 as expected
-        self.progress_for_last_day_before_time_span = self.__get_last_progress_of_todos(todos_for_one_day_before_start)
+        time_span_start_date = end_date - self.time_span_last_x_days
+        curr_date = time_span_start_date - one_day
+        print(f"start_date: {start_date}, end_date: {end_date}, time_span_start_date: {time_span_start_date}, curr_date: {curr_date}")
+
+        while curr_date >= start_date:
+            todos_for_date = self.__find_todos_for_date(curr_date)
+            print(f"curr_date: {curr_date}, len(todos_for_date): {len(todos_for_date)}")
+
+            if todos_for_date:
+                self.progress_for_last_day_before_time_span = self.__get_last_progress_of_todos(todos_for_date)
+                return
+
+            curr_date -= one_day
 
     def get_statistics_items(self):
         return self.statistics_items_for_time_span

@@ -10,6 +10,12 @@
             <button class="btn btn-primary" type="submit">OK</button>
         </form>
     </td>
+    <td style="min-width: 175px">
+        <form action="{{ url_for('edit_long_term_todo_comment', id=long_term_todo.id) }}" method="post">
+            <textarea class="form-control" name="comment">{{ long_term_todo.comment or ""}}</textarea>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+    </td>
     <td>
         {{ long_term_todo.timestamp_created }}
     </td>

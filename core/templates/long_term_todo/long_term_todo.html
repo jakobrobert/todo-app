@@ -16,6 +16,12 @@
         <h1>{{ long_term_todo.title }} [Long Term Todo]</h1>
         <br>
 
+        {% if long_term_todo.comment %}
+            <h3>Comment</h3>
+            <p>{{ long_term_todo.comment }}</p>
+        {% endif %}
+
+        <h3>Summary</h3>
         <table class="table-responsive">
             <tr>
                 <td>Total Duration</td>

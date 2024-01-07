@@ -300,6 +300,14 @@ def toggle_long_term_todo_completed(id):
     return redirect(url_for("get_long_term_todos"))
 
 
+@app.route(URL_PREFIX + "/long-term-todos/<int:id>/edit-comment", methods=["POST"])
+def edit_long_term_todo_comment(id):
+    comment = request.form.get("comment")
+    long_term_todo = LongTermTodo.get(id)
+    long_term_todo.set_comment(comment)
+    return redirect(url_for("get_long_term_todos"))
+
+
 @app.route(URL_PREFIX + "/long-term-todos/<int:id>/delete", methods=["GET"])
 def delete_long_term_todo(id):
     LongTermTodo.delete(id)

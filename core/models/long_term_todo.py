@@ -12,6 +12,7 @@ class LongTermTodo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     completed = db.Column(db.Boolean, default=False)
+    comment = db.Column(db.String(1023))
     timestamp_created = db.Column(db.TIMESTAMP(timezone=True), default=func.now())
     timestamp_completed = db.Column(db.TIMESTAMP(timezone=True))
     progress_goal = db.Column(db.Integer)
@@ -70,6 +71,10 @@ class LongTermTodo(db.Model):
 
     def set_title(self, title):
         self.title = title
+        db.session.commit()
+
+    def set_comment(self, comment):
+        self.comment = comment
         db.session.commit()
 
     def set_progress_goal(self, progress_goal):
